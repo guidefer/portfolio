@@ -1,0 +1,290 @@
+/* Loading Screen Styles */
+
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--color-background) 0%, #fafafa 100%);
+  display: none; /* Hidden by default, shown via JavaScript */
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.loading-screen.loading-active {
+  display: flex;
+}
+
+.loading-content {
+  text-align: center;
+  max-width: 400px;
+  padding: var(--space-xl);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  width: var(--loading-spinner-size);
+  height: var(--loading-spinner-size);
+  border: 3px solid var(--color-secondary);
+  border-top: 3px solid var(--color-accent-yellow);
+  border-radius: 50%;
+  animation: loadingSpinner 1s linear infinite;
+  margin: 0 auto var(--space-lg);
+}
+
+@keyframes loadingSpinner {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Loading Text */
+.loading-text {
+  font-size: var(--text-lg);
+  color: var(--color-tertiary);
+  margin-bottom: var(--space-xl);
+  font-weight: 500;
+}
+
+/* Progress Bar */
+.loading-progress {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.loading-progress-bar {
+  width: 100%;
+  height: 4px;
+  background-color: var(--color-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+  position: relative;
+}
+
+.loading-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent-yellow), var(--color-accent-orange));
+  border-radius: var(--radius-full);
+  width: 0%;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.loading-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: progressShimmer 2s ease-in-out infinite;
+}
+
+@keyframes progressShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.loading-percentage {
+  font-size: var(--text-sm);
+  color: var(--color-tertiary);
+  font-weight: 600;
+  text-align: center;
+  font-family: var(--font-mono);
+}
+
+/* Enhanced spinner with mascot-style animation */
+.loading-spinner.mascot-style {
+  border: none;
+  background: none;
+  width: 60px;
+  height: 60px;
+  position: relative;
+}
+
+.loading-spinner.mascot-style::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  background-color: #F4D1A6; /* Skin tone */
+  transform: translate(-50%, -50%);
+  box-shadow: 
+    /* Simplified mascot representation */
+    -4px -4px 0 0 var(--color-primary), /* Hair */
+    4px -4px 0 0 var(--color-tertiary),  /* Hair */
+    -2px 2px 0 0 var(--color-primary),   /* Eyes */
+    2px 2px 0 0 var(--color-primary),    /* Eyes */
+    0px 6px 0 0 var(--color-tertiary),   /* Beard */
+    -4px 12px 0 0 #000000,  /* Body */
+    0px 12px 0 0 #000000,   /* Body */
+    4px 12px 0 0 #000000,   /* Body */
+    -8px 16px 0 0 var(--color-accent-yellow); /* Tool */
+  animation: mascotLoadingDance 1.5s ease-in-out infinite;
+}
+
+@keyframes mascotLoadingDance {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(1) rotate(0deg); 
+  }
+  25% { 
+    transform: translate(-50%, -50%) scale(1.1) rotate(5deg); 
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.05) rotate(0deg); 
+  }
+  75% { 
+    transform: translate(-50%, -50%) scale(1.1) rotate(-5deg); 
+  }
+}
+
+/* Backdrop blur effect for modern browsers */
+@supports (backdrop-filter: blur(10px)) {
+  .loading-screen {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+  }
+}
+
+/* Alternative loading animations */
+.loading-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin: var(--space-lg) 0;
+}
+
+.loading-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-accent-yellow);
+  border-radius: 50%;
+  animation: loadingDots 1.4s ease-in-out infinite both;
+}
+
+.loading-dot:nth-child(1) { animation-delay: -0.32s; }
+.loading-dot:nth-child(2) { animation-delay: -0.16s; }
+.loading-dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes loadingDots {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Loading messages rotation */
+.loading-text.rotating {
+  animation: fadeInOut 3s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .loading-content {
+    padding: var(--space-2xl);
+  }
+  
+  .loading-spinner {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .loading-text {
+    font-size: var(--text-xl);
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .loading-spinner,
+  .loading-progress-fill::after,
+  .loading-spinner.mascot-style::before,
+  .loading-dot {
+    animation: none;
+  }
+  
+  .loading-spinner {
+    border-top-color: var(--color-accent-yellow);
+  }
+  
+  .loading-progress-fill::after {
+    display: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .loading-screen {
+    background: var(--color-background);
+    border: 2px solid var(--color-primary);
+  }
+  
+  .loading-spinner {
+    border-color: var(--color-primary);
+    border-top-color: var(--color-accent-yellow);
+  }
+  
+  .loading-progress-bar {
+    border: 1px solid var(--color-primary);
+  }
+}
+
+/* Loading screen overlay for body */
+body.loading {
+  overflow: hidden;
+}
+
+/* Error state for loading */
+.loading-error {
+  color: var(--color-error);
+  text-align: center;
+  padding: var(--space-xl);
+}
+
+.loading-error h2 {
+  margin-bottom: var(--space-md);
+  color: var(--color-error);
+}
+
+.loading-error button {
+  margin-top: var(--space-lg);
+  padding: var(--space-md) var(--space-xl);
+  background-color: var(--color-error);
+  color: var(--color-background);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  cursor: pointer;
+  transition: background-color var(--transition-base);
+}
+
+.loading-error button:hover {
+  background-color: #dc2626;
+}
+
+/* Print styles - hide loading screen */
+@media print {
+  .loading-screen {
+    display: none !important;
+  }
+}

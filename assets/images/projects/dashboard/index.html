@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard Design - Guilherme Ferreira</title>
+    <meta name="description" content="Project case study: Analytics Dashboard Design by Guilherme Ferreira, Creative Director & Designer">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../../../../css/main.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../../../../favicon.svg">
+    <link rel="icon" type="image/x-icon" href="../../../../favicon.ico">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://guilhermeferreira.com/projects/dashboard-ux-design/">
+    <meta property="og:title" content="Analytics Dashboard Design - Guilherme Ferreira">
+    <meta property="og:description" content="Project case study: Analytics Dashboard Design">
+    <meta property="og:image" content="https://guilhermeferreira.com/assets/images/projects/dashboard/hero.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://guilhermeferreira.com/projects/dashboard-ux-design/">
+    <meta property="twitter:title" content="Analytics Dashboard Design - Guilherme Ferreira">
+    <meta property="twitter:description" content="Project case study: Analytics Dashboard Design">
+    <meta property="twitter:image" content="https://guilhermeferreira.com/assets/images/projects/dashboard/hero.jpg">
+    
+    <style>
+        /* Project-specific styles */
+        .project-hero {
+            min-height: 80vh;
+            background-color: var(--color-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-hero-placeholder {
+            width: 100%;
+            max-width: 1200px;
+            height: 60vh;
+            background-color: var(--color-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-tertiary);
+            font-size: 24px;
+            border-radius: 8px;
+            margin: 0 var(--space-lg);
+        }
+        
+        .project-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--space-3xl) var(--space-lg);
+        }
+        
+        .project-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+        }
+        
+        .project-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+            color: var(--color-primary);
+        }
+        
+        .project-meta {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-lg);
+            flex-wrap: wrap;
+            color: var(--color-tertiary);
+        }
+        
+        .project-description {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: var(--color-tertiary);
+            text-align: center;
+        }
+        
+        .project-section {
+            margin-bottom: var(--space-3xl);
+        }
+        
+        .project-section h2 {
+            font-size: 2rem;
+            margin-bottom: var(--space-lg);
+            color: var(--color-primary);
+        }
+        
+        .project-section p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--color-tertiary);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .image-placeholder {
+            width: 100%;
+            height: 400px;
+            background-color: var(--color-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-tertiary);
+            font-size: 18px;
+            border-radius: 4px;
+            margin: var(--space-lg) 0;
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-lg) 0;
+        }
+        
+        .image-grid .image-placeholder {
+            height: 250px;
+        }
+        
+        .project-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-xl) 0;
+            border-top: 1px solid var(--color-secondary);
+            margin-top: var(--space-3xl);
+        }
+        
+        .nav-link {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--color-accent-yellow);
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        /* See More Section */
+        .see-more-section {
+            margin: var(--space-3xl) 0;
+            padding: var(--space-3xl) 0;
+            border-top: 1px solid var(--color-secondary);
+        }
+        
+        .see-more-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: var(--space-3xl);
+            color: var(--color-primary);
+        }
+        
+        .see-more-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-xl);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .see-more-item {
+            position: relative;
+            background-color: var(--color-background);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-sm);
+            aspect-ratio: 4/3;
+        }
+        
+        .see-more-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .see-more-item-image {
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-tertiary);
+            font-size: 14px;
+        }
+        
+        .see-more-item-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(235, 197, 51, 0.9) 0%, rgba(214, 100, 34, 0.9) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity var(--transition-base);
+            padding: var(--space-lg);
+        }
+        
+        .see-more-item:hover .see-more-item-overlay {
+            opacity: 1;
+        }
+        
+        .see-more-item-content {
+            text-align: center;
+            color: var(--color-background);
+        }
+        
+        .see-more-item-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+        
+        .see-more-item-category {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        @media (max-width: 768px) {
+            .project-meta {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+            
+            .project-navigation {
+                flex-direction: column;
+                gap: var(--space-lg);
+                text-align: center;
+            }
+            
+            .see-more-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-lg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-mascot"></div>
+            <div class="loading-text">Loading project...</div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container" role="navigation" aria-label="Main navigation">
+            <a href="../../../../index.html" class="nav-logo" aria-label="Return to homepage">
+                <span class="logo-text">Guilherme Ferreira</span>
+            </a>
+            
+            <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span class="nav-toggle-line"></span>
+                <span class="nav-toggle-line"></span>
+                <span class="nav-toggle-line"></span>
+            </button>
+            
+            <ul id="nav-menu" class="nav-menu" role="menubar">
+                <li role="none">
+                    <a href="../../../../index.html#work" class="nav-link" role="menuitem">Work</a>
+                </li>
+                <li role="none">
+                    <a href="../../../../index.html#about" class="nav-link" role="menuitem">About</a>
+                </li>
+                <li role="none">
+                    <a href="../../../../index.html#contact" class="nav-link" role="menuitem">Contact</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Project Hero -->
+    <section class="project-hero">
+        <div class="project-hero-placeholder">
+            Hero Image Placeholder - 1200x600px
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="project-content">
+        <!-- Project Header -->
+        <header class="project-header">
+            <h1 class="project-title">Analytics Dashboard Design</h1>
+            <div class="project-meta">
+                <span><strong>Client:</strong> DataFlow Analytics</span>
+                <span><strong>Year:</strong> 2024</span>
+                <span><strong>Category:</strong> UX/UI Design</span>
+            </div>
+            <p class="project-description">
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+            </p>
+        </header>
+
+        <!-- Project Overview -->
+        <section class="project-section">
+            <h2>Project Overview</h2>
+            <p>
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+            </p>
+            <p>
+                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.
+            </p>
+            <div class="image-placeholder">
+                Dashboard Overview Image - 800x400px
+            </div>
+        </section>
+
+        <!-- User Research -->
+        <section class="project-section">
+            <h2>User Research & Analysis</h2>
+            <p>
+                Sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.
+            </p>
+            
+            <div class="image-grid">
+                <div class="image-placeholder">User Personas - 400x250px</div>
+                <div class="image-placeholder">User Journey - 400x250px</div>
+                <div class="image-placeholder">Data Analysis - 400x250px</div>
+                <div class="image-placeholder">Key Insights - 400x250px</div>
+            </div>
+        </section>
+
+        <!-- Design Solution -->
+        <section class="project-section">
+            <h2>Design Solution</h2>
+            <p>
+                Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.
+            </p>
+            <div class="image-placeholder">
+                Dashboard Interface Design - 800x400px
+            </div>
+            <p>
+                Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+            </p>
+        </section>
+
+        <!-- Final Results -->
+        <section class="project-section">
+            <h2>Final Results</h2>
+            <p>
+                Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est.
+            </p>
+            
+            <div class="image-grid">
+                <div class="image-placeholder">Mobile Version - 400x250px</div>
+                <div class="image-placeholder">Desktop Version - 400x250px</div>
+            </div>
+            
+            <div class="image-placeholder">
+                Implementation Results - 800x400px
+            </div>
+        </section>
+
+        <!-- See More Projects Section -->
+        <section class="see-more-section">
+            <h2 class="see-more-title">See More</h2>
+            <div class="see-more-grid" id="see-more-grid">
+                <!-- Project thumbnails will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Back to Work Link -->
+        <nav class="project-navigation">
+            <a href="../../../../index.html#work" class="nav-link back-link">
+                ← Back to Work
+            </a>
+        </nav>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer-container">
+            <p class="footer-text">© 2024 Guilherme Ferreira. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module">
+        // Import portfolio data and create See More gallery
+        import { getRandomProjects } from '../../../../js/config/portfolio-data.js';
+        
+        // Current project ID
+        const currentProjectId = 'dashboard-ux-design';
+        
+        // Get 2 random projects excluding current one
+        const randomProjects = getRandomProjects(2, currentProjectId);
+        
+        // Create See More gallery
+        function createSeeMoreGallery() {
+            const grid = document.getElementById('see-more-grid');
+            
+            randomProjects.forEach(project => {
+                const item = document.createElement('article');
+                item.className = 'see-more-item';
+                item.style.outline = 'none';
+                item.style.border = 'none';
+                item.style.boxShadow = 'var(--shadow-sm)';
+                
+                // Project path mapping
+                const projectPaths = {
+                    'restaurant-rebrand': 'restaurant',
+                    'dashboard-ux-design': 'dashboard',
+                    'book-covers-design': 'book-covers',
+                    'fitness-app-design': 'fitness-app',
+                    'magazine-layout': 'magazine',
+                    'icon-system-design': 'icons'
+                };
+                
+                const folderName = projectPaths[project.id];
+                
+                item.innerHTML = `
+                    <div class="see-more-item-image">
+                        ${project.category}
+                    </div>
+                    <div class="see-more-item-overlay">
+                        <div class="see-more-item-content">
+                            <h3 class="see-more-item-title">${project.title}</h3>
+                            <p class="see-more-item-category">${project.category}</p>
+                        </div>
+                    </div>
+                `;
+                
+                // Add click handler for navigation
+                item.addEventListener('click', () => {
+                    if (folderName) {
+                        window.location.href = `../${folderName}/index.html`;
+                    }
+                });
+                
+                // Remove any focus styles
+                item.addEventListener('focus', () => {
+                    item.style.outline = 'none';
+                    item.style.boxShadow = 'var(--shadow-sm)';
+                });
+                
+                grid.appendChild(item);
+            });
+        }
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', createSeeMoreGallery);
+    </script>
+    <script type="module" src="../../../../js/main.js"></script>
+</body>
+</html>

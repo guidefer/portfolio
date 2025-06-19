@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guilherme Ferreira - Creative Director & Designer</title>
+    <meta name="description" content="Portfolio of Guilherme Ferreira, Creative Director & Designer specializing in brand identity, digital design, and creative strategy.">
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="css/main.css" as="style">
+    <link rel="preload" href="js/main.js" as="script">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    
+    <!-- Ultimate Focus Border Removal -->
+    <style>
+        /* ABSOLUTE FOCUS BORDER REMOVAL - INLINE STYLES FOR MAXIMUM PRIORITY */
+        *, *:focus, *:focus-visible, *:focus-within, *:active,
+        .gallery-item, .gallery-item:focus, .gallery-item:focus-visible, .gallery-item:active,
+        .gallery-grid *, .gallery-grid *:focus, .gallery-grid *:focus-visible, .gallery-grid *:active,
+        div, div:focus, div:focus-visible, div:active,
+        section, section:focus, section:focus-visible, section:active {
+            outline: none !important;
+            box-shadow: none !important;
+            border: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+            -moz-outline: none !important;
+        }
+        
+        /* Specifically target gallery items */
+        .gallery-section .gallery-container .gallery-grid .gallery-item,
+        .gallery-section .gallery-container .gallery-grid .gallery-item:focus,
+        .gallery-section .gallery-container .gallery-grid .gallery-item:focus-visible,
+        .gallery-section .gallery-container .gallery-grid .gallery-item:active {
+            outline: none !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+        
+        /* Remove any possible yellow outlines */
+        *[style*="outline"],
+        *[style*="border"],
+        *[style*="box-shadow"] {
+            outline: none !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+    </style>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Guilherme Ferreira - Creative Director & Designer">
+    <meta property="og:description" content="Portfolio showcasing creative direction and design work">
+    <meta property="og:url" content="https://guilhermeferreira.com">
+    <meta property="og:image" content="assets/images/og-image.jpg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Guilherme Ferreira - Creative Director & Designer">
+    <meta name="twitter:description" content="Portfolio showcasing creative direction and design work">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Guilherme Ferreira",
+        "jobTitle": "Creative Director & Designer",
+        "url": "https://guilhermeferreira.com",
+        "sameAs": [
+            "https://linkedin.com/in/guilhermeferreira",
+            "https://behance.net/guilhermeferreira"
+        ]
+    }
+    </script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen" aria-hidden="true">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Loading portfolio...</p>
+        </div>
+    </div>
+
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header / Navigation -->
+    <header class="header" role="banner">
+        <nav class="navigation" role="navigation" aria-label="Main navigation">
+            <div class="nav-container">
+                <a href="#home" class="nav-logo" aria-label="Guilherme Ferreira - Home">
+                    <span class="logo-text">GF</span>
+                </a>
+                
+                <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation menu">
+                    <span class="nav-toggle-line"></span>
+                    <span class="nav-toggle-line"></span>
+                    <span class="nav-toggle-line"></span>
+                </button>
+                
+                <ul id="nav-menu" class="nav-menu" role="menubar">
+                    <li role="none">
+                        <a href="#work" class="nav-link" role="menuitem">Work</a>
+                    </li>
+                    <li role="none">
+                        <a href="#about" class="nav-link" role="menuitem">About</a>
+                    </li>
+                    <li role="none">
+                        <a href="#contact" class="nav-link" role="menuitem">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main">
+        <!-- Hero Section -->
+        <section id="home" class="hero-section" aria-labelledby="hero-title">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 id="hero-title" class="hero-title">
+                        <span class="hero-name">Guilherme Ferreira</span>
+                        <span class="hero-role">Creative Director & Designer</span>
+                    </h1>
+                    <p class="hero-description">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Creating exceptional digital experiences through strategic design thinking and innovative creative solutions.
+                    </p>
+                    <a href="#work" class="hero-cta" aria-describedby="hero-cta-desc">
+                        View Selected Work
+                        <span id="hero-cta-desc" class="sr-only">Navigate to portfolio gallery</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Gallery -->
+        <section id="work" class="gallery-section" aria-labelledby="gallery-title">
+            <div class="gallery-container">
+                <h2 id="gallery-title" class="gallery-title">Selected Work</h2>
+                <div class="gallery-grid" role="region" aria-label="Portfolio projects">
+                    <!-- Gallery items will be loaded dynamically -->
+                    <div class="gallery-loading" aria-live="polite" aria-label="Loading portfolio items">
+                        <div class="gallery-spinner"></div>
+                        <p>Loading projects...</p>
+                    </div>
+                </div>
+                
+                <!-- Load More Button -->
+                <div class="gallery-actions">
+                    <button id="load-more-btn" class="load-more-btn" aria-describedby="load-more-desc">
+                        Load More Projects
+                        <span id="load-more-desc" class="sr-only">Load additional portfolio items</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-section" aria-labelledby="about-title">
+            <div class="about-container">
+                <div class="about-content">
+                    <h2 id="about-title" class="about-title">About</h2>
+                    <div class="about-text">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        </p>
+                        <p>
+                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+                        </p>
+                        <p>
+                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi.
+                        </p>
+                    </div>
+                    
+                    <div class="about-skills">
+                        <h3 class="skills-title">Expertise</h3>
+                        <ul class="skills-list">
+                            <li>Brand Identity Design</li>
+                            <li>Digital Design & UX</li>
+                            <li>Creative Direction</li>
+                            <li>Typography & Layout</li>
+                            <li>Motion Graphics</li>
+                            <li>Art Direction</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section" aria-labelledby="contact-title">
+            <div class="contact-container">
+                <h2 id="contact-title" class="contact-title">Let's Work Together</h2>
+                <div class="contact-content">
+                    <p class="contact-text">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                    
+                    <div class="contact-links">
+                        <a href="mailto:hello@guilhermeferreira.com" class="contact-link" aria-label="Send email to Guilherme">
+                            <span class="contact-icon">✉</span>
+                            hello@guilhermeferreira.com
+                        </a>
+                        <a href="https://linkedin.com/in/guilhermeferreira" class="contact-link" target="_blank" rel="noopener noreferrer" aria-label="View LinkedIn profile (opens in new tab)">
+                            <span class="contact-icon">🔗</span>
+                            LinkedIn
+                        </a>
+                        <a href="https://behance.net/guilhermeferreira" class="contact-link" target="_blank" rel="noopener noreferrer" aria-label="View Behance portfolio (opens in new tab)">
+                            <span class="contact-icon">🎨</span>
+                            Behance
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer-container">
+            <p class="footer-text">© 2024 Guilherme Ferreira. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Pixel Art Mascot -->
+    <!-- Mascot will be inserted by JavaScript -->
+
+    <!-- Scripts -->
+    <script type="module" src="js/main.js"></script>
+    
+    <!-- Service Worker for PWA (optional) -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('SW registered'))
+                    .catch(registrationError => console.log('SW registration failed'));
+            });
+        }
+    </script>
+</body>
+</html>

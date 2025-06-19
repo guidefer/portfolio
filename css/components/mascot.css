@@ -1,0 +1,841 @@
+/* Guilherme Designer Mascot - Clean Pixel Art Character */
+/* Simple 8-bit style character with individual body parts */
+
+.character-mascot {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 64px;
+  height: 64px;
+  z-index: 1000;
+  pointer-events: none;
+  transition: transform 0.3s ease-out;
+  /* Image rendering for pixel art crispness */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: pixelated;
+}
+
+/* Responsive sizing for mobile */
+@media (max-width: 640px) {
+  .character-mascot {
+    width: 48px;
+    height: 48px;
+    bottom: 15px;
+    right: 15px;
+  }
+  
+  /* Scale down all body parts proportionally for 48px container */
+  .mascot-character {
+    width: 48px;
+    height: 48px;
+  }
+  
+  /* Adjust all body parts for 48px container (0.75x scale) */
+  .mascot-hair { 
+    width: 20px; height: 8px; 
+    bottom: 38px; left: 14px; 
+  }
+  .mascot-head { 
+    width: 18px; height: 14px; 
+    bottom: 27px; left: 15px; 
+  }
+  .mascot-eye-left { 
+    width: 2px; height: 2px;
+    bottom: 33px; left: 18px; 
+  }
+  .mascot-eye-right { 
+    width: 2px; height: 2px;
+    bottom: 33px; left: 25px; 
+  }
+  .mascot-beard { 
+    width: 8px; height: 4px; 
+    bottom: 25px; left: 19px; 
+  }
+  .mascot-body { 
+    width: 14px; height: 14px; 
+    bottom: 12px; left: 17px; 
+  }
+  .mascot-arm-left { 
+    width: 3px; height: 9px;
+    bottom: 15px; left: 14px; 
+  }
+  .mascot-arm-right { 
+    width: 3px; height: 9px;
+    bottom: 15px; left: 32px; 
+  }
+  .mascot-leg-left { 
+    width: 5px; height: 14px;
+    bottom: 2px; left: 19px; 
+  }
+  .mascot-leg-right { 
+    width: 5px; height: 14px;
+    bottom: 2px; left: 25px; 
+  }
+  .mascot-tool { 
+    width: 2px; height: 6px;
+    bottom: 14px; left: 35px; 
+  }
+}
+
+/* Smaller adjustment for very narrow screens (iPhone Pro/Max) */
+@media (max-width: 440px) {
+  .character-mascot {
+    width: 42px;
+    height: 42px;
+    bottom: 12px;
+    right: 12px;
+  }
+  
+  /* Scale down all body parts proportionally for 42px container */
+  .mascot-character {
+    width: 42px;
+    height: 42px;
+  }
+  
+  /* Adjust all body parts for 42px container (0.66x scale) */
+  .mascot-hair { 
+    width: 17px; height: 7px; 
+    bottom: 33px; left: 12px; 
+  }
+  .mascot-head { 
+    width: 16px; height: 12px; 
+    bottom: 24px; left: 13px; 
+  }
+  .mascot-eye-left { 
+    width: 2px; height: 2px;
+    bottom: 29px; left: 16px; 
+  }
+  .mascot-eye-right { 
+    width: 2px; height: 2px;
+    bottom: 29px; left: 22px; 
+  }
+  .mascot-beard { 
+    width: 7px; height: 3px; 
+    bottom: 22px; left: 16px; 
+  }
+  .mascot-body { 
+    width: 12px; height: 12px; 
+    bottom: 11px; left: 15px; 
+  }
+  .mascot-arm-left { 
+    width: 3px; height: 8px;
+    bottom: 13px; left: 12px; 
+  }
+  .mascot-arm-right { 
+    width: 3px; height: 8px;
+    bottom: 13px; left: 28px; 
+  }
+  .mascot-leg-left { 
+    width: 4px; height: 12px;
+    bottom: 2px; left: 17px; 
+  }
+  .mascot-leg-right { 
+    width: 4px; height: 12px;
+    bottom: 2px; left: 22px; 
+  }
+  .mascot-tool { 
+    width: 1px; height: 5px;
+    bottom: 12px; left: 30px; 
+  }
+}
+
+/* Mascot Container */
+.mascot-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-origin: bottom center;
+}
+
+/* CSS Pixel Art Character - Clean and Simple */
+.mascot-character {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  bottom: 0;
+  left: 0;
+}
+
+/* === INDIVIDUAL BODY PARTS === */
+
+/* Hair - salt & pepper on top of head */
+.mascot-hair {
+  position: absolute;
+  width: 26px;
+  height: 10px;
+  bottom: 50px;
+  left: 19px;
+  background: #555555;
+  border-radius: 10px 10px 1px 1px;
+  z-index: 15;
+}
+
+/* Head - skin tone, slightly rectangular */
+.mascot-head {
+  position: absolute;
+  width: 24px;
+  height: 18px;
+  bottom: 36px;
+  left: 20px;
+  background: #FDBCB4;
+  border-radius: 5px 5px 8px 8px;
+  z-index: 10;
+}
+
+/* Left Eye */
+.mascot-eye-left {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  bottom: 44px;
+  left: 24px;
+  background: #000000;
+  border-radius: 50%;
+  z-index: 12;
+}
+
+/* Right Eye */
+.mascot-eye-right {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  bottom: 44px;
+  left: 33px;
+  background: #000000;
+  border-radius: 50%;
+  z-index: 12;
+}
+
+/* Beard - salt & pepper on lower face */
+.mascot-beard {
+  position: absolute;
+  width: 10px;
+  height: 5px;
+  bottom: 34px;
+  left: 25px;
+  background: #555555;
+  border-radius: 2px 2px 5px 5px;
+  z-index: 11;
+}
+
+/* Body - black t-shirt */
+.mascot-body {
+  position: absolute;
+  width: 18px;
+  height: 19px;
+  bottom: 16px;
+  left: 23px;
+  background: #000000;
+  border-radius: 4px 4px 1px 1px;
+  z-index: 8;
+}
+
+/* Left Arm - skin tone */
+.mascot-arm-left {
+  position: absolute;
+  width: 4px;
+  height: 12px;
+  bottom: 20px;
+  left: 18px;
+  background: #FDBCB4;
+  border-radius: 2px;
+  z-index: 7;
+}
+
+/* Right Arm - skin tone */
+.mascot-arm-right {
+  position: absolute;
+  width: 4px;
+  height: 12px;
+  bottom: 20px;
+  left: 42px;
+  background: #FDBCB4;
+  border-radius: 2px;
+  z-index: 7;
+}
+
+/* Left Leg - blue jeans */
+.mascot-leg-left {
+  position: absolute;
+  width: 6px;
+  height: 18px;
+  bottom: 2px;
+  left: 25px;
+  background: #2E4BC6;
+  border-radius: 2px;
+  z-index: 6;
+}
+
+/* Right Leg - blue jeans */
+.mascot-leg-right {
+  position: absolute;
+  width: 6px;
+  height: 18px;
+  bottom: 2px;
+  left: 33px;
+  background: #2E4BC6;
+  border-radius: 2px;
+  z-index: 6;
+}
+
+/* Design Tool - stylus/pen */
+.mascot-tool {
+  position: absolute;
+  width: 2px;
+  height: 8px;
+  bottom: 18px;
+  left: 43px; /* Moved from 46px to stay within 64px bounds */
+  background: #EBC533;
+  border-radius: 1px;
+  z-index: 9;
+}
+
+/* === ANIMATION STATES - REDESIGNED FOR INDIVIDUAL BODY PARTS === */
+
+/* ===== IDLE STATE - Subtle Life ===== */
+.mascot-idle .mascot-container {
+  animation: idle-breathing 4s ease-in-out infinite;
+}
+
+.mascot-idle .mascot-eye-left,
+.mascot-idle .mascot-eye-right {
+  animation: idle-blink 6s ease-in-out infinite;
+}
+
+.mascot-idle .mascot-tool {
+  animation: idle-tool-float 3s ease-in-out infinite;
+}
+
+@keyframes idle-breathing {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1px); }
+}
+
+@keyframes idle-blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  93%, 97% { transform: scaleY(0.1); }
+}
+
+@keyframes idle-tool-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-1px) rotate(2deg); }
+}
+
+/* ===== EXCITED STATE - Happy Jumping (Less Arm Movement) ===== */
+.mascot-excited .mascot-container {
+  animation: excited-happy-jump 0.9s ease-in-out infinite;
+}
+
+.mascot-excited .mascot-arm-left {
+  animation: excited-arm-subtle 1.8s ease-in-out infinite;
+}
+
+.mascot-excited .mascot-arm-right {
+  animation: excited-arm-gentle 1.8s ease-in-out infinite reverse;
+}
+
+.mascot-excited .mascot-tool {
+  animation: excited-tool-gentle-wave 1.2s ease-in-out infinite;
+}
+
+.mascot-excited .mascot-hair {
+  animation: excited-hair-bounce 0.9s ease-in-out infinite;
+}
+
+.mascot-excited .mascot-eye-left,
+.mascot-excited .mascot-eye-right {
+  animation: excited-happy-eyes 2s ease-in-out infinite;
+}
+
+@keyframes excited-happy-jump {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.02); }
+}
+
+@keyframes excited-arm-subtle {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  50% { transform: rotate(-8deg) translateY(-1px); }
+}
+
+@keyframes excited-arm-gentle {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  50% { transform: rotate(8deg) translateY(-1px); }
+}
+
+@keyframes excited-tool-gentle-wave {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(-12deg) scale(1.05); }
+}
+
+@keyframes excited-hair-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1px); }
+}
+
+@keyframes excited-happy-eyes {
+  0%, 100% { transform: scaleY(1) scaleX(1); }
+  50% { transform: scaleY(1.1) scaleX(0.9); }
+}
+
+/* ===== DANCING STATE - Rhythmic Side-to-Side Dance ===== */
+.mascot-dancing .mascot-container {
+  animation: dancing-groove 1.4s ease-in-out infinite;
+}
+
+.mascot-dancing .mascot-leg-left {
+  animation: dancing-leg-left 0.7s ease-in-out infinite;
+}
+
+.mascot-dancing .mascot-leg-right {
+  animation: dancing-leg-right 0.7s ease-in-out infinite reverse;
+}
+
+.mascot-dancing .mascot-arm-left {
+  animation: dancing-arm-left 0.7s ease-in-out infinite;
+}
+
+.mascot-dancing .mascot-arm-right {
+  animation: dancing-arm-right 0.7s ease-in-out infinite reverse;
+}
+
+.mascot-dancing .mascot-head {
+  animation: dancing-head-bob 1.4s ease-in-out infinite;
+}
+
+.mascot-dancing .mascot-tool {
+  animation: dancing-tool-wave 0.7s ease-in-out infinite;
+}
+
+.mascot-dancing .mascot-hair {
+  animation: dancing-hair-bounce 1.4s ease-in-out infinite;
+}
+
+@keyframes dancing-groove {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(-4px) rotate(-2deg); }
+  75% { transform: translateX(4px) rotate(2deg); }
+}
+
+@keyframes dancing-leg-left {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  50% { transform: translateX(-2px) rotate(-8deg); }
+}
+
+@keyframes dancing-leg-right {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  50% { transform: translateX(2px) rotate(8deg); }
+}
+
+@keyframes dancing-arm-left {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  50% { transform: rotate(15deg) translateY(-1px); }
+}
+
+@keyframes dancing-arm-right {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  50% { transform: rotate(-15deg) translateY(-1px); }
+}
+
+@keyframes dancing-head-bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-1px) rotate(-1deg); }
+  75% { transform: translateY(-1px) rotate(1deg); }
+}
+
+@keyframes dancing-tool-wave {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(25deg) scale(1.1); }
+}
+
+@keyframes dancing-hair-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1px); }
+}
+
+/* ===== CREATING STATE - Flowing Artistic Movement ===== */
+.mascot-creating .mascot-container {
+  animation: creating-artistic-flow 3s ease-in-out infinite;
+}
+
+.mascot-creating .mascot-head {
+  animation: creating-head-sway 2.5s ease-in-out infinite;
+}
+
+.mascot-creating .mascot-tool {
+  animation: creating-tool-paint-strokes 1.8s ease-in-out infinite;
+}
+
+.mascot-creating .mascot-arm-right {
+  animation: creating-flowing-arm 1.8s ease-in-out infinite;
+}
+
+.mascot-creating .mascot-arm-left {
+  animation: creating-support-gesture 2.5s ease-in-out infinite;
+}
+
+.mascot-creating .mascot-eye-left,
+.mascot-creating .mascot-eye-right {
+  animation: creating-inspired-eyes 3s ease-in-out infinite;
+}
+
+.mascot-creating .mascot-hair {
+  animation: creating-inspired-hair 3s ease-in-out infinite;
+}
+
+@keyframes creating-artistic-flow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-1px) rotate(1deg); }
+  75% { transform: translateY(-1px) rotate(-1deg); }
+}
+
+@keyframes creating-head-sway {
+  0%, 100% { transform: rotate(2deg); }
+  50% { transform: rotate(-3deg); }
+}
+
+@keyframes creating-tool-paint-strokes {
+  0%, 100% { transform: rotate(-5deg) translateY(0); }
+  25% { transform: rotate(-25deg) translateY(-2px); }
+  50% { transform: rotate(15deg) translateY(1px); }
+  75% { transform: rotate(-15deg) translateY(-1px); }
+}
+
+@keyframes creating-flowing-arm {
+  0%, 100% { transform: rotate(-8deg) translateY(0); }
+  25% { transform: rotate(-20deg) translateY(-2px); }
+  75% { transform: rotate(5deg) translateY(1px); }
+}
+
+@keyframes creating-support-gesture {
+  0%, 100% { transform: rotate(8deg) translateY(-1px); }
+  50% { transform: rotate(-5deg) translateY(1px); }
+}
+
+@keyframes creating-inspired-eyes {
+  0%, 100% { transform: scaleY(1) scaleX(1); }
+  50% { transform: scaleY(1.2) scaleX(0.9); }
+}
+
+@keyframes creating-inspired-hair {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-0.5px); }
+}
+
+/* ===== SLEEPY STATE - Sitting Down & Sleepy ===== */
+.mascot-sleepy .mascot-container {
+  animation: sleepy-sit-down 4s ease-in-out infinite;
+}
+
+.mascot-sleepy .mascot-head,
+.mascot-sleepy .mascot-hair,
+.mascot-sleepy .mascot-beard {
+  animation: sleepy-head-droop 4s ease-in-out infinite;
+}
+
+.mascot-sleepy .mascot-eye-left,
+.mascot-sleepy .mascot-eye-right {
+  animation: sleepy-head-droop 4s ease-in-out infinite, sleepy-sleepy-eyes 5s ease-in-out infinite;
+}
+
+.mascot-sleepy .mascot-body {
+  animation: sleepy-body-lower 4s ease-in-out infinite;
+}
+
+.mascot-sleepy .mascot-arm-left {
+  animation: sleepy-arm-hang 3s ease-in-out infinite;
+}
+
+.mascot-sleepy .mascot-arm-right {
+  animation: sleepy-arm-support 3s ease-in-out infinite;
+}
+
+.mascot-sleepy .mascot-leg-left,
+.mascot-sleepy .mascot-leg-right {
+  animation: sleepy-legs-sitting 4s ease-in-out infinite;
+}
+
+.mascot-sleepy .mascot-tool {
+  animation: sleepy-tool-dropped 6s ease-in-out infinite;
+}
+
+@keyframes sleepy-sit-down {
+  0%, 100% { transform: translateY(6px); }
+  50% { transform: translateY(8px); }
+}
+
+@keyframes sleepy-head-droop {
+  0%, 100% { transform: rotate(-15deg) translateY(6px); }
+  25% { transform: rotate(-18deg) translateY(7px); }
+  50% { transform: rotate(-20deg) translateY(8px); }
+  75% { transform: rotate(-18deg) translateY(7px); }
+}
+
+@keyframes sleepy-sleepy-eyes {
+  0%, 70%, 100% { transform: scaleY(0.1); opacity: 0.4; }
+  5%, 65% { transform: scaleY(0.6); opacity: 0.8; }
+  10%, 60% { transform: scaleY(0.1); opacity: 0.4; }
+}
+
+@keyframes sleepy-body-lower {
+  0%, 100% { transform: translateY(6px) rotate(-2deg); }
+  50% { transform: translateY(8px) rotate(-3deg); }
+}
+
+@keyframes sleepy-arm-hang {
+  0%, 100% { transform: rotate(-15deg) translateY(8px); }
+  50% { transform: rotate(-20deg) translateY(10px); }
+}
+
+@keyframes sleepy-arm-support {
+  0%, 100% { transform: rotate(25deg) translateY(6px); }
+  50% { transform: rotate(30deg) translateY(8px); }
+}
+
+@keyframes sleepy-legs-sitting {
+  0%, 100% { transform: rotate(20deg) translateY(6px); }
+  50% { transform: rotate(25deg) translateY(8px); }
+}
+
+@keyframes sleepy-tool-dropped {
+  0%, 100% { transform: rotate(50deg) translateY(12px) translateX(8px); opacity: 0.6; }
+  50% { transform: rotate(55deg) translateY(14px) translateX(10px); opacity: 0.4; }
+}
+
+/* ===== COFFEE STATE - Coffee Break & Sipping ===== */
+.mascot-coffee .mascot-container {
+  animation: coffee-break-relaxed 6s ease-in-out infinite;
+}
+
+.mascot-coffee .mascot-head {
+  animation: coffee-head-enjoy 6s ease-in-out infinite;
+}
+
+.mascot-coffee .mascot-eye-left,
+.mascot-coffee .mascot-eye-right {
+  animation: coffee-content-eyes 4s ease-in-out infinite;
+}
+
+.mascot-coffee .mascot-body {
+  animation: coffee-body-satisfied 6s ease-in-out infinite;
+}
+
+.mascot-coffee .mascot-arm-left {
+  animation: coffee-arm-hold-mug 3s ease-in-out infinite;
+}
+
+.mascot-coffee .mascot-arm-right {
+  animation: coffee-arm-support 6s ease-in-out infinite;
+}
+
+.mascot-coffee .mascot-tool {
+  animation: coffee-tool-resting 6s ease-in-out infinite;
+}
+
+/* Coffee Mug - visible coffee cup */
+.mascot-coffee .mascot-tool::before {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 8px;
+  background: #8B4513;
+  bottom: -2px;
+  left: -2px;
+  border-radius: 2px;
+  border: 1px solid #654321;
+}
+
+/* Coffee Steam - animated rising steam */
+.mascot-coffee .mascot-tool::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 4px;
+  background: linear-gradient(to top, rgba(255,255,255,0.6), rgba(255,255,255,0));
+  bottom: 6px;
+  left: 1px;
+  border-radius: 1px;
+  animation: coffee-steam 2s ease-in-out infinite;
+}
+
+@keyframes coffee-break-relaxed {
+  0%, 100% { transform: translateY(0); }
+  20% { transform: translateY(-0.5px); }
+  40% { transform: translateY(0); }
+  60% { transform: translateY(-0.5px); }
+  80% { transform: translateY(0); }
+}
+
+@keyframes coffee-head-enjoy {
+  0%, 100% { transform: rotate(0deg); }
+  15% { transform: rotate(-3deg); }
+  30% { transform: rotate(0deg); }
+  45% { transform: rotate(2deg); }
+  60% { transform: rotate(0deg); }
+  75% { transform: rotate(-2deg); }
+  85% { transform: rotate(0deg); }
+}
+
+@keyframes coffee-content-eyes {
+  0%, 80%, 100% { transform: scaleY(1); }
+  85%, 95% { transform: scaleY(0.3); }
+}
+
+@keyframes coffee-body-satisfied {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(0.5px) rotate(-0.5deg); }
+}
+
+@keyframes coffee-arm-hold-mug {
+  0%, 100% { transform: rotate(-25deg) translateY(-2px); }
+  15% { transform: rotate(-20deg) translateY(-4px); }
+  30% { transform: rotate(-25deg) translateY(-2px); }
+  45% { transform: rotate(-15deg) translateY(-5px); }
+  60% { transform: rotate(-25deg) translateY(-2px); }
+  75% { transform: rotate(-20deg) translateY(-3px); }
+}
+
+@keyframes coffee-arm-support {
+  0%, 100% { transform: rotate(8deg) translateY(0px); }
+  50% { transform: rotate(10deg) translateY(-0.5px); }
+}
+
+@keyframes coffee-tool-resting {
+  0%, 100% { transform: rotate(-45deg) translateY(-2px) translateX(-8px) scale(1.2); }
+  15% { transform: rotate(-40deg) translateY(-4px) translateX(-8px) scale(1.2); }
+  30% { transform: rotate(-45deg) translateY(-2px) translateX(-8px) scale(1.2); }
+  45% { transform: rotate(-35deg) translateY(-6px) translateX(-8px) scale(1.2); }
+  60% { transform: rotate(-45deg) translateY(-2px) translateX(-8px) scale(1.2); }
+  75% { transform: rotate(-40deg) translateY(-3px) translateX(-8px) scale(1.2); }
+}
+
+@keyframes coffee-steam {
+  0%, 100% { opacity: 0.4; transform: translateY(0) scaleY(1); }
+  50% { opacity: 0.8; transform: translateY(-2px) scaleY(1.2); }
+}
+
+/* ===== REVEALING STATE - Entrance Animation ===== */
+.mascot-revealing .mascot-container {
+  animation: revealing-entrance 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.mascot-revealing .mascot-hair {
+  animation: revealing-hair 1.4s ease-out 0.2s forwards;
+}
+
+.mascot-revealing .mascot-eye-left {
+  animation: revealing-eye-left 0.8s ease-out 0.6s forwards;
+}
+
+.mascot-revealing .mascot-eye-right {
+  animation: revealing-eye-right 0.8s ease-out 0.7s forwards;
+}
+
+.mascot-revealing .mascot-arm-left,
+.mascot-revealing .mascot-arm-right {
+  animation: revealing-arms 1s ease-out 0.8s forwards;
+}
+
+.mascot-revealing .mascot-tool {
+  animation: revealing-tool 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1s forwards;
+}
+
+@keyframes revealing-entrance {
+  0% { transform: scale(0) rotate(180deg); opacity: 0; }
+  70% { transform: scale(1.1) rotate(-10deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes revealing-hair {
+  0% { transform: translateY(-10px) scale(0); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes revealing-eye-left {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.5); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes revealing-eye-right {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.5); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes revealing-arms {
+  0% { transform: rotate(-90deg) scale(0); opacity: 0; }
+  100% { transform: rotate(0deg) scale(1); opacity: 1; }
+}
+
+@keyframes revealing-tool {
+  0% { transform: rotate(-180deg) scale(0) translateY(10px); opacity: 0; }
+  70% { transform: rotate(10deg) scale(1.2) translateY(-2px); opacity: 1; }
+  100% { transform: rotate(0deg) scale(1) translateY(0); opacity: 1; }
+}
+
+/* ===== HIDING STATE - Exit Animation ===== */
+.mascot-hiding .mascot-container {
+  animation: hiding-exit 0.6s ease-in forwards;
+}
+
+.mascot-hiding .mascot-arm-left {
+  animation: hiding-arm-left 0.4s ease-in forwards;
+}
+
+.mascot-hiding .mascot-arm-right {
+  animation: hiding-arm-right 0.4s ease-in 0.1s forwards;
+}
+
+.mascot-hiding .mascot-leg-left,
+.mascot-hiding .mascot-leg-right {
+  animation: hiding-legs 0.5s ease-in 0.2s forwards;
+}
+
+.mascot-hiding .mascot-tool {
+  animation: hiding-tool-spin 0.6s ease-in forwards;
+}
+
+@keyframes hiding-exit {
+  0% { transform: scale(1) rotate(0deg); opacity: 1; }
+  100% { transform: scale(0) rotate(-180deg); opacity: 0; }
+}
+
+@keyframes hiding-arm-left {
+  0% { transform: rotate(0deg) scale(1); opacity: 1; }
+  100% { transform: rotate(-90deg) scale(0); opacity: 0; }
+}
+
+@keyframes hiding-arm-right {
+  0% { transform: rotate(0deg) scale(1); opacity: 1; }
+  100% { transform: rotate(90deg) scale(0); opacity: 0; }
+}
+
+@keyframes hiding-legs {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(5px) scale(0.5); opacity: 0; }
+}
+
+@keyframes hiding-tool-spin {
+  0% { transform: rotate(0deg) scale(1); opacity: 1; }
+  100% { transform: rotate(720deg) scale(0); opacity: 0; }
+}
+
+/* ===== HIDDEN STATE - Completely Hidden ===== */
+.mascot-hidden {
+  transform: scale(0) rotate(180deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Debug mode - show all element borders */
+.debug-mascot .mascot-character > * {
+  border: 1px solid red !important;
+}
+
+/* Hover effects for interactive moments */
+.mascot-interactive:hover .mascot-container {
+  transform: scale(1.1);
+  transition: transform 0.2s ease-out;
+}
+
+/* Mobile responsive styles are handled earlier in the file */

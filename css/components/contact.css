@@ -1,0 +1,131 @@
+/* Contact Section Styles */
+
+.contact-section {
+  padding: var(--space-4xl) 0;
+  background-color: var(--color-background);
+}
+
+.contact-container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.contact-title {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+  font-size: var(--text-3xl);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.contact-content {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact-text {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--color-tertiary);
+  margin-bottom: var(--space-3xl);
+}
+
+/* Contact Links */
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .contact-links {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--space-xl);
+  }
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-md) var(--space-xl);
+  background-color: #fafafa;
+  color: var(--color-primary);
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  transition: all var(--transition-base);
+  border: 1px solid var(--color-secondary);
+  min-height: 48px;
+}
+
+.contact-link:hover,
+.contact-link:focus {
+  background-color: var(--color-accent-yellow);
+  border-color: var(--color-accent-yellow);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.contact-icon {
+  margin-right: var(--space-sm);
+  font-size: var(--text-lg);
+}
+
+/* Responsive Typography */
+@media (min-width: 768px) {
+  .contact-container {
+    padding: 0 var(--space-lg);
+  }
+  
+  .contact-title {
+    font-size: var(--text-4xl);
+  }
+  
+  .contact-text {
+    font-size: var(--text-xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .contact-container {
+    padding: 0 var(--space-xl);
+  }
+}
+
+/* Animation */
+.contact-content {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.contact-content.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .contact-content,
+  .contact-link {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .contact-link:hover {
+    transform: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .contact-link {
+    border-width: 2px;
+  }
+}

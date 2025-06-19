@@ -1,0 +1,276 @@
+/* Accessibility Utility Styles */
+
+/* Screen Reader Only Content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip Links */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--color-primary);
+  color: var(--color-background);
+  padding: var(--space-sm) var(--space-md);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  z-index: var(--z-modal);
+  transition: top var(--transition-base);
+  font-weight: 500;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Focus Indicators - Disabled to prevent unwanted outlines */
+*:focus {
+  outline: none;
+  outline-offset: 2px;
+}
+
+*:focus-visible {
+  outline: none;
+  outline-offset: 2px;
+}
+
+/* Enhanced focus for interactive elements - Disabled */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  outline-offset: 2px;
+}
+
+/* Focus within for containers - Disabled */
+.nav-menu:focus-within,
+.gallery-grid:focus-within {
+  outline: none;
+  outline-offset: 4px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  /* Increase border thickness */
+  .gallery-item,
+  .hero-cta,
+  .load-more-btn,
+  .contact-link,
+  .nav-link {
+    border-width: 2px;
+  }
+  
+  /* Ensure sufficient contrast */
+  .hero-cta:hover,
+  .load-more-btn:hover,
+  .contact-link:hover {
+    background-color: var(--color-accent-yellow) !important;
+    color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+  }
+  
+  /* Enhanced focus indicators */
+  *:focus-visible {
+    outline-width: 4px;
+    outline-style: solid;
+  }
+}
+
+/* Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  /* Remove all animations and transitions */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Maintain functional transforms for layout */
+  .gallery-item:hover {
+    transform: none;
+  }
+  
+  .hero-cta:hover,
+  .load-more-btn:hover,
+  .contact-link:hover {
+    transform: none;
+  }
+  
+  /* Disable parallax and moving elements */
+  .hero-section::after {
+    display: none;
+  }
+}
+
+/* Touch Target Sizing */
+@media (pointer: coarse) {
+  /* Ensure minimum 44x44px touch targets */
+  button,
+  a,
+  input[type="button"],
+  input[type="submit"],
+  .gallery-item,
+  .nav-link,
+  .hero-cta,
+  .load-more-btn,
+  .contact-link {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Increase padding for better touch experience */
+  .nav-link {
+    padding: var(--space-md) var(--space-lg);
+  }
+  
+  .hero-cta,
+  .load-more-btn,
+  .contact-link {
+    padding: var(--space-md) var(--space-xl);
+  }
+}
+
+/* Print Accessibility */
+@media print {
+  /* Ensure good contrast in print */
+  * {
+    color: #000 !important;
+    background: transparent !important;
+  }
+  
+  /* Show link URLs for reference */
+  a[href]:not(.nav-link):after {
+    content: " (" attr(href) ")";
+    font-size: smaller;
+    color: #666;
+  }
+  
+  /* Hide decorative elements */
+  .loading-screen,
+  .pixel-mascot,
+  .hero-section::before,
+  .hero-section::after {
+    display: none !important;
+  }
+  
+  /* Optimize spacing for print */
+  section {
+    page-break-inside: avoid;
+    padding: 1rem 0;
+  }
+}
+
+/* Color Contrast Utilities */
+.high-contrast {
+  filter: contrast(150%);
+}
+
+.low-contrast {
+  filter: contrast(80%);
+}
+
+/* Text Resize Support */
+@media (min-resolution: 2dppx) {
+  /* Adjust for high-DPI displays */
+  body {
+    font-size: calc(var(--text-base) * 1.1);
+  }
+}
+
+/* Keyboard Navigation Helpers - Disabled to prevent unwanted outlines */
+.keyboard-nav *:focus {
+  outline: none !important;
+  outline-offset: 2px !important;
+}
+
+/* Screen Reader and Loading States - Modern browsers handle ARIA attributes automatically */
+[aria-busy="true"]::after {
+  content: "Loading...";
+  /* Content will be announced when aria-busy becomes false */
+}
+
+/* Interactive Element States */
+[aria-expanded="true"] + * {
+  display: block;
+}
+
+[aria-expanded="false"] + * {
+  display: none;
+}
+
+/* Error State Styling */
+[aria-invalid="true"] {
+  border-color: var(--color-error) !important;
+  outline-color: var(--color-error) !important;
+}
+
+/* Required Field Indicators */
+[aria-required="true"]::after {
+  content: " *";
+  color: var(--color-error);
+  font-weight: bold;
+}
+
+/* Disabled State */
+[aria-disabled="true"],
+[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Focus Management for Modals/Overlays */
+.overlay-open {
+  overflow: hidden;
+}
+
+.overlay-open .main-content,
+.overlay-open .header,
+.overlay-open .footer {
+  filter: blur(3px);
+  pointer-events: none;
+}
+
+/* Language Direction Support */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .nav-container {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .contact-links {
+  flex-direction: row-reverse;
+}
+
+/* Browser-specific Accessibility Fixes */
+/* Firefox - Remove button inner borders */
+@supports (-moz-appearance: none) {
+  button::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+}
+
+/* Safari */
+@supports (-webkit-appearance: none) {
+  button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+}
