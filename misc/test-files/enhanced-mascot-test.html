@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Enhanced Mascot Test - Environmental Elements</title>
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .enhancement-status {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .state-test {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .state-test:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .state-test h3 {
+            margin: 0 0 10px 0;
+            color: var(--color-accent-yellow);
+        }
+        
+        .state-test p {
+            margin: 5px 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .current-state {
+            background: rgba(235, 197, 51, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+        
+        .gallery-simulation {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .mock-gallery-item {
+            background: rgba(255,255,255,0.2);
+            height: 100px;
+            border-radius: 5px;
+            margin: 10px;
+            display: inline-block;
+            width: 150px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .mock-gallery-item:hover {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .features-list {
+            text-align: left;
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .features-list h4 {
+            color: var(--color-accent-orange);
+            margin-bottom: 10px;
+        }
+        
+        .features-list ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .features-list li {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
+        .interactive-controls {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .control-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        
+        .control-button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .control-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .control-button.creating { background: rgba(235,197,51,0.3); }
+        .control-button.excited { background: rgba(235,197,51,0.3); }
+        .control-button.coffee { background: rgba(214,100,34,0.3); }
+        .control-button.thinking { background: rgba(214,100,34,0.3); }
+        .control-button.sleepy { background: rgba(128,128,128,0.3); }
+        .control-button.auto-cycle { background: rgba(33,150,243,0.3); padding: 10px 20px; }
+        
+        .auto-cycle-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .note-text {
+            font-size: 12px;
+            margin-top: 15px;
+        }
+        
+        .footer-text {
+            margin-top: 40px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .state-test.active {
+            background: rgba(235,197,51,0.3);
+            border: 2px solid var(--color-accent-yellow);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🌟 Enhanced Mascot System</h1>
+        <p>Testing environmental elements and responsive interactions</p>
+        
+        <div class="enhancement-status">
+            <h2>✅ Phase 1 Complete: Enhanced Mascot System</h2>
+            <div class="features-list">
+                <h4>🎯 New Features Implemented:</h4>
+                <ul>
+                    <li><strong>Isolated Environmental Elements:</strong> 200% character area with contextual props</li>
+                    <li><strong>Responsive Interactions:</strong> Immediate state changes for gallery hovers</li>
+                    <li><strong>Digital Design Focus:</strong> Typography samples, color swatches, mouse pointer</li>
+                    <li><strong>Synchronized State Management:</strong> Character and environment move together</li>
+                    <li><strong>Mobile Responsive:</strong> Proper scaling for all screen sizes</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="current-state">
+            Current State: <span id="current-state">idle</span><br>
+            Environment Active: <span id="env-active">idle elements</span><br>
+            Interaction Mode: <span id="interaction-mode">standard</span>
+        </div>
+        
+        <div class="test-grid">
+            <div class="state-test" onclick="window.testState('creating')">
+                <h3>🎨 Creating State</h3>
+                <p><strong>Elements:</strong> Typography samples (Sans, Serif, Script)</p>
+                <p><strong>Props:</strong> Color swatches with pulse animation</p>
+                <p><strong>Digital Tools:</strong> Mouse pointer with movement</p>
+                <p><strong>Design Elements:</strong> Floating shapes (circle, square)</p>
+            </div>
+            
+            <div class="state-test" onclick="window.testState('excited')">
+                <h3>⭐ Excited State</h3>
+                <p><strong>Elements:</strong> Bouncing star particles</p>
+                <p><strong>Effects:</strong> Sparkle trails with sweep animation</p>
+                <p><strong>Response:</strong> Immediate on gallery hover</p>
+                <p><strong>Duration:</strong> Until interaction ends</p>
+            </div>
+            
+            <div class="state-test" onclick="window.testState('coffee')">
+                <h3>☕ Coffee State</h3>
+                <p><strong>Elements:</strong> Steam particles (enhanced)</p>
+                <p><strong>Props:</strong> Coffee beans scattered around</p>
+                <p><strong>Atmosphere:</strong> Warm glow effect</p>
+                <p><strong>Mood:</strong> Relaxed creative energy</p>
+            </div>
+            
+            <div class="state-test" onclick="window.testState('thinking')">
+                <h3>💭 Thinking State</h3>
+                <p><strong>Elements:</strong> Question mark and lightbulb</p>
+                <p><strong>Props:</strong> Floating wireframe sketches</p>
+                <p><strong>Effects:</strong> Pulsing thought bubble</p>
+                <p><strong>Concept:</strong> Design ideation process</p>
+            </div>
+            
+            <div class="state-test" onclick="window.testState('sleepy')">
+                <h3>😴 Sleepy State</h3>
+                <p><strong>Elements:</strong> "Zzz" particles floating up</p>
+                <p><strong>Props:</strong> Moon icon and dim overlay</p>
+                <p><strong>Sync:</strong> Head, hair, beard move together</p>
+                <p><strong>Atmosphere:</strong> Dimmed environment</p>
+            </div>
+            
+            <div class="state-test" onclick="window.testState('idle')">
+                <h3>🧘 Idle State</h3>
+                <p><strong>Elements:</strong> Subtle ambient dots</p>
+                <p><strong>Animation:</strong> Gentle floating movement</p>
+                <p><strong>Default:</strong> Returns after interactions</p>
+                <p><strong>Breathing:</strong> Character subtle life</p>
+            </div>
+        </div>
+        
+        <div class="interactive-controls">
+            <h3>🎮 Interactive Controls</h3>
+            <div class="control-buttons">
+                <button onclick="window.testState('idle')" class="control-button">Reset to Idle</button>
+                <button onclick="window.testState('creating')" class="control-button creating">Creating</button>
+                <button onclick="window.testState('excited')" class="control-button excited">Excited</button>
+                <button onclick="window.testState('coffee')" class="control-button coffee">Coffee</button>
+                <button onclick="window.testState('thinking')" class="control-button thinking">Thinking</button>
+                <button onclick="window.testState('sleepy')" class="control-button sleepy">Sleepy</button>
+            </div>
+            <div class="control-buttons">
+                <button onclick="window.enableAutoCycle()" class="control-button auto-cycle">🔄 Auto-Cycle All States</button>
+                <button onclick="window.debugEnvironment()" class="control-button">🐛 Debug State</button>
+                <button onclick="window.verifyEnvironment()" class="control-button">✅ Verify Clean</button>
+                <button onclick="window.forceCleanEnvironment()" class="control-button">🧹 Force Clean</button>
+                <button onclick="window.testElementVisibility()" class="control-button">👁️ Test Visibility</button>
+                <button onclick="window.forceShowElements()" class="control-button">🔥 Force Show All</button>
+            </div>
+        </div>
+        
+        <div class="gallery-simulation">
+            <h3>🖼️ Gallery Interaction Simulation</h3>
+            <p>Hover over these mock gallery items to test responsive mascot reactions:</p>
+            <div class="mock-gallery-item gallery-item" data-project="project1">Project 1</div>
+            <div class="mock-gallery-item gallery-item" data-project="project2">Project 2</div>
+            <div class="mock-gallery-item gallery-item" data-project="project3">Project 3</div>
+            <p class="note-text">
+                <strong>Expected Behavior:</strong> Immediate state change on hover, immediate return to idle when hover ends
+            </p>
+        </div>
+        
+        <div class="features-list">
+            <h4>🔧 Technical Implementation:</h4>
+            <ul>
+                <li><strong>Isolated Systems:</strong> Character and environment in separate divs</li>
+                <li><strong>Synchronized Control:</strong> Single setState() function controls both</li>
+                <li><strong>Responsive Timing:</strong> 0.15s hide, 0.3s show, immediate for interactions</li>
+                <li><strong>Mobile Scaling:</strong> Environmental area scales with character size</li>
+                <li><strong>Performance:</strong> Hardware-accelerated CSS animations</li>
+            </ul>
+        </div>
+        
+        <div class="footer-text">
+            <p><strong>Next Phase:</strong> Navigation animations, loading enhancements, gallery wow moments</p>
+            <p><strong>Test Instructions:</strong> Try hovering gallery items, clicking states, resizing window</p>
+        </div>
+    </div>
+
+    <script src="js/main.js" type="module"></script>
+    <script type="module">
+        // Wait for mascot to be initialized globally
+        let mascot = null;
+        let currentState = 'idle';
+        
+        // Wait for global mascot to be available
+        function waitForMascot() {
+            if (window.mascot) {
+                mascot = window.mascot;
+                console.log('🌟 Test page connected to mascot:', mascot);
+                console.log('🌟 Environment available:', !!mascot.environment);
+                updateDisplay();
+                return true;
+            }
+            return false;
+        }
+        
+        // Try immediately and then with intervals
+        if (!waitForMascot()) {
+            const checkInterval = setInterval(() => {
+                if (waitForMascot()) {
+                    clearInterval(checkInterval);
+                }
+            }, 100);
+        }
+        
+        // Test state function - make it global
+        window.testState = function(state) {
+            if (!mascot) {
+                console.error('❌ Mascot not available yet');
+                return;
+            }
+            
+            console.log(`🧪 TEST: Setting state to ${state}`);
+            mascot.setState(state, true);
+            currentState = state;
+            updateDisplay();
+            updateActiveState(state);
+            
+            // Also try to debug environment directly
+            if (mascot.environment) {
+                setTimeout(() => {
+                    mascot.environment.debugState();
+                }, 500);
+            }
+        };
+        
+        // Update display
+        function updateDisplay() {
+            const currentStateEl = document.getElementById('current-state');
+            const envActiveEl = document.getElementById('env-active');
+            const interactionModeEl = document.getElementById('interaction-mode');
+            
+            if (currentStateEl) currentStateEl.textContent = currentState;
+            if (envActiveEl) envActiveEl.textContent = getEnvironmentDescription(currentState);
+            if (interactionModeEl) {
+                interactionModeEl.textContent = 
+                    ['excited', 'creating'].includes(currentState) ? 'immediate response' : 'standard';
+            }
+        }
+        
+        // Update visual feedback for active state
+        function updateActiveState(state) {
+            // Remove active class from all state test cards
+            document.querySelectorAll('.state-test').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Add active class to current state card
+            const activeCard = document.querySelector(`.state-test[onclick*="${state}"]`);
+            if (activeCard) {
+                activeCard.classList.add('active');
+            }
+            
+            // Update button feedback
+            document.querySelectorAll('.control-button').forEach(btn => {
+                btn.style.transform = '';
+                btn.style.boxShadow = '';
+            });
+            
+            const activeButton = document.querySelector(`[onclick*="${state}"]`);
+            if (activeButton && activeButton.classList.contains('control-button')) {
+                activeButton.style.transform = 'translateY(-2px)';
+                activeButton.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)';
+            }
+        }
+        
+        function getEnvironmentDescription(state) {
+            switch (state) {
+                case 'creating': return 'Typography, colors, mouse pointer, shapes';
+                case 'excited': return 'Star particles, sparkle trails';
+                case 'coffee': return 'Steam, coffee beans, warm glow';
+                case 'thinking': return 'Question mark, lightbulb, wireframes';
+                case 'sleepy': return 'Zzz particles, moon, dim overlay';
+                case 'idle': return 'Ambient dots';
+                default: return 'Unknown';
+            }
+        }
+        
+        // Add gallery simulation event listeners
+        function setupGallerySimulation() {
+            document.querySelectorAll('.mock-gallery-item').forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    const interactionModeEl = document.getElementById('interaction-mode');
+                    if (interactionModeEl) {
+                        interactionModeEl.textContent = 'gallery hover detected';
+                    }
+                    console.log('🖼️ Gallery hover simulation');
+                });
+                
+                item.addEventListener('mouseleave', () => {
+                    const interactionModeEl = document.getElementById('interaction-mode');
+                    if (interactionModeEl) {
+                        interactionModeEl.textContent = 'returning to idle';
+                    }
+                    console.log('🖼️ Gallery hover ended');
+                });
+            });
+        }
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            setupGallerySimulation();
+            updateDisplay();
+            
+            // Auto-cycle demo (optional - can be disabled)
+            let autoCycleEnabled = false;
+            if (autoCycleEnabled) {
+                const states = ['idle', 'creating', 'excited', 'coffee', 'thinking', 'sleepy'];
+                let stateIndex = 0;
+                
+                setInterval(() => {
+                    window.testState(states[stateIndex]);
+                    stateIndex = (stateIndex + 1) % states.length;
+                }, 4000);
+            }
+        });
+        
+        // Manual control buttons
+        window.enableAutoCycle = function() {
+            const button = document.querySelector('.auto-cycle');
+            if (button) {
+                button.textContent = '🔄 Auto-Cycling...';
+                button.disabled = true;
+                button.style.opacity = '0.6';
+            }
+            
+            console.log('🔄 Auto-cycle started');
+            const states = ['idle', 'creating', 'excited', 'coffee', 'thinking', 'sleepy'];
+            let stateIndex = 0;
+            
+            const interval = setInterval(() => {
+                window.testState(states[stateIndex]);
+                console.log(`🔄 Auto-cycle: ${states[stateIndex]} (${stateIndex + 1}/${states.length})`);
+                stateIndex = (stateIndex + 1) % states.length;
+            }, 2500);
+            
+            // Stop after one full cycle
+            setTimeout(() => {
+                clearInterval(interval);
+                window.testState('idle');
+                console.log('✅ Auto-cycle completed');
+                
+                if (button) {
+                    button.textContent = '🔄 Auto-Cycle All States';
+                    button.disabled = false;
+                    button.style.opacity = '1';
+                }
+            }, states.length * 2500);
+        };
+        
+        // Debug functions
+        window.debugEnvironment = function() {
+            if (mascot && mascot.environment) {
+                console.log('🐛 Debugging environment state...');
+                const debug = mascot.environment.debugState();
+                console.table(debug);
+            } else {
+                console.error('Mascot or environment not available');
+            }
+        };
+        
+        window.verifyEnvironment = function() {
+            if (mascot && mascot.environment) {
+                console.log('✅ Verifying environment clean state...');
+                const isClean = mascot.environment.verifyCleanState();
+                if (isClean) {
+                    console.log('✅ Environment is clean and properly synchronized');
+                } else {
+                    console.error('❌ Environment has state issues');
+                }
+            } else {
+                console.error('Mascot or environment not available');
+            }
+        };
+        
+        window.forceCleanEnvironment = function() {
+            if (mascot && mascot.environment) {
+                console.log('🧹 Force cleaning environment...');
+                mascot.environment.forceCleanState();
+                setTimeout(() => {
+                    mascot.environment.debugState();
+                }, 200);
+            } else {
+                console.error('Mascot or environment not available');
+            }
+        };
+        
+        // Test function to force show elements
+        window.testElementVisibility = function() {
+            const envElements = document.querySelectorAll('.env-element');
+            console.log(`Found ${envElements.length} environmental elements`);
+            
+            envElements.forEach((el, index) => {
+                el.style.opacity = '1';
+                el.style.transform = 'scale(1)';
+                el.style.background = 'rgba(255,0,0,0.5)';
+                el.style.border = '2px solid red';
+                el.style.zIndex = '1000';
+                console.log(`Element ${index}: ${el.dataset.type}, position: ${getComputedStyle(el).position}`);
+            });
+        };
+        
+        // Force show all elements with different colors per state
+        window.forceShowElements = function() {
+            console.log('🔥 FORCE SHOWING ALL ENVIRONMENTAL ELEMENTS');
+            
+            const stateColors = {
+                'creating': 'red',
+                'excited': 'orange', 
+                'coffee': 'brown',
+                'thinking': 'blue',
+                'sleepy': 'purple',
+                'idle': 'gray',
+                'revealing': 'yellow',
+                'hiding': 'black',
+                'walking': 'green',
+                'dancing': 'pink'
+            };
+            
+            Object.keys(stateColors).forEach(state => {
+                const elements = document.querySelectorAll(`.env-${state} .env-element`);
+                console.log(`State ${state}: Found ${elements.length} elements`);
+                
+                elements.forEach((el, index) => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'scale(1)';
+                    el.style.background = stateColors[state];
+                    el.style.border = `3px solid ${stateColors[state]}`;
+                    el.style.color = 'white';
+                    el.style.zIndex = '1001';
+                    el.classList.add('active');
+                    console.log(`  - ${el.dataset.type}: ${stateColors[state]}`);
+                });
+            });
+        };
+    </script>
+</body>
+</html>

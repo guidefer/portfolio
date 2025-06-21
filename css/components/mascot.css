@@ -10,9 +10,9 @@
   z-index: 1000;
   pointer-events: none;
   transition: transform 0.3s ease-out;
-  /* Image rendering for pixel art crispness */
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: pixelated;
+  /* Image rendering for pixel art crispness - Broadly compatible */
+  image-rendering: -webkit-optimize-contrast; /* Safari and older Edge */
+  image-rendering: pixelated; /* Modern browsers (Chrome, Firefox, new Edge) */
 }
 
 /* Responsive sizing for mobile */
@@ -637,11 +637,12 @@
   position: absolute;
   width: 6px;
   height: 8px;
-  background: #8B4513;
+  background: #ffffff;
   bottom: -2px;
   left: -2px;
   border-radius: 2px;
-  border: 1px solid #654321;
+  border: 1px solid #cccccc;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 /* Coffee Steam - animated rising steam */

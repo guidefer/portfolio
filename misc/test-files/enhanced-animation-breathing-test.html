@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Animation Breathing Time Test</title>
+    
+    <!-- Use our production CSS files -->
+    <link rel="stylesheet" href="css/main.css">
+    
+    <style>
+        body {
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f9f9f9;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .controls button {
+            padding: 12px 16px;
+            background: var(--color-accent-yellow);
+            border: 2px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        
+        .controls button:hover {
+            background: var(--color-accent-orange);
+            transform: translateY(-2px);
+        }
+        
+        .controls button:active {
+            transform: translateY(0);
+        }
+        
+        .status {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        .status h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        
+        .log {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        
+        .improvement {
+            background: #e8f5e8;
+            border: 2px solid #4CAF50;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .improvement h3 {
+            color: #2e7d32;
+            margin-top: 0;
+        }
+        
+        .improvement ul {
+            color: #2e7d32;
+            margin: 10px 0;
+        }
+        
+        .timer {
+            display: inline-block;
+            background: #333;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        /* Force mascot visibility */
+        .character-mascot {
+            display: block !important;
+            visibility: visible !important;
+        }
+        
+        .mascot-environment {
+            display: block !important;
+            visibility: visible !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎭 Enhanced Animation Breathing Time Test</h1>
+        <p>Testing the improved mascot animation system with proper breathing time and alternating thinking sequence.</p>
+        
+        <div class="improvement">
+            <h3>✅ Improvements Applied:</h3>
+            <ul>
+                <li><strong>Standardized Duration:</strong> All animations now run for exactly 10 seconds</li>
+                <li><strong>Automatic Return:</strong> Every state automatically returns to idle after 10 seconds</li>
+                <li><strong>Idle-Only Triggers:</strong> New animations only start when mascot is idle</li>
+                <li><strong>Enhanced Thinking:</strong> Question mark (0-5s) → Lightbulb (5-10s) sequence</li>
+                <li><strong>Improved Visibility:</strong> Enhanced bubble glow for white backgrounds</li>
+                <li><strong>Fixed Coffee State:</strong> Now returns to idle (was going to excited before)</li>
+            </ul>
+        </div>
+        
+        <div class="controls">
+            <button onclick="testState('idle')">🧘 Idle</button>
+            <button onclick="testState('excited')">🎉 Excited</button>
+            <button onclick="testState('creating')">🎨 Creating</button>
+            <button onclick="testState('thinking')">🤔 Thinking</button>
+            <button onclick="testState('coffee')">☕ Coffee</button>
+            <button onclick="testState('dancing')">💃 Dancing</button>
+            <button onclick="testState('resting')">😴 Resting</button>
+            <button onclick="clearLog()">🧹 Clear Log</button>
+        </div>
+        
+        <div class="status">
+            <h3>Current Status:</h3>
+            <p><strong>State:</strong> <span id="current-state">idle</span></p>
+            <p><strong>Duration:</strong> <span class="timer" id="duration-timer">0s</span></p>
+            <p><strong>Expected Return:</strong> <span id="expected-return">-</span></p>
+            <p><strong>Last Update:</strong> <span id="last-update">-</span></p>
+        </div>
+        
+        <div class="log" id="log">
+            <div>🎭 Enhanced Animation Test Ready</div>
+            <div>→ All animations will run for exactly 10 seconds</div>
+            <div>→ Each state will automatically return to idle</div>
+            <div>→ Thinking state features alternating question mark → lightbulb</div>
+        </div>
+    </div>
+    
+    <!-- Include our JavaScript modules -->
+    <script type="module">
+        // Import the mascot system properly
+        import { getMascot, initializeMascot } from './js/modules/mascot.js';
+        
+        let currentTestState = 'idle';
+        let stateStartTime = Date.now();
+        let statusInterval;
+        let mascotInstance = null;
+        
+        function testState(state) {
+            // Update UI immediately
+            currentTestState = state;
+            stateStartTime = Date.now();
+            document.getElementById('current-state').textContent = state;
+            document.getElementById('last-update').textContent = new Date().toLocaleTimeString();
+            
+            if (state === 'idle') {
+                document.getElementById('expected-return').textContent = '-';
+            } else {
+                const returnTime = new Date(Date.now() + 10000).toLocaleTimeString();
+                document.getElementById('expected-return').textContent = `${returnTime} (10s)`;
+            }
+            
+            // Use the existing mascot instance instead of manipulating DOM directly
+            if (mascotInstance) {
+                logMessage(`🎭 Testing ${state} state via mascot.setState()`);
+                mascotInstance.setState(state);
+                
+                if (state !== 'idle') {
+                    logMessage(`⏱️ Animation will run for 10 seconds`);
+                    
+                    if (state === 'thinking') {
+                        logMessage(`🤔 Thinking sequence: Question mark (0-5s) → Lightbulb (5-10s)`);
+                    }
+                    
+                    // The mascot will automatically return to idle after 10 seconds
+                    // We just need to update our UI when it does
+                    setTimeout(() => {
+                        if (currentTestState === state) {
+                            // Update our UI to match the automatic return
+                            currentTestState = 'idle';
+                            document.getElementById('current-state').textContent = 'idle';
+                            document.getElementById('expected-return').textContent = '-';
+                            logMessage(`✅ ${state} completed - returned to idle automatically`);
+                            clearInterval(statusInterval);
+                        }
+                    }, 10000);
+                }
+            } else {
+                // Fallback to DOM manipulation if mascot instance not available
+                const mascot = document.querySelector('.character-mascot');
+                const environment = document.querySelector('.mascot-environment');
+                
+                if (mascot && environment) {
+                    // Clear existing state classes
+                    mascot.className = 'character-mascot';
+                    environment.className = 'mascot-environment';
+                    
+                    // Add new state classes
+                    if (state !== 'idle') {
+                        mascot.classList.add(`state-${state}`);
+                        environment.classList.add(`state-${state}`);
+                    }
+                    
+                    logMessage(`🎭 Testing ${state} state via DOM manipulation (fallback)`);
+                    
+                    if (state !== 'idle') {
+                        setTimeout(() => {
+                            if (currentTestState === state) {
+                                testState('idle');
+                                logMessage(`✅ ${state} completed - returned to idle automatically`);
+                            }
+                        }, 10000);
+                    }
+                } else {
+                    logMessage(`❌ Error: Mascot elements not found`);
+                }
+            }
+            
+            // Start status timer
+            startStatusTimer();
+        }
+        
+        function startStatusTimer() {
+            clearInterval(statusInterval);
+            statusInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - stateStartTime) / 1000);
+                document.getElementById('duration-timer').textContent = `${elapsed}s`;
+                
+                // Update progress for non-idle states
+                if (currentTestState !== 'idle' && elapsed >= 10) {
+                    clearInterval(statusInterval);
+                }
+            }, 100);
+        }
+        
+        function logMessage(message) {
+            const log = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            log.appendChild(logEntry);
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        function clearLog() {
+            const log = document.getElementById('log');
+            log.innerHTML = `
+                <div>🎭 Enhanced Animation Test Ready</div>
+                <div>→ All animations will run for exactly 10 seconds</div>
+                <div>→ Each state will automatically return to idle</div>
+                <div>→ Thinking state features alternating question mark → lightbulb</div>
+            `;
+        }
+        
+        // Make functions available globally for HTML onclick handlers
+        window.testState = testState;
+        window.clearLog = clearLog;
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // First try to get existing mascot instance
+            mascotInstance = getMascot();
+            
+            if (mascotInstance) {
+                logMessage(`✅ Connected to existing mascot instance`);
+                testState('idle');
+            } else {
+                // Initialize new mascot instance if none exists
+                logMessage(`🎭 No existing mascot found, initializing new instance...`);
+                mascotInstance = initializeMascot();
+                
+                if (mascotInstance) {
+                    logMessage(`✅ New mascot instance created successfully`);
+                    testState('idle');
+                } else {
+                    logMessage(`❌ Failed to create mascot instance - check console for errors`);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

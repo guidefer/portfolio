@@ -27,8 +27,9 @@ html:focus-within {
 html {
   font-size: 100%;
   /* Prevent font scaling in landscape orientation for mobile browsers */
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%; /* Safari, iOS Safari */
+  -ms-text-size-adjust: 100%; /* IE 11, Edge Legacy */
+  text-size-adjust: 100%; /* Modern browsers */
 }
 
 /* Set core body defaults */

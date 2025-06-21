@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safari Environment Debug</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: white;
+            min-height: 100vh;
+        }
+        
+        .debug-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 3000;
+            max-width: 500px;
+            font-size: 12px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .test-btn {
+            margin: 5px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background: #333;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .test-btn.active {
+            background: #EBC533;
+            color: black;
+        }
+        
+        .debug-info {
+            margin: 10px 0;
+            font-family: monospace;
+            background: #111;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 10px;
+            white-space: pre-wrap;
+        }
+        
+        /* Simple test environment styles */
+        .test-environment {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 64px;
+            height: 64px;
+            background: orange;
+            border-radius: 4px;
+            z-index: 1001;
+        }
+        
+        .test-env-creating,
+        .test-env-thinking {
+            display: none;
+        }
+        
+        .test-environment.state-creating .test-env-creating {
+            display: block;
+        }
+        
+        .test-environment.state-thinking .test-env-thinking {
+            display: block;
+        }
+        
+        .test-element {
+            position: absolute;
+            background: red;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .test-font {
+            position: absolute;
+            top: -30px;
+            left: 5px;
+            background: yellow;
+            color: black;
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-size: 10px;
+        }
+        
+        .test-bubble {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 15px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+        }
+    </style>
+    <link rel="stylesheet" href="css/utilities/variables.css">
+    <link rel="stylesheet" href="css/components/mascot.css">
+    <link rel="stylesheet" href="css/components/mascot-environment.css">
+</head>
+<body>
+    <div class="debug-panel">
+        <h3>Safari Environment Debug</h3>
+        <div>
+            <button class="test-btn" data-state="idle">Idle</button>
+            <button class="test-btn" data-state="creating">Creating</button>
+            <button class="test-btn" data-state="thinking">Thinking</button>
+            <button class="test-btn" data-state="coffee">Coffee</button>
+        </div>
+        
+        <h4>Simple Test (should work):</h4>
+        <div>
+            <button class="test-btn" data-test="creating">Test Creating</button>
+            <button class="test-btn" data-test="thinking">Test Thinking</button>
+            <button class="test-btn" data-test="clear">Clear Test</button>
+        </div>
+        
+        <div class="debug-info" id="debugInfo">
+            Initializing Safari debug...
+        </div>
+    </div>
+    
+    <!-- Simple test environment -->
+    <div class="test-environment" id="testEnv">
+        <div class="test-env-creating">
+            <div class="test-element test-font">Aa</div>
+        </div>
+        <div class="test-env-thinking">
+            <div class="test-element test-bubble"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { DesignerMascot } from './js/modules/mascot.js';
+        
+        let mascot = null;
+        const debugEl = document.getElementById('debugInfo');
+        const testEnvEl = document.getElementById('testEnv');
+        
+        function updateDebug() {
+            const mascotEl = document.querySelector('.character-mascot');
+            const envEl = document.querySelector('.mascot-environment');
+            
+            let info = 'SAFARI DEBUG INFO:\n\n';
+            info += `User Agent: ${navigator.userAgent.includes('Safari') ? 'Safari' : 'Other'}\n\n`;
+            
+            if (mascotEl) {
+                info += `✓ Mascot found\n`;
+                info += `Classes: ${mascotEl.className}\n`;
+                const mascotStyle = getComputedStyle(mascotEl);
+                info += `Z-index: ${mascotStyle.zIndex}\n`;
+                info += `Position: ${mascotStyle.position}\n`;
+                info += `Bottom: ${mascotStyle.bottom}\n`;
+                info += `Right: ${mascotStyle.right}\n\n`;
+            } else {
+                info += `✗ Mascot not found\n\n`;
+            }
+            
+            if (envEl) {
+                info += `✓ Environment found\n`;
+                info += `Classes: ${envEl.className}\n`;
+                const envStyle = getComputedStyle(envEl);
+                info += `Z-index: ${envStyle.zIndex}\n`;
+                info += `Position: ${envStyle.position}\n`;
+                info += `Bottom: ${envStyle.bottom}\n`;
+                info += `Right: ${envStyle.right}\n`;
+                info += `Overflow: ${envStyle.overflow}\n\n`;
+                
+                // Check each state
+                ['creating', 'thinking', 'coffee'].forEach(state => {
+                    const container = envEl.querySelector(`.env-${state}`);
+                    if (container) {
+                        const containerStyle = getComputedStyle(container);
+                        info += `${state} container:\n`;
+                        info += `  display: ${containerStyle.display}\n`;
+                        info += `  visibility: ${containerStyle.visibility}\n`;
+                        
+                        if (containerStyle.display === 'block') {
+                            const elements = container.querySelectorAll('.env-element');
+                            let visibleCount = 0;
+                            elements.forEach(el => {
+                                const elStyle = getComputedStyle(el);
+                                const rect = el.getBoundingClientRect();
+                                if (rect.width > 0 && rect.height > 0 && elStyle.visibility !== 'hidden') {
+                                    visibleCount++;
+                                }
+                            });
+                            info += `  visible elements: ${visibleCount}/${elements.length}\n`;
+                            
+                            // Check first element in detail
+                            if (elements.length > 0) {
+                                const firstEl = elements[0];
+                                const firstStyle = getComputedStyle(firstEl);
+                                const rect = firstEl.getBoundingClientRect();
+                                info += `  first element:\n`;
+                                info += `    class: ${firstEl.className}\n`;
+                                info += `    content: "${firstEl.textContent}"\n`;
+                                info += `    position: ${firstStyle.position}\n`;
+                                info += `    top: ${firstStyle.top}\n`;
+                                info += `    left: ${firstStyle.left}\n`;
+                                info += `    width: ${rect.width}px\n`;
+                                info += `    height: ${rect.height}px\n`;
+                                info += `    visible: ${rect.width > 0 && rect.height > 0}\n`;
+                            }
+                        }
+                        info += `\n`;
+                    }
+                });
+            } else {
+                info += `✗ Environment not found\n`;
+            }
+            
+            if (mascot) {
+                info += `Mascot state: ${mascot.currentState}\n`;
+                info += `Environment instance: ${mascot.environment ? 'Yes' : 'No'}\n`;
+            }
+            
+            debugEl.textContent = info;
+        }
+        
+        // Initialize mascot
+        try {
+            mascot = new DesignerMascot();
+            setTimeout(updateDebug, 1000);
+            setInterval(updateDebug, 3000);
+        } catch (error) {
+            debugEl.textContent = `Error: ${error.message}`;
+        }
+        
+        // State test buttons
+        document.querySelectorAll('.test-btn[data-state]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const state = btn.dataset.state;
+                
+                document.querySelectorAll('.test-btn[data-state]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                if (mascot) {
+                    mascot.setState(state);
+                    setTimeout(updateDebug, 100);
+                }
+            });
+        });
+        
+        // Simple test buttons
+        document.querySelectorAll('.test-btn[data-test]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const test = btn.dataset.test;
+                
+                testEnvEl.className = 'test-environment';
+                if (test !== 'clear') {
+                    testEnvEl.classList.add(`state-${test}`);
+                }
+                
+                setTimeout(updateDebug, 100);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+/* Guilherme Designer Mascot - Clean Pixel Art Character */
+/* Simple 8-bit style character with individual body parts */
+
+.character-mascot {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 64px;
+  height: 64px;
+  z-index: 1000;
+  pointer-events: none;
+  transition: transform 0.3s ease-out;
+  /* Image rendering for pixel art crispness */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: pixelated;
+}
+
+/* Responsive sizing for mobile */
+@media (max-width: 640px) {
+  .character-mascot {
+    width: 48px;
+    height: 48px;
+    bottom: 15px;
+    right: 15px;
+  }
+}
+
+/* Mascot Container */
+.mascot-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-origin: bottom center;
+}
+
+/* CSS Pixel Art Character - Clean and Simple */
+.mascot-character {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  bottom: 0;
+  left: 0;
+}
+
+/* === INDIVIDUAL BODY PARTS === */
+
+/* Hair - salt & pepper on top of head */
+.mascot-hair {
+  position: absolute;
+  width: 28px;
+  height: 12px;
+  bottom: 54px;
+  left: 18px;
+  background: #555555;
+  border-radius: 6px 6px 3px 3px;
+  z-index: 15;
+}
+
+/* Head - skin tone, slightly rectangular */
+.mascot-head {
+  position: absolute;
+  width: 24px;
+  height: 18px;
+  bottom: 36px;
+  left: 20px;
+  background: #FDBCB4;
+  border-radius: 6px;
+  z-index: 10;
+}
+
+/* Left Eye */
+.mascot-eye-left {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  bottom: 44px;
+  left: 24px;
+  background: #000000;
+  border-radius: 50%;
+  z-index: 12;
+}
+
+/* Right Eye */
+.mascot-eye-right {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  bottom: 44px;
+  left: 33px;
+  background: #000000;
+  border-radius: 50%;
+  z-index: 12;
+}
+
+/* Beard - salt & pepper on lower face */
+.mascot-beard {
+  position: absolute;
+  width: 16px;
+  height: 8px;
+  bottom: 30px;
+  left: 24px;
+  background: #555555;
+  border-radius: 4px;
+  z-index: 11;
+}
+
+/* Body - black t-shirt */
+.mascot-body {
+  position: absolute;
+  width: 18px;
+  height: 14px;
+  bottom: 20px;
+  left: 23px;
+  background: #000000;
+  border-radius: 3px;
+  z-index: 8;
+}
+
+/* Left Arm - skin tone */
+.mascot-arm-left {
+  position: absolute;
+  width: 4px;
+  height: 12px;
+  bottom: 24px;
+  left: 18px;
+  background: #FDBCB4;
+  border-radius: 2px;
+  z-index: 7;
+}
+
+/* Right Arm - skin tone */
+.mascot-arm-right {
+  position: absolute;
+  width: 4px;
+  height: 12px;
+  bottom: 24px;
+  left: 42px;
+  background: #FDBCB4;
+  border-radius: 2px;
+  z-index: 7;
+}
+
+/* Left Leg - blue jeans */
+.mascot-leg-left {
+  position: absolute;
+  width: 6px;
+  height: 18px;
+  bottom: 2px;
+  left: 25px;
+  background: #2E4BC6;
+  border-radius: 2px;
+  z-index: 6;
+}
+
+/* Right Leg - blue jeans */
+.mascot-leg-right {
+  position: absolute;
+  width: 6px;
+  height: 18px;
+  bottom: 2px;
+  left: 33px;
+  background: #2E4BC6;
+  border-radius: 2px;
+  z-index: 6;
+}
+
+/* Design Tool - stylus/pen */
+.mascot-tool {
+  position: absolute;
+  width: 2px;
+  height: 8px;
+  bottom: 20px;
+  left: 46px;
+  background: #EBC533;
+  border-radius: 1px;
+  z-index: 9;
+  transform-origin: bottom center;
+}
+
+/* === ANIMATION STATES === */
+
+/* Idle State - subtle breathing */
+.mascot-idle .mascot-container {
+  animation: breathing 3s ease-in-out infinite;
+}
+
+@keyframes breathing {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+/* Excited State - bouncing with energy */
+.mascot-excited .mascot-container {
+  animation: bouncing 0.6s ease-in-out infinite;
+}
+
+@keyframes bouncing {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.05); }
+}
+
+/* Resting State - sleepy/sketching */
+.mascot-resting .mascot-head {
+  transform: rotate(-5deg);
+}
+
+.mascot-resting .mascot-tool {
+  transform: rotate(15deg);
+  bottom: 22px;
+  left: 44px;
+}
+
+/* Walking State - side to side movement */
+.mascot-walking .mascot-container {
+  animation: walking 1.2s ease-in-out infinite;
+}
+
+@keyframes walking {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* Creating State - tool movement */
+.mascot-creating .mascot-tool {
+  animation: creating 1s ease-in-out infinite;
+}
+
+@keyframes creating {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-20deg); }
+}
+
+/* Celebrating State - jump and cheer */
+.mascot-celebrating .mascot-container {
+  animation: celebrating 1s ease-in-out infinite;
+}
+
+@keyframes celebrating {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(5deg); }
+}
+
+/* Hidden State - when mouse too close */
+.mascot-hidden {
+  transform: scale(0) rotate(180deg);
+  opacity: 0;
+}
+
+/* Debug mode - show all element borders */
+.debug-mascot .mascot-character > * {
+  border: 1px solid red !important;
+}
+
+/* Hover effects for interactive moments */
+.mascot-interactive:hover .mascot-container {
+  transform: scale(1.1);
+  transition: transform 0.2s ease-out;
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .mascot-character {
+    width: 48px;
+    height: 48px;
+  }
+  
+  /* Scale down all parts proportionally */
+  .mascot-hair { width: 21px; height: 9px; bottom: 40px; left: 13px; }
+  .mascot-head { width: 18px; height: 14px; bottom: 27px; left: 15px; }
+  .mascot-eye-left { bottom: 33px; left: 18px; }
+  .mascot-eye-right { bottom: 33px; left: 25px; }
+  .mascot-beard { width: 12px; height: 6px; bottom: 23px; left: 18px; }
+  .mascot-body { width: 14px; height: 11px; bottom: 15px; left: 17px; }
+  .mascot-arm-left { bottom: 18px; left: 14px; }
+  .mascot-arm-right { bottom: 18px; left: 32px; }
+  .mascot-leg-left { bottom: 2px; left: 19px; }
+  .mascot-leg-right { bottom: 2px; left: 25px; }
+  .mascot-tool { bottom: 15px; left: 35px; }
+}

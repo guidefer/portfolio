@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safari Compatibility Test - Environmental Animations</title>
+    <style>
+        /* Basic reset and setup */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: white;
+            color: #333;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* CSS Variables - ensure Safari compatibility */
+        :root {
+            --color-background: #ffffff;
+            --color-primary: #333333;
+            --color-secondary: #C8C8BC;
+            --color-tertiary: #808080;
+            --color-accent-yellow: #EBC533;
+            --color-accent-orange: #D66422;
+        }
+        
+        /* Control panel */
+        .control-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            border: 2px solid #333;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            z-index: 2000;
+            max-width: 300px;
+        }
+        
+        .control-panel h3 {
+            margin-bottom: 15px;
+            color: var(--color-primary);
+        }
+        
+        .control-panel button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: var(--color-accent-yellow);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .control-panel button:hover {
+            background: var(--color-accent-orange);
+        }
+        
+        .debug-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        /* Simplified mascot for testing */
+        .mascot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 64px;
+            height: 64px;
+            background: var(--color-primary);
+            border-radius: 4px;
+            z-index: 1000;
+            /* Use image-rendering that works in Safari */
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: pixelated;
+        }
+        
+        /* Add mascot face for visibility */
+        .mascot::before {
+            content: '🎨';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+        }
+        
+        /* Environmental container - EXACTLY matching the real one */
+        .mascot-environment {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 64px;
+            height: 64px;
+            pointer-events: none;
+            z-index: 1001;
+            overflow: visible;
+            /* Add visible border for debugging */
+            border: 2px dashed red;
+            background: rgba(255, 0, 0, 0.1);
+        }
+        
+        /* State containers - ensure they're properly scoped */
+        .env-creating,
+        .env-thinking,
+        .env-coffee,
+        .env-sleepy,
+        .env-excited,
+        .env-dancing {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Add debugging border */
+            border: 1px solid green;
+            background: rgba(0, 255, 0, 0.1);
+        }
+        
+        /* Environmental elements base */
+        .env-element {
+            position: absolute;
+            pointer-events: none;
+            /* Add debugging border */
+            border: 1px solid blue;
+            background: rgba(0, 0, 255, 0.1);
+        }
+        
+        /* STATE VISIBILITY - Use !important to override any conflicts */
+        .mascot-environment.state-creating .env-creating {
+            display: block !important;
+        }
+        
+        .mascot-environment.state-thinking .env-thinking {
+            display: block !important;
+        }
+        
+        .mascot-environment.state-coffee .env-coffee {
+            display: block !important;
+        }
+        
+        .mascot-environment.state-sleepy .env-sleepy {
+            display: block !important;
+        }
+        
+        .mascot-environment.state-excited .env-excited {
+            display: block !important;
+        }
+        
+        .mascot-environment.state-dancing .env-dancing {
+            display: block !important;
+        }
+        
+        /* CREATING STATE ELEMENTS */
+        .mascot-environment.state-creating .env-creating .color-dot {
+            top: 25px;
+            left: -25px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--color-accent-yellow);
+            /* Simplified animation for Safari */
+            animation: pulse-simple 2s ease-in-out infinite;
+        }
+        
+        .mascot-environment.state-creating .env-creating .color-dot-2 {
+            top: 35px;
+            left: -35px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--color-accent-orange);
+            animation: pulse-simple 2s ease-in-out infinite 0.5s;
+        }
+        
+        /* THINKING STATE ELEMENTS */
+        .mascot-environment.state-thinking .env-thinking .thought-bubble {
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 35px;
+            height: 25px;
+            background: white;
+            border: 2px solid var(--color-secondary);
+            border-radius: 20px;
+            /* Safari-compatible box-shadow */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            animation: bubble-simple 3s ease-in-out infinite;
+        }
+        
+        .mascot-environment.state-thinking .env-thinking .question-mark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 16px;
+            color: var(--color-primary);
+            font-weight: bold;
+        }
+        
+        /* COFFEE STATE ELEMENTS */
+        .mascot-environment.state-coffee .env-coffee .coffee-mug {
+            top: 20px;
+            right: -30px;
+            width: 20px;
+            height: 15px;
+            background: var(--color-primary);
+            border-radius: 0 0 8px 8px;
+            animation: coffee-simple 2s ease-in-out infinite;
+        }
+        
+        /* SLEEPY STATE ELEMENTS */
+        .mascot-environment.state-sleepy .env-sleepy .z-letter {
+            top: -20px;
+            right: 10px;
+            font-size: 16px;
+            color: var(--color-tertiary);
+            font-weight: bold;
+            animation: z-simple 3s ease-in-out infinite;
+        }
+        
+        /* EXCITED STATE ELEMENTS */
+        .mascot-environment.state-excited .env-excited .confetti-1 {
+            top: -10px;
+            left: 10px;
+            width: 4px;
+            height: 4px;
+            background: var(--color-accent-yellow);
+            animation: confetti-simple 2s ease-out infinite;
+        }
+        
+        /* DANCING STATE ELEMENTS */
+        .mascot-environment.state-dancing .env-dancing .note-1 {
+            top: -25px;
+            left: -15px;
+            font-size: 14px;
+            color: var(--color-primary);
+            animation: music-simple 2s ease-in-out infinite;
+        }
+        
+        /* SIMPLIFIED ANIMATIONS FOR SAFARI COMPATIBILITY */
+        @keyframes pulse-simple {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+        
+        @keyframes bubble-simple {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
+        }
+        
+        @keyframes coffee-simple {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes z-simple {
+            0% { opacity: 0; transform: translateY(5px); }
+            50% { opacity: 1; transform: translateY(0px); }
+            100% { opacity: 0; transform: translateY(-5px); }
+        }
+        
+        @keyframes confetti-simple {
+            0% { transform: translateY(0px); opacity: 1; }
+            100% { transform: translateY(50px); opacity: 0; }
+        }
+        
+        @keyframes music-simple {
+            0%, 100% { transform: translateY(0px); opacity: 0.7; }
+            50% { transform: translateY(-5px); opacity: 1; }
+        }
+        
+        /* Active state indicator */
+        .active-state {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--color-accent-orange);
+            z-index: 1500;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="control-panel">
+        <h3>Safari Environmental Test</h3>
+        <button onclick="setState('creating')">Test Creating State</button>
+        <button onclick="setState('thinking')">Test Thinking State</button>
+        <button onclick="setState('coffee')">Test Coffee State</button>
+        <button onclick="setState('sleepy')">Test Sleepy State</button>
+        <button onclick="setState('excited')">Test Excited State</button>
+        <button onclick="setState('dancing')">Test Dancing State</button>
+        <button onclick="setState('idle')">Reset to Idle</button>
+        
+        <div class="debug-info">
+            <div><strong>Current State:</strong> <span id="current-state">idle</span></div>
+            <div><strong>Container Classes:</strong> <span id="container-classes">none</span></div>
+            <div><strong>Visible Elements:</strong> <span id="visible-elements">none</span></div>
+            <div><strong>Browser:</strong> <span id="browser-info">loading...</span></div>
+        </div>
+    </div>
+    
+    <div class="active-state" id="active-state">IDLE</div>
+    
+    <!-- Simplified mascot for testing -->
+    <div class="mascot"></div>
+    
+    <!-- Environmental container with all elements -->
+    <div class="mascot-environment" id="mascot-environment">
+        <!-- Creating state elements -->
+        <div class="env-creating">
+            <div class="env-element color-dot"></div>
+            <div class="env-element color-dot-2"></div>
+        </div>
+        
+        <!-- Thinking state elements -->
+        <div class="env-thinking">
+            <div class="env-element thought-bubble">
+                <div class="question-mark">?</div>
+            </div>
+        </div>
+        
+        <!-- Coffee state elements -->
+        <div class="env-coffee">
+            <div class="env-element coffee-mug"></div>
+        </div>
+        
+        <!-- Sleepy state elements -->
+        <div class="env-sleepy">
+            <div class="env-element z-letter">Z</div>
+        </div>
+        
+        <!-- Excited state elements -->
+        <div class="env-excited">
+            <div class="env-element confetti confetti-1"></div>
+        </div>
+        
+        <!-- Dancing state elements -->
+        <div class="env-dancing">
+            <div class="env-element music-note note-1">♪</div>
+        </div>
+    </div>
+    
+    <script>
+        let currentState = 'idle';
+        
+        function setState(newState) {
+            const container = document.getElementById('mascot-environment');
+            const activeIndicator = document.getElementById('active-state');
+            
+            // Clear all state classes
+            container.classList.remove('state-creating', 'state-thinking', 'state-coffee', 'state-sleepy', 'state-excited', 'state-dancing');
+            
+            // Set new state
+            currentState = newState;
+            activeIndicator.textContent = newState.toUpperCase();
+            
+            if (newState !== 'idle') {
+                container.classList.add(`state-${newState}`);
+            }
+            
+            // Update debug info
+            updateDebugInfo();
+            
+            console.log(`State changed to: ${newState}`);
+            console.log('Container classes:', container.className);
+        }
+        
+        function updateDebugInfo() {
+            const container = document.getElementById('mascot-environment');
+            const currentStateEl = document.getElementById('current-state');
+            const containerClassesEl = document.getElementById('container-classes');
+            const visibleElementsEl = document.getElementById('visible-elements');
+            const browserInfoEl = document.getElementById('browser-info');
+            
+            // Update current state
+            currentStateEl.textContent = currentState;
+            
+            // Update container classes
+            containerClassesEl.textContent = container.className || 'none';
+            
+            // Check visible elements
+            const visibleElements = [];
+            const allStateContainers = container.querySelectorAll('[class^="env-"]');
+            
+            allStateContainers.forEach(stateContainer => {
+                const computedStyle = window.getComputedStyle(stateContainer);
+                if (computedStyle.display !== 'none') {
+                    visibleElements.push(stateContainer.className);
+                    
+                    // Check child elements
+                    const childElements = stateContainer.querySelectorAll('.env-element');
+                    childElements.forEach(child => {
+                        const childStyle = window.getComputedStyle(child);
+                        if (childStyle.display !== 'none' && childStyle.opacity !== '0') {
+                            visibleElements.push(`  -> ${child.className}`);
+                        }
+                    });
+                }
+            });
+            
+            visibleElementsEl.textContent = visibleElements.length > 0 ? visibleElements.join(', ') : 'none';
+            
+            // Browser info
+            const userAgent = navigator.userAgent;
+            let browserName = 'Unknown';
+            if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
+                browserName = 'Safari';
+            } else if (userAgent.includes('Chrome')) {
+                browserName = 'Chrome';
+            } else if (userAgent.includes('Firefox')) {
+                browserName = 'Firefox';
+            }
+            
+            browserInfoEl.textContent = browserName;
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDebugInfo();
+            
+            // Auto-cycle through states for testing
+            const states = ['creating', 'thinking', 'coffee', 'sleepy', 'excited', 'dancing'];
+            let currentIndex = 0;
+            
+            setInterval(() => {
+                setState(states[currentIndex]);
+                currentIndex = (currentIndex + 1) % states.length;
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

@@ -103,8 +103,8 @@ html .gallery-grid *:active {
   box-shadow: none !important;
   border: none !important;
   -webkit-tap-highlight-color: transparent !important;
-  -moz-outline: none !important;
   -webkit-appearance: none !important;
+  appearance: none !important;
 }
 
 /* Specifically target gallery items with maximum specificity */

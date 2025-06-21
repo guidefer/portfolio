@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS-Only Environmental Test</title>
+    <style>
+        /* CSS Variables */
+        :root {
+            --color-background: #ffffff;
+            --color-primary: #333333;
+            --color-secondary: #C8C8BC;
+            --color-tertiary: #808080;
+            --color-accent-yellow: #EBC533;
+            --color-accent-orange: #D66422;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            min-height: 100vh;
+        }
+        
+        /* Control panel */
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #333;
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 2000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .controls h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+        
+        .controls button {
+            display: block;
+            width: 200px;
+            margin-bottom: 8px;
+            padding: 10px;
+            background: var(--color-accent-yellow);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .controls button:hover {
+            background: var(--color-accent-orange);
+        }
+        
+        .debug-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+        
+        /* Simple mascot placeholder */
+        .mascot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 64px;
+            height: 64px;
+            background: #333;
+            border-radius: 4px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        /* === EXACT COPY OF ENVIRONMENTAL CSS === */
+        .mascot-environment {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 64px;
+            height: 64px;
+            pointer-events: none;
+            z-index: 1001;
+            overflow: visible;
+        }
+        
+        .env-element {
+            position: absolute;
+            pointer-events: none;
+        }
+        
+        .env-creating,
+        .env-thinking, 
+        .env-coffee,
+        .env-sleepy,
+        .env-excited,
+        .env-dancing {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* STATE VISIBILITY */
+        .mascot-environment.state-creating .env-creating {
+            display: block;
+        }
+        
+        .mascot-environment.state-thinking .env-thinking {
+            display: block;
+        }
+        
+        .mascot-environment.state-coffee .env-coffee {
+            display: block;
+        }
+        
+        .mascot-environment.state-sleepy .env-sleepy {
+            display: block;
+        }
+        
+        .mascot-environment.state-excited .env-excited {
+            display: block;
+        }
+        
+        .mascot-environment.state-dancing .env-dancing {
+            display: block;
+        }
+        
+        /* CREATING ELEMENTS */
+        .mascot-environment.state-creating .env-creating .color-dot {
+            top: 25px;
+            left: -25px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--color-accent-yellow);
+            animation: pulse-color 1.8s ease-in-out infinite;
+        }
+        
+        .mascot-environment.state-creating .env-creating .color-dot-2 {
+            top: 35px;
+            left: -35px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--color-accent-orange);
+            animation: pulse-color 2s ease-in-out infinite 0.3s;
+        }
+        
+        .mascot-environment.state-creating .env-creating .color-dot-3 {
+            top: 15px;
+            left: -20px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-secondary);
+            animation: pulse-color 2.2s ease-in-out infinite 0.6s;
+        }
+        
+        .mascot-environment.state-creating .env-creating .font-aa {
+            top: 10px;
+            left: -40px;
+            font-size: 10px;
+            font-weight: bold;
+            color: var(--color-primary);
+            animation: float-text 2.5s ease-in-out infinite;
+        }
+        
+        /* THINKING ELEMENTS */
+        .mascot-environment.state-thinking .env-thinking .thought-bubble {
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 35px;
+            height: 25px;
+            background: white;
+            border: 2px solid var(--color-secondary);
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            animation: bubble-think 3s ease-in-out infinite;
+        }
+        
+        .mascot-environment.state-thinking .env-thinking .thought-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 10px;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border: 2px solid var(--color-secondary);
+            border-radius: 50%;
+        }
+        
+        .mascot-environment.state-thinking .env-thinking .question-mark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 16px;
+            color: var(--color-primary);
+            font-weight: bold;
+        }
+        
+        /* COFFEE ELEMENTS */
+        .mascot-environment.state-coffee .env-coffee .coffee-mug {
+            top: 20px;
+            right: -30px;
+            width: 20px;
+            height: 15px;
+            background: var(--color-primary);
+            border-radius: 0 0 8px 8px;
+            animation: coffee-steam 2s ease-in-out infinite;
+        }
+        
+        .mascot-environment.state-coffee .env-coffee .coffee-mug::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 2px;
+            width: 4px;
+            height: 8px;
+            border: 2px solid var(--color-primary);
+            border-left: none;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        /* SLEEPY ELEMENTS */
+        .mascot-environment.state-sleepy .env-sleepy .z-letter {
+            top: -20px;
+            right: 10px;
+            font-size: 16px;
+            color: var(--color-tertiary);
+            font-weight: bold;
+            animation: z-float 3s ease-in-out infinite;
+        }
+        
+        .mascot-environment.state-sleepy .env-sleepy .z-letter-2 {
+            top: -35px;
+            right: 20px;
+            font-size: 14px;
+            color: var(--color-tertiary);
+            font-weight: bold;
+            animation: z-float 3s ease-in-out infinite 0.5s;
+        }
+        
+        /* EXCITED ELEMENTS */
+        .mascot-environment.state-excited .env-excited .confetti-1 {
+            top: -10px;
+            left: 10px;
+            width: 4px;
+            height: 4px;
+            background: var(--color-accent-yellow);
+            animation: confetti-fall 2s ease-out infinite;
+        }
+        
+        .mascot-environment.state-excited .env-excited .confetti-2 {
+            top: -15px;
+            left: 30px;
+            width: 4px;
+            height: 4px;
+            background: var(--color-accent-orange);
+            animation: confetti-fall 2s ease-out infinite 0.2s;
+        }
+        
+        /* DANCING ELEMENTS */
+        .mascot-environment.state-dancing .env-dancing .note-1 {
+            top: -25px;
+            left: -15px;
+            font-size: 14px;
+            color: var(--color-primary);
+            animation: music-bounce 2s ease-in-out infinite;
+        }
+        
+        .mascot-environment.state-dancing .env-dancing .note-2 {
+            top: -35px;
+            left: 5px;
+            font-size: 14px;
+            color: var(--color-primary);
+            animation: music-bounce 2s ease-in-out infinite 0.3s;
+        }
+        
+        /* ANIMATIONS */
+        @keyframes pulse-color {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+        
+        @keyframes float-text {
+            0%, 100% { transform: translateY(0px); opacity: 0.7; }
+            50% { transform: translateY(-8px); opacity: 1; }
+        }
+        
+        @keyframes bubble-think {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
+        }
+        
+        @keyframes coffee-steam {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes z-float {
+            0% { opacity: 0; transform: translateY(10px); }
+            50% { opacity: 1; transform: translateY(0px); }
+            100% { opacity: 0; transform: translateY(-10px); }
+        }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(80px) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes music-bounce {
+            0%, 100% { transform: translateY(0px); opacity: 0.7; }
+            50% { transform: translateY(-8px); opacity: 1; }
+        }
+        
+        /* DEBUG MODE */
+        .debug .mascot-environment {
+            border: 3px dashed red !important;
+            background: rgba(255, 0, 0, 0.2) !important;
+        }
+        
+        .debug .env-creating,
+        .debug .env-thinking,
+        .debug .env-coffee,
+        .debug .env-sleepy,
+        .debug .env-excited,
+        .debug .env-dancing {
+            border: 2px solid green !important;
+            background: rgba(0, 255, 0, 0.1) !important;
+        }
+        
+        .debug .env-element {
+            border: 1px solid blue !important;
+            background: rgba(0, 0, 255, 0.2) !important;
+        }
+        
+        /* State indicator */
+        .state-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--color-accent-orange);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            z-index: 1500;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h3>Pure CSS Environmental Test</h3>
+        <button onclick="setState('creating')">🎨 Test Creating</button>
+        <button onclick="setState('thinking')">💭 Test Thinking</button>
+        <button onclick="setState('coffee')">☕ Test Coffee</button>
+        <button onclick="setState('sleepy')">😴 Test Sleepy</button>
+        <button onclick="setState('excited')">🎉 Test Excited</button>
+        <button onclick="setState('dancing')">💃 Test Dancing</button>
+        <button onclick="setState('idle')">⭕ Reset Idle</button>
+        <button onclick="toggleDebug()">🔍 Toggle Debug</button>
+        
+        <div class="debug-info" id="debug-info">
+            <div><strong>State:</strong> <span id="state-display">idle</span></div>
+            <div><strong>Classes:</strong> <span id="class-display">none</span></div>
+            <div><strong>Visible:</strong> <span id="visible-display">none</span></div>
+        </div>
+    </div>
+    
+    <div class="state-indicator" id="state-indicator">IDLE</div>
+    
+    <div class="mascot">🎨</div>
+    
+    <div class="mascot-environment" id="environment">
+        <!-- Creating State -->
+        <div class="env-creating">
+            <div class="env-element color-dot"></div>
+            <div class="env-element color-dot-2"></div>
+            <div class="env-element color-dot-3"></div>
+            <div class="env-element font-aa">Aa</div>
+        </div>
+        
+        <!-- Thinking State -->
+        <div class="env-thinking">
+            <div class="env-element thought-bubble">
+                <div class="question-mark">?</div>
+            </div>
+        </div>
+        
+        <!-- Coffee State -->
+        <div class="env-coffee">
+            <div class="env-element coffee-mug"></div>
+        </div>
+        
+        <!-- Sleepy State -->
+        <div class="env-sleepy">
+            <div class="env-element z-letter">Z</div>
+            <div class="env-element z-letter-2">z</div>
+        </div>
+        
+        <!-- Excited State -->
+        <div class="env-excited">
+            <div class="env-element confetti confetti-1"></div>
+            <div class="env-element confetti confetti-2"></div>
+        </div>
+        
+        <!-- Dancing State -->
+        <div class="env-dancing">
+            <div class="env-element music-note note-1">♪</div>
+            <div class="env-element music-note note-2">♫</div>
+        </div>
+    </div>
+    
+    <script>
+        let currentState = 'idle';
+        let debugMode = false;
+        
+        function setState(state) {
+            const env = document.getElementById('environment');
+            const indicator = document.getElementById('state-indicator');
+            
+            // Clear all state classes
+            env.className = 'mascot-environment';
+            if (debugMode) env.classList.add('debug');
+            
+            // Set new state
+            currentState = state;
+            indicator.textContent = state.toUpperCase();
+            
+            if (state !== 'idle') {
+                env.classList.add(`state-${state}`);
+            }
+            
+            updateDebugInfo();
+            console.log(`State: ${state}, Classes: ${env.className}`);
+        }
+        
+        function toggleDebug() {
+            debugMode = !debugMode;
+            document.body.classList.toggle('debug', debugMode);
+            
+            const env = document.getElementById('environment');
+            env.classList.toggle('debug', debugMode);
+            
+            updateDebugInfo();
+        }
+        
+        function updateDebugInfo() {
+            const env = document.getElementById('environment');
+            document.getElementById('state-display').textContent = currentState;
+            document.getElementById('class-display').textContent = env.className;
+            
+            // Check visible elements
+            const visibleElements = [];
+            const stateContainers = env.querySelectorAll('[class*="env-"]');
+            
+            stateContainers.forEach(container => {
+                const style = window.getComputedStyle(container);
+                if (style.display !== 'none') {
+                    visibleElements.push(container.className);
+                }
+            });
+            
+            document.getElementById('visible-display').textContent = 
+                visibleElements.length > 0 ? visibleElements.join(', ') : 'none';
+        }
+        
+        // Auto-test cycle
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDebugInfo();
+            
+            // Start auto-cycling after 2 seconds
+            setTimeout(() => {
+                const states = ['creating', 'thinking', 'coffee', 'sleepy', 'excited', 'dancing'];
+                let index = 0;
+                
+                const interval = setInterval(() => {
+                    setState(states[index]);
+                    index++;
+                    
+                    if (index >= states.length) {
+                        clearInterval(interval);
+                        setTimeout(() => setState('idle'), 3000);
+                    }
+                }, 3000);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

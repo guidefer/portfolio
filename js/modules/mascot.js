@@ -1,22 +1,29 @@
 // Guilherme Designer Mascot Behavior System
+// Enhanced with environmental elements and responsive interactions
 // Handles all interactive behaviors and state management for the pixel art mascot
+
+import { MascotEnvironment } from './mascot-environment.js';
 
 export class DesignerMascot {
   constructor() {
     this.element = null;
+    this.environment = null;
     this.currentState = 'idle';
     this.lastInteraction = Date.now();
     this.hideTimeout = null;
     this.restTimeout = null;
     this.isHidden = false;
     this.mousePosition = { x: 0, y: 0 };
+    this.interactionEndTimeout = null;
     
     // Configuration
     this.config = {
       hideDistance: 100, // pixels
       revealDelay: 2000, // milliseconds
-      restDelay: 30000,  // 30 seconds of inactivity
+      restDelay: 120000,  // 2 minutes of inactivity for sleepy mode
       mouseMoveThrottle: 100, // throttle mouse move events
+      immediateResponseStates: ['excited', 'creating'], // States that respond immediately
+      interactionEndDelay: 300, // Delay before returning to idle after interaction ends
     };
     
     this.init();
@@ -24,6 +31,7 @@ export class DesignerMascot {
   
   init() {
     this.createElement();
+    this.createEnvironment();
     this.bindEvents();
     this.startBehaviorLoop();
     
@@ -32,7 +40,7 @@ export class DesignerMascot {
       this.onPageLoad();
     }, 500);
     
-    console.log('🎭 Designer Mascot initialized - Guilherme is ready!');
+    console.log('🎭 Enhanced Designer Mascot initialized - Guilherme is ready with environmental elements!');
   }
   
   createElement() {
@@ -64,6 +72,19 @@ export class DesignerMascot {
     this.setState('idle');
   }
   
+  createEnvironment() {
+    try {
+      // Initialize environmental elements system
+      this.environment = new MascotEnvironment();
+      console.log('🌟 Environmental elements system integrated successfully');
+      console.log('🌟 Environment element:', this.environment.element);
+      console.log('🌟 Environment current state:', this.environment.currentState);
+    } catch (error) {
+      console.error('❌ Failed to create environment:', error);
+      this.environment = null;
+    }
+  }
+  
   bindEvents() {
     // Mouse movement tracking for proximity detection
     let mouseMoveThrottled = this.throttle((e) => {
@@ -73,15 +94,11 @@ export class DesignerMascot {
     
     document.addEventListener('mousemove', mouseMoveThrottled);
     
-    // Page interaction events
-    document.addEventListener('click', () => this.onUserInteraction('click'));
-    document.addEventListener('scroll', this.throttle(() => this.onUserInteraction('scroll'), 200));
-    document.addEventListener('keydown', () => this.onUserInteraction('keydown'));
-    
     // Gallery specific events
     document.addEventListener('DOMContentLoaded', () => {
       this.bindGalleryEvents();
       this.bindNavigationEvents();
+      this.bindSectionEvents();
     });
     
     // Page visibility changes
@@ -89,18 +106,31 @@ export class DesignerMascot {
       if (document.hidden) {
         this.setState('sleepy');
       } else {
-        this.setState('excited');
-        this.onUserInteraction('page-focus');
+        // Only wake up if was sleepy, don't force excited
+        if (this.currentState === 'sleepy') {
+          this.setState('idle');
+          this.onUserInteraction('page-focus');
+        }
       }
     });
   }
   
   bindGalleryEvents() {
-    // Gallery item hover events
+    // Gallery item hover events with responsive interactions
     const galleryItems = document.querySelectorAll('.gallery-item');
     galleryItems.forEach(item => {
       item.addEventListener('mouseenter', () => {
+        // Clear any pending interaction end timeout
+        if (this.interactionEndTimeout) {
+          clearTimeout(this.interactionEndTimeout);
+          this.interactionEndTimeout = null;
+        }
         this.onProjectHover();
+      });
+      
+      item.addEventListener('mouseleave', () => {
+        // Immediate return to idle when interaction ends
+        this.onInteractionEnd();
       });
       
       item.addEventListener('click', () => {
@@ -108,11 +138,14 @@ export class DesignerMascot {
       });
     });
     
-    // Scroll loading events
+    // Scroll loading events - removed excited trigger to prevent interruption
     const scrollObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          this.setState('excited');
+          // Only trigger thinking state instead of excited to be less intrusive
+          if (this.currentState === 'idle') {
+            this.setState('thinking');
+          }
           this.onUserInteraction('content-load');
         }
       });
@@ -144,8 +177,44 @@ export class DesignerMascot {
     });
   }
   
-  setState(newState) {
+  bindSectionEvents() {
+    // Intersection Observer for section-based behaviors
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+          const sectionName = entry.target.dataset.section || 
+                             entry.target.className.split(' ').find(cls => 
+                               ['hero', 'work', 'about', 'contact'].includes(cls)
+                             ) ||
+                             entry.target.id;
+          
+          if (sectionName) {
+            console.log(`🎭 Entering section: ${sectionName}`);
+            this.onUserInteraction(`section-${sectionName}`);
+          }
+        }
+      });
+    }, {
+      threshold: 0.5, // Trigger when 50% of section is visible
+      rootMargin: '-10% 0px -10% 0px' // Small margins to avoid rapid triggering
+    });
+    
+    // Observe all main sections
+    const sections = document.querySelectorAll('[data-section], .hero, .work, .about, .contact, #hero, #work, #about, #contact');
+    sections.forEach(section => {
+      sectionObserver.observe(section);
+    });
+    
+    console.log(`🎭 Observing ${sections.length} sections for mascot interactions`);
+  }
+  
+  setState(newState, immediate = false) {
     if (this.currentState === newState) return;
+    
+    // Determine if this should be an immediate response
+    const shouldBeImmediate = immediate || 
+                             this.config.immediateResponseStates.includes(newState) ||
+                             this.config.immediateResponseStates.includes(this.currentState);
     
     // Remove previous state class
     this.element.classList.remove(`mascot-${this.currentState}`);
@@ -154,7 +223,15 @@ export class DesignerMascot {
     this.element.classList.add(`mascot-${newState}`);
     
     this.currentState = newState;
-    console.log(`🎭 Mascot state changed to: ${newState}`);
+    console.log(`🎭 Mascot state changed to: ${newState} (immediate: ${immediate} → shouldBeImmediate: ${shouldBeImmediate})`);
+    
+    // Synchronize environment state
+    if (this.environment) {
+      console.log(`🎭 Calling environment.setState(${newState}, ${shouldBeImmediate})`);
+      this.environment.setState(newState, shouldBeImmediate);
+    } else {
+      console.error(`🎭 ❌ Environment not available!`);
+    }
     
     // Handle state-specific logic
     this.handleStateChange(newState);
@@ -165,6 +242,12 @@ export class DesignerMascot {
       case 'excited':
         // Clear rest timeout since user is active
         clearTimeout(this.restTimeout);
+        // Return to idle after 10 seconds
+        setTimeout(() => {
+          if (this.currentState === 'excited') {
+            this.setState('idle');
+          }
+        }, 10000);
         this.scheduleRestState();
         break;
         
@@ -175,16 +258,18 @@ export class DesignerMascot {
           if (this.currentState === 'dancing') {
             this.setState('idle');
           }
-        }, 8000); // Match enhanced animation duration
+        }, 10000); // 10 seconds for dancing
+        this.scheduleRestState();
         break;
         
       case 'creating':
-        // Special designer gesture
+        // Return to idle after creating animation
         setTimeout(() => {
           if (this.currentState === 'creating') {
-            this.setState('excited');
+            this.setState('idle');
           }
-        }, 3000);
+        }, 10000); // 10 seconds for creating
+        this.scheduleRestState();
         break;
         
       case 'hiding':
@@ -211,13 +296,24 @@ export class DesignerMascot {
         // Very tired, stays sleepy until interaction
         break;
         
+      case 'thinking':
+        // Thinking state - return to idle after 10 seconds
+        setTimeout(() => {
+          if (this.currentState === 'thinking') {
+            this.setState('idle');
+          }
+        }, 10000);
+        this.scheduleRestState();
+        break;
+        
       case 'coffee':
-        // Coffee break time
+        // Coffee break time - return to idle after 10 seconds (was returning to excited before)
         setTimeout(() => {
           if (this.currentState === 'coffee') {
-            this.setState('excited');
+            this.setState('idle'); // Fixed: was going to 'excited' before
           }
-        }, 6000);
+        }, 10000);
+        this.scheduleRestState();
         break;
     }
   }
@@ -226,16 +322,23 @@ export class DesignerMascot {
     this.lastInteraction = Date.now();
     
     // Log interaction for debugging
-    console.log(`🎭 User interaction: ${type}`);
+    console.log(`🎭 User interaction: ${type} (current state: ${this.currentState})`);
     
     // Clear rest timeout on any interaction
     clearTimeout(this.restTimeout);
     
-    // Handle specific interaction types
+    // Only trigger new animations if currently idle (prevent interrupting ongoing animations)
+    if (this.currentState !== 'idle' && this.currentState !== 'sleepy') {
+      console.log(`🎭 Skipping ${type} interaction - mascot busy in ${this.currentState} state`);
+      this.scheduleRestState();
+      return;
+    }
+    
+    // Handle specific interaction types - only when idle or sleepy
     switch (type) {
       case 'gallery-hover':
-        if (this.currentState !== 'hiding' && this.currentState !== 'dancing') {
-          this.setState('excited');
+        if (this.currentState !== 'hiding') {
+          this.setState('thinking'); // Changed from excited to thinking
         }
         break;
         
@@ -249,9 +352,26 @@ export class DesignerMascot {
         break;
         
       case 'page-focus':
+        // Only react if was sleepy, otherwise let natural cycle continue
         if (this.currentState === 'sleepy') {
-          this.setState('excited');
+          this.setState('idle');
         }
+        break;
+        
+      case 'section-hero':
+        this.setState('creating');
+        break;
+        
+      case 'section-work':
+        this.setState('coffee');
+        break;
+        
+      case 'section-about':
+        this.setState('dancing');
+        break;
+        
+      case 'section-contact':
+        this.setState('excited');
         break;
     }
     
@@ -308,32 +428,41 @@ export class DesignerMascot {
     }, 15000); // Check every 15 seconds
   }
   
-  // Enhanced periodic behaviors
+  // Enhanced periodic behaviors - more varied and less aggressive
   periodicBehavior() {
     const timeSinceInteraction = Date.now() - this.lastInteraction;
     
-    // Random dancing if idle for a while
-    if (timeSinceInteraction > 45000 && this.currentState === 'idle' && Math.random() > 0.7) {
-      this.setState('dancing');
-    }
+    // Only proceed if currently idle to allow natural cycling
+    if (this.currentState !== 'idle') return;
     
-    // Coffee break occasionally when idle
-    if (timeSinceInteraction > 60000 && this.currentState === 'idle' && Math.random() > 0.75) {
-      this.setState('coffee');
-    }
-    
-    // Occasional creative gesture when idle
-    if (this.currentState === 'idle' && Math.random() > 0.8) {
-      this.setState('creating');
-    }
-    
-    // Get sleepy after very long inactivity
-    if (timeSinceInteraction > 120000 && this.currentState === 'idle' && Math.random() > 0.6) {
+    // Get sleepy after 2 minutes of inactivity
+    if (timeSinceInteraction > this.config.restDelay) {
       this.setState('sleepy');
+      return;
     }
     
-    // Subtle idle variations
-    if (this.currentState === 'idle' && Math.random() > 0.85) {
+    // Random behaviors while idle - more varied cycling
+    const behaviors = [
+      { state: 'thinking', chance: 0.25, minTime: 20000 }, // 25% chance after 20s
+      { state: 'creating', chance: 0.3, minTime: 30000 },  // 30% chance after 30s
+      { state: 'coffee', chance: 0.2, minTime: 45000 },    // 20% chance after 45s
+      { state: 'dancing', chance: 0.15, minTime: 60000 },  // 15% chance after 60s
+    ];
+    
+    // Check each behavior
+    for (const behavior of behaviors) {
+      if (timeSinceInteraction > behavior.minTime && Math.random() < behavior.chance) {
+        console.log(`🎭 Periodic behavior: ${behavior.state} (${timeSinceInteraction/1000}s idle)`);
+        this.setState(behavior.state);
+        
+        // Return to idle after a while - automatic return handled in handleStateChange now
+        // No need for additional timeout here since each state handles its own return
+        break;
+      }
+    }
+    
+    // Subtle idle variations occasionally
+    if (Math.random() > 0.9) {
       this.addIdleVariation();
     }
   }
@@ -354,40 +483,62 @@ export class DesignerMascot {
     }, 600);
   }
 
-  // Enhanced hover response with variations
+  // Enhanced hover response with variations - less aggressive
   onProjectHover() {
-    const responses = ['excited', 'creating'];
+    // Only react if currently idle to avoid interrupting animations
+    if (this.currentState !== 'idle') return;
+    
+    const responses = ['thinking', 'creating']; // Removed excited from hover responses
     
     // Occasionally show surprise for variety
     if (Math.random() > 0.9) {
       this.showSurprise();
       setTimeout(() => {
         const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-        this.setState(randomResponse);
+        this.setState(randomResponse, true); // Immediate response for hover
       }, 600);
     } else {
       const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-      this.setState(randomResponse);
+      this.setState(randomResponse, true); // Immediate response for hover
     }
   }
 
   onProjectClick() {
-    this.setState('excited');
+    // Only react if currently idle to avoid interrupting animations
+    if (this.currentState !== 'idle') return;
+    this.setState('creating', true); // Changed from excited to creating
   }
 
   onMenuOpen() {
-    this.setState('excited');
+    // Only react if currently idle to avoid interrupting animations
+    if (this.currentState !== 'idle') return;
+    this.setState('dancing'); // Changed from excited to dancing for menu
+  }
+  
+  onInteractionEnd() {
+    // Immediate return to idle when user interaction ends
+    if (this.interactionEndTimeout) {
+      clearTimeout(this.interactionEndTimeout);
+    }
+    
+    // Small delay to avoid flickering, but much faster than before
+    this.interactionEndTimeout = setTimeout(() => {
+      if (this.config.immediateResponseStates.includes(this.currentState)) {
+        this.setState('idle', true); // Immediate return to idle
+        console.log('🎭 Interaction ended - returning to idle immediately');
+      }
+    }, this.config.interactionEndDelay);
   }
 
   onPageLoad() {
-    this.setState('revealing');
+    // Start with a brief creating state as page loads
+    this.setState('creating');
     
-    // After revealing, start creating
+    // After creating, go to idle and let natural cycling begin
     setTimeout(() => {
-      if (this.currentState === 'idle') {
-        this.setState('creating');
-      }
-    }, 2000);
+      this.setState('idle');
+      console.log('🎭 Page load complete - entering natural behavior cycle');
+    }, 4000); // 4 seconds of creating, then idle
   }
   
   // Loading state for project pages
@@ -398,7 +549,7 @@ export class DesignerMascot {
     if (progress >= 100) {
       setTimeout(() => {
         this.element.classList.remove('mascot-loading');
-        this.setState('excited');
+        this.setState('creating'); // Changed from excited to creating
       }, 500);
     }
   }
@@ -424,14 +575,22 @@ export class DesignerMascot {
   
   // Cleanup method
   destroy() {
-    clearTimeout(this.hideTimeout);
-    clearTimeout(this.restTimeout);
+    // Clear all timeouts
+    if (this.hideTimeout) clearTimeout(this.hideTimeout);
+    if (this.restTimeout) clearTimeout(this.restTimeout);
+    if (this.interactionEndTimeout) clearTimeout(this.interactionEndTimeout);
     
+    // Destroy environment
+    if (this.environment) {
+      this.environment.destroy();
+    }
+    
+    // Remove DOM element
     if (this.element && this.element.parentNode) {
       this.element.parentNode.removeChild(this.element);
     }
     
-    console.log('🎭 Designer Mascot destroyed');
+    console.log('🎭 Enhanced Designer Mascot destroyed');
   }
 }
 
@@ -496,10 +655,11 @@ let mascotInstance = null;
 // Initialize mascot when DOM is ready
 export function initializeMascot() {
   if (mascotInstance) {
-    console.warn('🎭 Mascot already initialized');
+    console.log('🎭 Mascot already initialized, returning existing instance');
     return mascotInstance;
   }
   
+  console.log('🎭 Initializing Designer Mascot...');
   mascotInstance = new DesignerMascot();
   
   // Make available globally for debugging
@@ -511,6 +671,13 @@ export function initializeMascot() {
 // Get current mascot instance
 export function getMascot() {
   return mascotInstance;
+}
+
+// Export enhanced mascot manager class (for compatibility with test files)
+export class MascotManager extends DesignerMascot {
+  constructor() {
+    super();
+  }
 }
 
 // Convenience functions for external use
@@ -530,9 +697,5 @@ export function triggerMascotState(state) {
   }
 }
 
-// Auto-initialize if not in module environment
-if (typeof document !== 'undefined' && document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeMascot);
-} else if (typeof document !== 'undefined') {
-  initializeMascot();
-}
+// Note: Auto-initialization removed to prevent conflicts
+// Initialization should be handled by the main app or explicitly called by test files

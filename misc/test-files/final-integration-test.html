@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Environmental Integration Test</title>
+    
+    <!-- Import actual CSS files -->
+    <link rel="stylesheet" href="css/utilities/variables.css">
+    <link rel="stylesheet" href="css/utilities/reset.css">
+    <link rel="stylesheet" href="css/components/mascot.css">
+    <link rel="stylesheet" href="css/components/mascot-environment.css">
+    
+    <style>
+        body {
+            background: white;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+        
+        /* Control panel for testing */
+        .test-controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            border: 2px solid #333;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            z-index: 2000;
+            max-width: 350px;
+        }
+        
+        .test-controls h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .test-controls button {
+            display: block;
+            width: 100%;
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background: var(--color-accent-yellow, #EBC533);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .test-controls button:hover {
+            background: var(--color-accent-orange, #D66422);
+        }
+        
+        .debug-panel {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .debug-panel div {
+            margin-bottom: 5px;
+        }
+        
+        .status-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--color-accent-orange, #D66422);
+            z-index: 1500;
+            pointer-events: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        /* Force visibility for debugging in problematic browsers */
+        .force-visible .mascot-environment {
+            border: 3px dashed red !important;
+            background: rgba(255, 0, 0, 0.2) !important;
+        }
+        
+        .force-visible .env-element {
+            border: 2px solid blue !important;
+            background: rgba(0, 0, 255, 0.3) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-controls">
+        <h3>Environmental Animation Test</h3>
+        <button onclick="testState('creating')">🎨 Creating Animation</button>
+        <button onclick="testState('thinking')">💭 Thinking Animation</button>
+        <button onclick="testState('coffee')">☕ Coffee Animation</button>
+        <button onclick="testState('sleepy')">😴 Sleepy Animation</button>
+        <button onclick="testState('excited')">🎉 Excited Animation</button>
+        <button onclick="testState('dancing')">💃 Dancing Animation</button>
+        <button onclick="testState('idle')">⭕ Reset to Idle</button>
+        <button onclick="toggleDebug()">🔍 Toggle Debug Mode</button>
+        
+        <div class="debug-panel" id="debug-panel">
+            <div><strong>Status:</strong> <span id="status">Ready</span></div>
+            <div><strong>Current State:</strong> <span id="current-state">idle</span></div>
+            <div><strong>Environment Classes:</strong> <span id="env-classes">loading...</span></div>
+            <div><strong>Active Elements:</strong> <span id="active-elements">none</span></div>
+            <div><strong>Browser:</strong> <span id="browser">detecting...</span></div>
+            <div><strong>Visible Containers:</strong> <span id="visible-containers">checking...</span></div>
+        </div>
+    </div>
+    
+    <div class="status-indicator" id="status-indicator">READY</div>
+    
+    <!-- The actual mascot and environment from our system -->
+    <div class="character-mascot" id="mascot">
+        <div class="mascot-sprite"></div>
+    </div>
+    
+    <div class="mascot-environment" id="environment">
+        <!-- All environmental containers will be created by JS -->
+    </div>
+    
+    <!-- Import actual JavaScript modules -->
+    <script type="module">
+        // Import the actual mascot and environment modules
+        import { mascot } from './js/modules/mascot.js';
+        import { environment } from './js/modules/mascot-environment.js';
+        
+        let currentState = 'idle';
+        let debugMode = false;
+        
+        // Initialize the system
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Initializing mascot and environment system...');
+            
+            try {
+                // Initialize the mascot system
+                if (typeof mascot.init === 'function') {
+                    await mascot.init();
+                    console.log('Mascot initialized successfully');
+                }
+                
+                // Initialize the environment system
+                if (typeof environment.init === 'function') {
+                    await environment.init();
+                    console.log('Environment initialized successfully');
+                }
+                
+                updateDebugInfo();
+                document.getElementById('status').textContent = 'System Ready';
+                
+                // Auto-cycle test for 30 seconds
+                setTimeout(() => {
+                    startAutoCycle();
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Initialization error:', error);
+                document.getElementById('status').textContent = 'Error: ' + error.message;
+            }
+        });
+        
+        // Test function for manual triggering
+        window.testState = function(state) {
+            console.log(`Testing state: ${state}`);
+            currentState = state;
+            
+            const statusIndicator = document.getElementById('status-indicator');
+            statusIndicator.textContent = state.toUpperCase();
+            
+            if (state === 'idle') {
+                if (typeof mascot.setState === 'function') {
+                    mascot.setState('idle');
+                }
+                if (typeof environment.setState === 'function') {
+                    environment.setState('idle');
+                }
+            } else {
+                if (typeof mascot.setState === 'function') {
+                    mascot.setState(state);
+                }
+                if (typeof environment.setState === 'function') {
+                    environment.setState(state);
+                }
+            }
+            
+            updateDebugInfo();
+        };
+        
+        // Debug mode toggle
+        window.toggleDebug = function() {
+            debugMode = !debugMode;
+            document.body.classList.toggle('force-visible', debugMode);
+            
+            const envContainer = document.getElementById('environment');
+            if (debugMode) {
+                envContainer.style.border = '3px dashed red';
+                envContainer.style.background = 'rgba(255, 0, 0, 0.2)';
+            } else {
+                envContainer.style.border = '';
+                envContainer.style.background = '';
+            }
+            
+            console.log('Debug mode:', debugMode ? 'ON' : 'OFF');
+            updateDebugInfo();
+        };
+        
+        function updateDebugInfo() {
+            const envContainer = document.getElementById('environment');
+            if (!envContainer) return;
+            
+            // Update debug panel
+            document.getElementById('current-state').textContent = currentState;
+            document.getElementById('env-classes').textContent = envContainer.className || 'none';
+            
+            // Check for visible state containers
+            const stateContainers = envContainer.querySelectorAll('[class*="env-"]');
+            const visibleContainers = [];
+            const activeElements = [];
+            
+            stateContainers.forEach(container => {
+                const computedStyle = window.getComputedStyle(container);
+                if (computedStyle.display !== 'none') {
+                    visibleContainers.push(container.className);
+                    
+                    // Check elements within this container
+                    const elements = container.querySelectorAll('.env-element');
+                    elements.forEach(element => {
+                        const elementStyle = window.getComputedStyle(element);
+                        if (elementStyle.display !== 'none' && elementStyle.opacity !== '0') {
+                            activeElements.push(element.className);
+                        }
+                    });
+                }
+            });
+            
+            document.getElementById('visible-containers').textContent = 
+                visibleContainers.length > 0 ? visibleContainers.join(', ') : 'none';
+            document.getElementById('active-elements').textContent = 
+                activeElements.length > 0 ? activeElements.join(', ') : 'none';
+            
+            // Browser detection
+            const ua = navigator.userAgent;
+            let browser = 'Unknown';
+            if (ua.includes('Safari') && !ua.includes('Chrome')) {
+                browser = 'Safari ' + (ua.match(/Version\/([0-9._]+)/) ? ua.match(/Version\/([0-9._]+)/)[1] : '');
+            } else if (ua.includes('Chrome')) {
+                browser = 'Chrome ' + (ua.match(/Chrome\/([0-9.]+)/) ? ua.match(/Chrome\/([0-9.]+)/)[1] : '');
+            } else if (ua.includes('Firefox')) {
+                browser = 'Firefox ' + (ua.match(/Firefox\/([0-9.]+)/) ? ua.match(/Firefox\/([0-9.]+)/)[1] : '');
+            }
+            document.getElementById('browser').textContent = browser;
+        }
+        
+        function startAutoCycle() {
+            const states = ['creating', 'thinking', 'coffee', 'sleepy', 'excited', 'dancing'];
+            let index = 0;
+            
+            const cycleInterval = setInterval(() => {
+                testState(states[index]);
+                index = (index + 1) % states.length;
+                
+                // Stop after 30 seconds
+                if (index === 0) {
+                    setTimeout(() => {
+                        clearInterval(cycleInterval);
+                        testState('idle');
+                        console.log('Auto-cycle completed');
+                    }, 3000);
+                }
+            }, 4000);
+            
+            console.log('Started auto-cycle test');
+        }
+        
+        // Update debug info every second
+        setInterval(updateDebugInfo, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mascot Environment Final Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f0f0;
+            min-height: 100vh;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .test-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            background: #333;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        
+        .test-btn:hover {
+            background: #555;
+        }
+        
+        .test-btn.active {
+            background: #EBC533;
+            color: #333;
+        }
+        
+        .status {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .mascot-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .debug-info {
+            background: #343a40;
+            color: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎭 Mascot Environment Final Test</h1>
+        <p>Testing environmental elements with the actual mascot character.</p>
+        
+        <div class="test-buttons">
+            <button class="test-btn" data-state="idle">Idle</button>
+            <button class="test-btn" data-state="creating">Creating</button>
+            <button class="test-btn" data-state="thinking">Thinking</button>
+            <button class="test-btn" data-state="coffee">Coffee</button>
+            <button class="test-btn" data-state="sleepy">Sleepy</button>
+            <button class="test-btn" data-state="excited">Excited</button>
+            <button class="test-btn" data-state="dancing">Dancing</button>
+        </div>
+        
+        <div id="status" class="status info">
+            Initializing mascot and environment...
+        </div>
+        
+        <div class="mascot-info">
+            <strong>What to look for:</strong><br>
+            • Mascot should appear in bottom-right corner<br>
+            • Environmental elements should appear around the mascot<br>
+            • Only elements for the active state should be visible<br>
+            • Elements should be positioned contextually (bubbles above head, etc.)<br>
+            • Transitions should be immediate when clicking buttons
+        </div>
+        
+        <div id="debug" class="debug-info">
+            Debug info will appear here...
+        </div>
+    </div>
+
+    <!-- Include CSS files -->
+    <link rel="stylesheet" href="css/utilities/variables.css">
+    <link rel="stylesheet" href="css/utilities/reset.css">
+    <link rel="stylesheet" href="css/components/mascot.css">
+    <link rel="stylesheet" href="css/components/mascot-environment.css">
+
+    <script type="module">
+        import { DesignerMascot } from './js/modules/mascot.js';
+        
+        let mascot = null;
+        let statusEl = document.getElementById('status');
+        let debugEl = document.getElementById('debug');
+        
+        function updateStatus(message, type = 'info') {
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+        
+        function updateDebug(info) {
+            debugEl.textContent = info;
+        }
+        
+        function logMascotInfo() {
+            const mascotEl = document.querySelector('.character-mascot');
+            const envEl = document.querySelector('.mascot-environment');
+            
+            let info = 'MASCOT DEBUG INFO:\n\n';
+            
+            if (mascotEl) {
+                const mascotRect = mascotEl.getBoundingClientRect();
+                info += `Mascot Element: Found ✓\n`;
+                info += `Position: ${mascotRect.left}px, ${mascotRect.top}px\n`;
+                info += `Size: ${mascotRect.width}px × ${mascotRect.height}px\n`;
+                info += `Z-index: ${getComputedStyle(mascotEl).zIndex}\n`;
+                info += `Classes: ${mascotEl.className}\n\n`;
+            } else {
+                info += `Mascot Element: NOT FOUND ✗\n\n`;
+            }
+            
+            if (envEl) {
+                const envRect = envEl.getBoundingClientRect();
+                info += `Environment Element: Found ✓\n`;
+                info += `Position: ${envRect.left}px, ${envRect.top}px\n`;
+                info += `Size: ${envRect.width}px × ${envRect.height}px\n`;
+                info += `Z-index: ${getComputedStyle(envEl).zIndex}\n`;
+                info += `Classes: ${envEl.className}\n`;
+                
+                // Check visible elements
+                const visibleElements = envEl.querySelectorAll('.env-element');
+                const actuallyVisible = Array.from(visibleElements).filter(el => {
+                    const style = getComputedStyle(el);
+                    return style.opacity !== '0' && style.transform !== 'scale(0)';
+                });
+                
+                info += `Total env elements: ${visibleElements.length}\n`;
+                info += `Visible elements: ${actuallyVisible.length}\n`;
+                
+                if (actuallyVisible.length > 0) {
+                    info += `Visible element classes: ${actuallyVisible.map(el => el.className).join(', ')}\n`;
+                }
+            } else {
+                info += `Environment Element: NOT FOUND ✗\n`;
+            }
+            
+            updateDebug(info);
+        }
+        
+        // Initialize mascot
+        try {
+            updateStatus('Creating mascot instance...', 'info');
+            mascot = new DesignerMascot();
+            
+            // Wait a bit for initialization
+            setTimeout(() => {
+                const mascotEl = document.querySelector('.character-mascot');
+                const envEl = document.querySelector('.mascot-environment');
+                
+                if (mascotEl && envEl) {
+                    updateStatus('Mascot and environment initialized successfully!', 'success');
+                } else {
+                    updateStatus(`Missing elements - Mascot: ${mascotEl ? '✓' : '✗'}, Environment: ${envEl ? '✓' : '✗'}`, 'error');
+                }
+                
+                logMascotInfo();
+            }, 1000);
+        } catch (error) {
+            updateStatus(`Error initializing mascot: ${error.message}`, 'error');
+            console.error('Mascot initialization error:', error);
+        }
+        
+        // Test button handlers
+        document.querySelectorAll('.test-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const state = btn.dataset.state;
+                
+                // Update active button
+                document.querySelectorAll('.test-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                if (mascot) {
+                    updateStatus(`Setting state to: ${state}`, 'info');
+                    mascot.setState(state);
+                    
+                    // Log debug info after state change
+                    setTimeout(() => {
+                        logMascotInfo();
+                    }, 100);
+                } else {
+                    updateStatus('Mascot not initialized!', 'error');
+                }
+            });
+        });
+        
+        // Auto-refresh debug info every 2 seconds
+        setInterval(logMascotInfo, 2000);
+    </script>
+</body>
+</html>
