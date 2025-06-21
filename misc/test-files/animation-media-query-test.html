@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Media Query Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: monospace;
+            background: #f0f0f0;
+        }
+        
+        .test-box {
+            width: 100px;
+            height: 100px;
+            background: #333;
+            margin: 20px;
+            animation: test-animation 2s ease-in-out infinite;
+        }
+        
+        @keyframes test-animation {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(50px); }
+        }
+        
+        /* This is the same media query from reset.css */
+        @media (prefers-reduced-motion: reduce) {
+            .test-box {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+            }
+        }
+        
+        .debug-info {
+            margin: 20px;
+            padding: 15px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+        
+        .override-test {
+            width: 100px;
+            height: 100px;
+            background: #e74c3c;
+            margin: 20px;
+            animation: test-animation 2s ease-in-out infinite;
+        }
+        
+        /* Force animation regardless of media query */
+        .override-test {
+            animation-duration: 2s !important;
+            animation-iteration-count: infinite !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-info">
+        <h3>🎬 Animation Media Query Test</h3>
+        <div id="motion-info">Checking motion preferences...</div>
+        <div id="animation-info">Checking animation status...</div>
+        <button onclick="checkAnimations()">Refresh Check</button>
+    </div>
+    
+    <div>
+        <h4>Normal Animation (affected by prefers-reduced-motion):</h4>
+        <div class="test-box" id="normal-box"></div>
+    </div>
+    
+    <div>
+        <h4>Forced Animation (should ignore prefers-reduced-motion):</h4>
+        <div class="override-test" id="override-box"></div>
+    </div>
+    
+    <div style="margin: 20px;">
+        <h4>Instructions:</h4>
+        <ul>
+            <li>Both boxes should be moving if animations work correctly</li>
+            <li>If you have "Reduce motion" enabled in your OS, the first box might not animate</li>
+            <li>The red box should always animate regardless of settings</li>
+            <li>Check the debug info above for your motion preferences</li>
+        </ul>
+    </div>
+
+    <script>
+        function checkAnimations() {
+            const motionInfo = document.getElementById('motion-info');
+            const animationInfo = document.getElementById('animation-info');
+            const normalBox = document.getElementById('normal-box');
+            const overrideBox = document.getElementById('override-box');
+            
+            // Check prefers-reduced-motion
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            
+            if (motionInfo) {
+                motionInfo.innerHTML = `
+                    <strong>Motion Preferences:</strong><br>
+                    prefers-reduced-motion: ${reducedMotion ? 'REDUCE' : 'no-preference'}<br>
+                    ${reducedMotion ? '⚠️ This could be disabling mascot animations!' : '✅ Motion preferences should not interfere'}
+                `;
+            }
+            
+            // Check computed animation styles
+            if (animationInfo && normalBox && overrideBox) {
+                const normalStyle = getComputedStyle(normalBox);
+                const overrideStyle = getComputedStyle(overrideBox);
+                
+                animationInfo.innerHTML = `
+                    <strong>Animation Status:</strong><br>
+                    Normal box: ${normalStyle.animationName} (${normalStyle.animationDuration})<br>
+                    Override box: ${overrideStyle.animationName} (${overrideStyle.animationDuration})<br>
+                    Normal iteration: ${normalStyle.animationIterationCount}<br>
+                    Override iteration: ${overrideStyle.animationIterationCount}
+                `;
+            }
+        }
+        
+        // Initial check
+        document.addEventListener('DOMContentLoaded', checkAnimations);
+        
+        // Check every 3 seconds to see if animations are running
+        setInterval(() => {
+            console.log('🎬 Animation check...');
+            checkAnimations();
+        }, 3000);
+    </script>
+</body>
+</html>

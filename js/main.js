@@ -3,7 +3,7 @@
  * Guilherme Ferreira Portfolio Website
  */
 
-import MascotController from './modules/mascot.js';
+import UnifiedMascot from './modules/mascot-unified.js';
 import GalleryController from './modules/gallery.js';
 import NavigationController from './modules/navigation.js';
 import LoadingController from './modules/loading.js';
@@ -83,7 +83,7 @@ class PortfolioApp {
       // Initialize core modules
       this.navigation = new NavigationController();
       this.gallery = new GalleryController();
-      this.mascot = new MascotController();
+      this.mascot = new UnifiedMascot();
       
       // Setup cross-module communication
       this.setupModuleCommunication();

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mascot Animation Fix Test</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: monospace;
+            background: #f0f0f0;
+        }
+        
+        .debug-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 15px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            z-index: 2000;
+            max-width: 400px;
+            font-size: 12px;
+        }
+        
+        .debug-btn {
+            margin: 3px;
+            padding: 6px 10px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .debug-btn:hover {
+            background: #555;
+        }
+        
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-panel">
+        <h3>🎭 Mascot Animation Fix Test</h3>
+        
+        <div id="motion-status" class="status">Checking motion preferences...</div>
+        
+        <div>
+            <button class="debug-btn" onclick="testMascotState('idle')">Test Idle</button>
+            <button class="debug-btn" onclick="testMascotState('excited')">Test Excited</button>
+            <button class="debug-btn" onclick="testMascotState('dancing')">Test Dancing</button>
+            <button class="debug-btn" onclick="testMascotState('coffee')">Test Coffee</button>
+        </div>
+        
+        <div>
+            <button class="debug-btn" onclick="runFullTest()">Run Full Test</button>
+            <button class="debug-btn" onclick="inspectMascot()">Inspect Mascot</button>
+            <button class="debug-btn" onclick="checkAnimations()">Check Animations</button>
+        </div>
+        
+        <div id="test-log" style="margin-top: 10px; max-height: 200px; overflow-y: auto; font-size: 10px; background: #f8f8f8; padding: 8px; border-radius: 4px;"></div>
+    </div>
+
+    <div style="padding: 50px; padding-top: 150px;">
+        <h1>Mascot Animation Fix Test</h1>
+        <p>This test checks if the mascot animations work correctly after fixing the prefers-reduced-motion issue.</p>
+        
+        <h3>What was fixed:</h3>
+        <ul>
+            <li>CSS reset rule that was disabling all animations with <code>animation-duration: 0.01ms !important</code></li>
+            <li>Added specific protection for mascot animations to ignore prefers-reduced-motion</li>
+            <li>Removed duplicate reduced motion rules from main.css</li>
+        </ul>
+        
+        <h3>Test results:</h3>
+        <div id="results"></div>
+    </div>
+
+    <script type="module">
+        import { Mascot } from '../../js/modules/mascot.js';
+        
+        let mascot;
+        let testResults = [];
+        
+        function log(message, type = 'info') {
+            const logEl = document.getElementById('test-log');
+            const timestamp = new Date().toLocaleTimeString();
+            const emoji = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️';
+            
+            if (logEl) {
+                logEl.innerHTML += `<div>[${timestamp}] ${emoji} ${message}</div>`;
+                logEl.scrollTop = logEl.scrollHeight;
+            }
+            console.log(`${emoji} ${message}`);
+        }
+        
+        function checkMotionPreferences() {
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const statusEl = document.getElementById('motion-status');
+            
+            if (reducedMotion) {
+                statusEl.className = 'status warning';
+                statusEl.innerHTML = `
+                    ⚠️ <strong>Reduced Motion is ENABLED</strong><br>
+                    This was likely causing the animation issue.<br>
+                    The fix should make mascot animations work anyway.
+                `;
+                log('Reduced motion preference detected - this was the likely cause of the issue', 'info');
+            } else {
+                statusEl.className = 'status success';
+                statusEl.innerHTML = `
+                    ✅ <strong>Reduced Motion is DISABLED</strong><br>
+                    The animation issue was likely still caused by the CSS reset rule.<br>
+                    Animations should work normally now.
+                `;
+                log('No reduced motion preference - CSS reset rule was still problematic', 'info');
+            }
+            
+            return reducedMotion;
+        }
+        
+        window.testMascotState = function(state) {
+            if (!mascot) {
+                log('Mascot not initialized yet', 'error');
+                return;
+            }
+            
+            log(`Testing mascot state: ${state}`);
+            
+            try {
+                mascot.debugSetState(state);
+                
+                // Check if animation is actually applied
+                setTimeout(() => {
+                    const container = mascot.element?.querySelector('.mascot-container');
+                    if (container) {
+                        const computedStyle = getComputedStyle(container);
+                        const animationName = computedStyle.animationName;
+                        const animationDuration = computedStyle.animationDuration;
+                        
+                        if (animationName !== 'none' && animationDuration !== '0s') {
+                            log(`✅ ${state} animation active: ${animationName} (${animationDuration})`, 'success');
+                            testResults.push({ state, success: true, animation: animationName, duration: animationDuration });
+                        } else {
+                            log(`❌ ${state} animation not active: ${animationName} (${animationDuration})`, 'error');
+                            testResults.push({ state, success: false, animation: animationName, duration: animationDuration });
+                        }
+                    } else {
+                        log(`❌ ${state} test failed: container not found`, 'error');
+                        testResults.push({ state, success: false, error: 'container not found' });
+                    }
+                }, 200);
+                
+            } catch (error) {
+                log(`Error testing ${state}: ${error.message}`, 'error');
+                testResults.push({ state, success: false, error: error.message });
+            }
+        };
+        
+        window.inspectMascot = function() {
+            if (!mascot) {
+                log('Mascot not available for inspection', 'error');
+                return;
+            }
+            
+            log('Inspecting mascot...');
+            mascot.debugInspectElement();
+        };
+        
+        window.checkAnimations = function() {
+            if (!mascot || !mascot.element) {
+                log('Cannot check animations - mascot not available', 'error');
+                return;
+            }
+            
+            const container = mascot.element.querySelector('.mascot-container');
+            if (!container) {
+                log('Cannot check animations - container not found', 'error');
+                return;
+            }
+            
+            const computedStyle = getComputedStyle(container);
+            log('Animation status check:');
+            log(`  - animation-name: ${computedStyle.animationName}`);
+            log(`  - animation-duration: ${computedStyle.animationDuration}`);
+            log(`  - animation-iteration-count: ${computedStyle.animationIterationCount}`);
+            log(`  - animation-play-state: ${computedStyle.animationPlayState}`);
+        };
+        
+        window.runFullTest = function() {
+            if (!mascot) {
+                log('Cannot run full test - mascot not initialized', 'error');
+                return;
+            }
+            
+            log('Starting full animation test sequence...');
+            testResults = [];
+            
+            const states = ['idle', 'excited', 'dancing', 'coffee', 'creating'];
+            let index = 0;
+            
+            const testNext = () => {
+                if (index < states.length) {
+                    const state = states[index];
+                    log(`Testing ${index + 1}/${states.length}: ${state}`);
+                    testMascotState(state);
+                    index++;
+                    setTimeout(testNext, 2000);
+                } else {
+                    // Show results
+                    setTimeout(() => {
+                        showTestResults();
+                    }, 1000);
+                }
+            };
+            
+            testNext();
+        };
+        
+        function showTestResults() {
+            const resultsEl = document.getElementById('results');
+            if (!resultsEl) return;
+            
+            const successCount = testResults.filter(r => r.success).length;
+            const totalCount = testResults.length;
+            
+            let html = `<h4>Test Results: ${successCount}/${totalCount} passed</h4>`;
+            
+            if (successCount === totalCount) {
+                html += '<div class="status success">🎉 All tests passed! Mascot animations are working correctly.</div>';
+            } else {
+                html += '<div class="status warning">⚠️ Some tests failed. Animation issue may persist.</div>';
+            }
+            
+            html += '<ul>';
+            testResults.forEach(result => {
+                const icon = result.success ? '✅' : '❌';
+                const details = result.success 
+                    ? `${result.animation} (${result.duration})`
+                    : result.error || 'Animation not active';
+                html += `<li>${icon} ${result.state}: ${details}</li>`;
+            });
+            html += '</ul>';
+            
+            resultsEl.innerHTML = html;
+            
+            log(`Full test completed: ${successCount}/${totalCount} animations working`, 
+                successCount === totalCount ? 'success' : 'error');
+        }
+        
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            log('Initializing mascot animation fix test...');
+            
+            // Check motion preferences first
+            checkMotionPreferences();
+            
+            try {
+                mascot = new Mascot();
+                window.mascot = mascot; // Make globally available
+                
+                setTimeout(() => {
+                    log('Mascot initialized - ready for testing', 'success');
+                }, 500);
+                
+            } catch (error) {
+                log(`Failed to initialize mascot: ${error.message}`, 'error');
+            }
+        });
+    </script>
+</body>
+</html>

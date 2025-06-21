@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Mascot CSS Test</title>
+    <link rel="stylesheet" href="../../css/components/mascot.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: monospace;
+            background: #f0f0f0;
+        }
+        
+        .test-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 15px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            z-index: 2000;
+            font-size: 12px;
+        }
+        
+        .test-btn {
+            margin: 3px;
+            padding: 6px 10px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .test-btn:hover {
+            background: #555;
+        }
+        
+        /* Override any conflicting styles */
+        .character-mascot * {
+            animation-duration: initial !important;
+            animation-iteration-count: initial !important;
+        }
+        
+        /* Force visible animations for testing */
+        .test-excited .mascot-container {
+            animation: test-bounce 1s ease-in-out infinite !important;
+            border: 2px solid yellow !important;
+        }
+        
+        .test-dancing .mascot-container {
+            animation: test-wiggle 0.8s ease-in-out infinite !important;
+            border: 2px solid purple !important;
+        }
+        
+        @keyframes test-bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.1); }
+        }
+        
+        @keyframes test-wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-panel">
+        <h4>🎭 Minimal CSS Test</h4>
+        <div>
+            <button class="test-btn" onclick="testOriginalCSS('idle')">Idle</button>
+            <button class="test-btn" onclick="testOriginalCSS('excited')">Excited</button>
+            <button class="test-btn" onclick="testOriginalCSS('dancing')">Dancing</button>
+        </div>
+        <div>
+            <button class="test-btn" onclick="testForcedCSS('excited')">Force Excited</button>
+            <button class="test-btn" onclick="testForcedCSS('dancing')">Force Dancing</button>
+            <button class="test-btn" onclick="clearAll()">Clear</button>
+        </div>
+        <div id="status" style="margin-top: 10px; font-size: 10px; color: #666;"></div>
+    </div>
+
+    <!-- Exact same structure as the JavaScript creates -->
+    <div class="character-mascot" id="test-mascot">
+        <div class="mascot-container">
+            <div class="mascot-character">
+                <div class="mascot-hair"></div>
+                <div class="mascot-head"></div>
+                <div class="mascot-eye-left"></div>
+                <div class="mascot-eye-right"></div>
+                <div class="mascot-beard"></div>
+                <div class="mascot-body"></div>
+                <div class="mascot-arm-left"></div>
+                <div class="mascot-arm-right"></div>
+                <div class="mascot-leg-left"></div>
+                <div class="mascot-leg-right"></div>
+                <div class="mascot-tool"></div>
+            </div>
+        </div>
+    </div>
+
+    <div style="padding: 50px; padding-top: 150px;">
+        <h1>Minimal Mascot CSS Test</h1>
+        <p>This test uses the exact same HTML structure and CSS as the JavaScript-generated mascot.</p>
+        <p><strong>If this works:</strong> The issue is with JavaScript state management.</p>
+        <p><strong>If this doesn't work:</strong> The issue is with CSS or browser compatibility.</p>
+        
+        <h3>What to look for:</h3>
+        <ul>
+            <li><strong>Original CSS buttons:</strong> Should use the actual mascot.css animations</li>
+            <li><strong>Force buttons:</strong> Use simple test animations with colored borders</li>
+            <li><strong>Mascot position:</strong> Bottom-right corner, should be visible</li>
+        </ul>
+    </div>
+
+    <script>
+        const mascot = document.getElementById('test-mascot');
+        const status = document.getElementById('status');
+        
+        function updateStatus(message) {
+            if (status) {
+                status.innerHTML = `${new Date().toLocaleTimeString()}: ${message}`;
+            }
+            console.log(message);
+        }
+        
+        function testOriginalCSS(state) {
+            if (!mascot) return;
+            
+            // Clear all classes
+            mascot.className = 'character-mascot';
+            
+            // Add original state class
+            mascot.classList.add(`mascot-${state}`);
+            updateStatus(`Applied original CSS: mascot-${state}`);
+            
+            // Check if animation is active
+            setTimeout(() => {
+                const container = mascot.querySelector('.mascot-container');
+                if (container) {
+                    const computedStyle = getComputedStyle(container);
+                    updateStatus(`Animation: ${computedStyle.animationName} (${computedStyle.animationDuration})`);
+                }
+            }, 100);
+        }
+        
+        function testForcedCSS(state) {
+            if (!mascot) return;
+            
+            // Clear all classes
+            mascot.className = 'character-mascot';
+            
+            // Add test class
+            mascot.classList.add(`test-${state}`);
+            updateStatus(`Applied forced CSS: test-${state}`);
+        }
+        
+        function clearAll() {
+            if (!mascot) return;
+            
+            mascot.className = 'character-mascot';
+            updateStatus('Cleared all state classes');
+        }
+        
+        // Initial status
+        updateStatus('Ready - Test the buttons to see if CSS animations work');
+        
+        // Check if mascot is visible
+        if (mascot) {
+            const rect = mascot.getBoundingClientRect();
+            updateStatus(`Mascot position: ${rect.bottom}, ${rect.right} (should be near viewport edges)`);
+        }
+    </script>
+</body>
+</html>

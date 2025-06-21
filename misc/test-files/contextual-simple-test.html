@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contextual Animation Test - Simple</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+        }
+        
+        .test-controls {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 9999;
+            max-width: 400px;
+        }
+        
+        .test-controls h3 {
+            margin: 0 0 15px 0;
+            color: #EBC533;
+        }
+        
+        .test-row {
+            margin: 10px 0;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .test-btn {
+            padding: 6px 12px;
+            background: #EBC533;
+            color: #333;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            min-width: 80px;
+        }
+        
+        .test-btn:hover {
+            background: #D66422;
+            color: white;
+        }
+        
+        .test-btn.nav-test {
+            background: #333;
+            color: white;
+        }
+        
+        .test-btn.nav-test:hover {
+            background: #EBC533;
+            color: #333;
+        }
+        
+        .status {
+            font-family: monospace;
+            font-size: 11px;
+            color: #ccc;
+            margin-left: 10px;
+        }
+        
+        section {
+            min-height: 100vh;
+            padding: 50px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+        }
+        
+        #home {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
+        }
+        
+        #work {
+            background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+        }
+        
+        #about {
+            background: linear-gradient(135deg, #e5e5e5 0%, #dadada 100%);
+        }
+        
+        #contact {
+            background: linear-gradient(135deg, #dadada 0%, #d0d0d0 100%);
+        }
+        
+        .section-info {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #666;
+            max-width: 500px;
+        }
+        
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 8px;
+            padding: 8px 16px;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            background: #EBC533;
+            color: #333;
+            transform: translateY(-2px);
+        }
+    </style>
+    
+    <!-- Import CSS system -->
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+    <!-- Test Controls -->
+    <div class="test-controls">
+        <h3>🎭 Contextual Animation Tests</h3>
+        
+        <div class="test-row">
+            <strong>Manual Contextual Triggers:</strong>
+        </div>
+        <div class="test-row">
+            <button class="test-btn" onclick="testContextual('hero')">Hero</button>
+            <button class="test-btn" onclick="testContextual('work')">Work</button>
+            <button class="test-btn" onclick="testContextual('about')">About</button>
+            <button class="test-btn" onclick="testContextual('contact')">Contact</button>
+        </div>
+        
+        <div class="test-row">
+            <strong>Navigation Simulation:</strong>
+        </div>
+        <div class="test-row">
+            <button class="test-btn nav-test" onclick="simulateNavClick('home')">Nav Home</button>
+            <button class="test-btn nav-test" onclick="simulateNavClick('work')">Nav Work</button>
+            <button class="test-btn nav-test" onclick="simulateNavClick('about')">Nav About</button>
+            <button class="test-btn nav-test" onclick="simulateNavClick('contact')">Nav Contact</button>
+        </div>
+        
+        <div class="test-row">
+            <strong>Direct State Tests:</strong>
+        </div>
+        <div class="test-row">
+            <button class="test-btn" onclick="testState('creating')">Creating</button>
+            <button class="test-btn" onclick="testState('coffee')">Coffee</button>
+            <button class="test-btn" onclick="testState('dancing')">Dancing</button>
+            <button class="test-btn" onclick="testState('excited')">Excited</button>
+            <button class="test-btn" onclick="testState('idle')">Idle</button>
+        </div>
+        
+        <div class="test-row">
+            <strong>System Control:</strong>
+        </div>
+        <div class="test-row">
+            <button class="test-btn" onclick="logMascotInfo()">Log Info</button>
+            <button class="test-btn" onclick="resetMascot()">Reset</button>
+        </div>
+        
+        <div class="test-row">
+            <div id="current-status" class="status">Status: Loading...</div>
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <div class="nav-container">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#work" class="nav-link">Work</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#contact" class="nav-link">Contact</a>
+    </div>
+    
+    <!-- Sections -->
+    <section id="home" class="hero-section">
+        <h1>🏠 Hero / Home Section</h1>
+        <div class="section-info">
+            <strong>Expected Animation:</strong> Creating<br>
+            <strong>Trigger:</strong> Scroll into view or click Home nav
+        </div>
+    </section>
+    
+    <section id="work" class="gallery-section">
+        <h1>💼 Work Section</h1>
+        <div class="section-info">
+            <strong>Expected Animation:</strong> Coffee<br>
+            <strong>Trigger:</strong> Scroll into view or click Work nav
+        </div>
+    </section>
+    
+    <section id="about" class="about-section">
+        <h1>👨‍💻 About Section</h1>
+        <div class="section-info">
+            <strong>Expected Animation:</strong> Dancing<br>
+            <strong>Trigger:</strong> Scroll into view or click About nav
+        </div>
+    </section>
+    
+    <section id="contact" class="contact-section">
+        <h1>📞 Contact Section</h1>
+        <div class="section-info">
+            <strong>Expected Animation:</strong> Excited<br>
+            <strong>Trigger:</strong> Scroll into view or click Contact nav
+        </div>
+    </section>
+    
+    <script type="module">
+        import { DesignerMascot } from '../../js/modules/mascot.js';
+        
+        let mascot;
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🧪 Initializing contextual animation test...');
+            
+            // Initialize mascot
+            mascot = new DesignerMascot();
+            
+            // Update status periodically
+            setInterval(updateStatus, 1000);
+            
+            // Log section intersections
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        console.log(`🧪 Section in view: ${entry.target.id} (${(entry.intersectionRatio * 100).toFixed(1)}%)`);
+                    }
+                });
+            }, { threshold: [0.1, 0.2, 0.3, 0.5] });
+            
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+            
+            console.log('🧪 Test environment ready');
+        });
+        
+        // Global test functions
+        window.testContextual = (section) => {
+            console.log(`🧪 Manual contextual test: ${section}`);
+            if (window.mascot && window.mascot.triggerContextualAnimation) {
+                window.mascot.triggerContextualAnimation(section);
+            } else if (mascot && mascot.triggerContextualAnimation) {
+                mascot.triggerContextualAnimation(section);
+            } else {
+                console.error('🧪 ❌ triggerContextualAnimation not available');
+            }
+        };
+        
+        window.testState = (state) => {
+            console.log(`🧪 Direct state test: ${state}`);
+            if (window.mascot && window.mascot.setState) {
+                window.mascot.setState(state);
+            } else if (mascot && mascot.setState) {
+                mascot.setState(state);
+            } else {
+                console.error('🧪 ❌ setState not available');
+            }
+        };
+        
+        window.simulateNavClick = (section) => {
+            console.log(`🧪 Simulating nav click: ${section}`);
+            const link = document.querySelector(`a[href="#${section}"]`);
+            if (link) {
+                link.click();
+            } else {
+                // Fallback - trigger directly
+                testContextual(section);
+            }
+        };
+        
+        window.logMascotInfo = () => {
+            if (window.getMascotInfo) {
+                console.log('🧪 Mascot Info:', window.getMascotInfo());
+            } else if (mascot && mascot.logDebugInfo) {
+                mascot.logDebugInfo();
+            } else {
+                console.log('🧪 Mascot state:', mascot ? mascot.currentState : 'not available');
+            }
+        };
+        
+        window.resetMascot = () => {
+            console.log('🧪 Resetting mascot to idle...');
+            if (mascot && mascot.setState) {
+                mascot.contextualAnimationActive = false;
+                mascot.setState('idle');
+            }
+        };
+        
+        function updateStatus() {
+            const statusEl = document.getElementById('current-status');
+            if (statusEl && mascot) {
+                const info = window.getMascotInfo ? window.getMascotInfo() : { currentState: mascot.currentState };
+                statusEl.textContent = `State: ${info.currentState} | Contextual: ${info.contextualActive || 'unknown'}`;
+            }
+        }
+        
+        // Monitor navigation clicks
+        document.addEventListener('click', (e) => {
+            if (e.target.matches('.nav-link')) {
+                const href = e.target.getAttribute('href');
+                console.log(`🧪 Real navigation click detected: ${href}`);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Structure Test - Environmental Positioning</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        body {
+            /* Test environment styling */
+            border: 2px solid red;
+            min-height: 100vh;
+        }
+        
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 2001;
+            font-family: monospace;
+        }
+        
+        .test-buttons {
+            position: fixed;
+            top: 10px;
+            right: 100px; /* Far from mascot */
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 4px;
+            z-index: 2001;
+        }
+        
+        .test-btn {
+            display: block;
+            margin: 5px 0;
+            padding: 5px 10px;
+            background: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 2px;
+            font-size: 11px;
+        }
+        
+        .content {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Viewport overflow indicator */
+        .overflow-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 3px solid blue;
+            pointer-events: none;
+            z-index: 2000;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="overflow-indicator"></div>
+    
+    <div class="debug-info">
+        <div>Viewport: <span id="viewport"></span></div>
+        <div>Body scroll: <span id="body-scroll"></span></div>
+        <div>Document size: <span id="doc-size"></span></div>
+        <div>Scrollbars: <span id="scrollbars"></span></div>
+        <div>Current state: <span id="current-state">idle</span></div>
+    </div>
+    
+    <div class="test-buttons">
+        <button class="test-btn" onclick="testEnvState('thinking')">Thinking</button>
+        <button class="test-btn" onclick="testEnvState('coffee')">Coffee</button>
+        <button class="test-btn" onclick="testEnvState('sleepy')">Sleepy</button>
+        <button class="test-btn" onclick="testEnvState('creating')">Creating</button>
+        <button class="test-btn" onclick="testEnvState('excited')">Excited</button>
+        <button class="test-btn" onclick="testEnvState('dancing')">Dancing</button>
+        <button class="test-btn" onclick="testEnvState('idle')">Reset</button>
+    </div>
+
+    <div class="content">
+        <h1>Environmental Animation Test</h1>
+        <p>This test uses the exact same structure as the main website to check for overflow issues.</p>
+        
+        <h2>Instructions:</h2>
+        <ol>
+            <li>Use the buttons on the right to test different mascot states</li>
+            <li>Watch the debug info for any scrollbar detection</li>
+            <li>Look for the blue border - no elements should extend beyond it</li>
+            <li>Check that the thought bubble has a strong shadow and contains the question mark/lightbulb</li>
+        </ol>
+        
+        <h2>Test Content</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+    </div>
+
+    <!-- Mascot will be inserted by JavaScript like in the real site -->
+    
+    <script type="module">
+        import { DesignerMascot } from '../../js/modules/mascot.js';
+        
+        // Initialize mascot like in main.js
+        let mascot;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                mascot = new DesignerMascot();
+                console.log('🎭 Mascot initialized for testing');
+            } catch (error) {
+                console.error('Failed to initialize mascot:', error);
+            }
+            
+            updateDebugInfo();
+        });
+        
+        // Test function to trigger environmental states
+        window.testEnvState = function(state) {
+            if (!mascot || !mascot.environment) {
+                console.warn('Mascot or environment not available');
+                return;
+            }
+            
+            try {
+                // Force the environment to the desired state
+                mascot.environment.setState(state);
+                document.getElementById('current-state').textContent = state;
+                
+                // Also set mascot state for consistency
+                mascot.setState(state);
+                
+                setTimeout(updateDebugInfo, 100); // Update after state change
+            } catch (error) {
+                console.error('Error setting state:', error);
+            }
+        };
+        
+        function updateDebugInfo() {
+            const viewport = document.getElementById('viewport');
+            const bodyScroll = document.getElementById('body-scroll');
+            const docSize = document.getElementById('doc-size');
+            const scrollbars = document.getElementById('scrollbars');
+            
+            // Viewport info
+            viewport.textContent = `${window.innerWidth}x${window.innerHeight}`;
+            
+            // Body scroll info  
+            bodyScroll.textContent = `${document.body.scrollWidth}x${document.body.scrollHeight}`;
+            
+            // Document size
+            docSize.textContent = `${document.documentElement.scrollWidth}x${document.documentElement.scrollHeight}`;
+            
+            // Scrollbar detection
+            const hasHScroll = document.body.scrollWidth > window.innerWidth;
+            const hasVScroll = document.body.scrollHeight > window.innerHeight;
+            scrollbars.textContent = hasHScroll || hasVScroll ? 
+                `DETECTED! H:${hasHScroll} V:${hasVScroll}` : 
+                'None ✓';
+            scrollbars.style.color = hasHScroll || hasVScroll ? 'red' : 'lightgreen';
+        }
+        
+        // Update on resize
+        window.addEventListener('resize', updateDebugInfo);
+        
+        // Update periodically to catch dynamic changes
+        setInterval(updateDebugInfo, 1000);
+    </script>
+</body>
+</html>

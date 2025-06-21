@@ -1,5 +1,8 @@
-/* Guilherme Designer Mascot - Clean Pixel Art Character */
-/* Simple 8-bit style character with individual body parts */
+/* UNIFIED MASCOT SYSTEM - Character + Environmental Animations */
+/* Merged from mascot.css + mascot-environment.css */
+/* Single file controlling both character and environmental elements */
+
+/* ===== BASE CHARACTER STYLES ===== */
 
 .character-mascot {
   position: fixed;
@@ -49,93 +52,39 @@
   }
   .mascot-beard { 
     width: 8px; height: 4px; 
-    bottom: 25px; left: 19px; 
+    bottom: 26px; left: 19px; 
   }
   .mascot-body { 
-    width: 14px; height: 14px; 
+    width: 14px; height: 15px; 
     bottom: 12px; left: 17px; 
   }
   .mascot-arm-left { 
-    width: 3px; height: 9px;
+    width: 3px; height: 9px; 
     bottom: 15px; left: 14px; 
   }
   .mascot-arm-right { 
-    width: 3px; height: 9px;
+    width: 3px; height: 9px; 
     bottom: 15px; left: 32px; 
   }
   .mascot-leg-left { 
-    width: 5px; height: 14px;
+    width: 5px; height: 14px; 
     bottom: 2px; left: 19px; 
   }
   .mascot-leg-right { 
-    width: 5px; height: 14px;
+    width: 5px; height: 14px; 
     bottom: 2px; left: 25px; 
   }
   .mascot-tool { 
-    width: 2px; height: 6px;
-    bottom: 14px; left: 35px; 
+    width: 2px; height: 6px; 
+    bottom: 14px; left: 32px; 
   }
 }
 
 /* Smaller adjustment for very narrow screens (iPhone Pro/Max) */
 @media (max-width: 440px) {
   .character-mascot {
-    width: 42px;
-    height: 42px;
-    bottom: 12px;
-    right: 12px;
-  }
-  
-  /* Scale down all body parts proportionally for 42px container */
-  .mascot-character {
-    width: 42px;
-    height: 42px;
-  }
-  
-  /* Adjust all body parts for 42px container (0.66x scale) */
-  .mascot-hair { 
-    width: 17px; height: 7px; 
-    bottom: 33px; left: 12px; 
-  }
-  .mascot-head { 
-    width: 16px; height: 12px; 
-    bottom: 24px; left: 13px; 
-  }
-  .mascot-eye-left { 
-    width: 2px; height: 2px;
-    bottom: 29px; left: 16px; 
-  }
-  .mascot-eye-right { 
-    width: 2px; height: 2px;
-    bottom: 29px; left: 22px; 
-  }
-  .mascot-beard { 
-    width: 7px; height: 3px; 
-    bottom: 22px; left: 16px; 
-  }
-  .mascot-body { 
-    width: 12px; height: 12px; 
-    bottom: 11px; left: 15px; 
-  }
-  .mascot-arm-left { 
-    width: 3px; height: 8px;
-    bottom: 13px; left: 12px; 
-  }
-  .mascot-arm-right { 
-    width: 3px; height: 8px;
-    bottom: 13px; left: 28px; 
-  }
-  .mascot-leg-left { 
-    width: 4px; height: 12px;
-    bottom: 2px; left: 17px; 
-  }
-  .mascot-leg-right { 
-    width: 4px; height: 12px;
-    bottom: 2px; left: 22px; 
-  }
-  .mascot-tool { 
-    width: 1px; height: 5px;
-    bottom: 12px; left: 30px; 
+    bottom: 10px;
+    right: 10px;
   }
 }
 
@@ -290,13 +239,53 @@
   z-index: 9;
 }
 
+/* ===== ENVIRONMENTAL CONTAINER ===== */
+
+/* Environmental container - positioned to match mascot exactly */
+.mascot-environment {
+  position: fixed;
+  bottom: 20px;   /* Match mascot position exactly */
+  right: 20px;    /* Match mascot position exactly */
+  width: 64px;    /* Same size as mascot */
+  height: 64px;   /* Same size as mascot */
+  pointer-events: none;
+  z-index: 1001;  /* Above mascot (1000) to ensure visibility */
+  overflow: visible;
+  /* Extended bounds for environmental elements while preventing viewport overflow */
+  contain: layout;
+  /* Ensure environmental elements never extend beyond safe viewport bounds */
+  max-width: calc(100vw - 40px); /* Reserve space for right position */
+  max-height: calc(100vh - 40px); /* Reserve space for bottom position */
+}
+
+/* Responsive environmental sizing to match mascot */
+@media (max-width: 640px) {
+  .mascot-environment {
+    width: 48px;
+    height: 48px;
+    bottom: 15px;
+    right: 15px;
+  }
+}
+
+@media (max-width: 440px) {
+  .mascot-environment {
+    bottom: 10px;
+    right: 10px;
+  }
+}
+
 /* ===== ANIMATION PROTECTION ===== */
 /* Ensure mascot animations work regardless of prefers-reduced-motion setting */
 @media (prefers-reduced-motion: reduce) {
   .character-mascot,
   .character-mascot *,
   .character-mascot *::before,
-  .character-mascot *::after {
+  .character-mascot *::after,
+  .mascot-environment,
+  .mascot-environment *,
+  .mascot-environment *::before,
+  .mascot-environment *::after {
     animation-duration: initial !important;
     animation-iteration-count: initial !important;
     transition-duration: initial !important;
@@ -312,25 +301,26 @@
   }
   
   .mascot-dancing .mascot-container {
-    animation: dancing-sway 0.8s ease-in-out infinite !important;
+    animation: dancing-groove 1.4s ease-in-out infinite !important;
   }
   
   .mascot-coffee .mascot-container {
-    animation: coffee-sip 2.5s ease-in-out infinite !important;
+    animation: coffee-break-relaxed 6s ease-in-out infinite !important;
   }
   
   .mascot-creating .mascot-container {
-    animation: creating-focus 3s ease-in-out infinite !important;
+    animation: creating-artistic-flow 3s ease-in-out infinite !important;
   }
   
   .mascot-sleepy .mascot-container {
-    animation: sleepy-breathing 6s ease-in-out infinite !important;
+    animation: sleepy-sit-down 4s ease-in-out infinite !important;
   }
 }
 
-/* ===== ANIMATION STATES - REDESIGNED FOR INDIVIDUAL BODY PARTS ===== */
+/* ===== UNIFIED STATE SYSTEM ===== */
+/* Single .mascot-[state] class controls BOTH character AND environment */
 
-/* ===== IDLE STATE - Subtle Life ===== */
+/* ===== IDLE STATE ===== */
 .mascot-idle .mascot-container {
   animation: idle-breathing 4s ease-in-out infinite;
 }
@@ -344,6 +334,7 @@
   animation: idle-tool-float 3s ease-in-out infinite;
 }
 
+/* IDLE KEYFRAMES */
 @keyframes idle-breathing {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-1px); }
@@ -359,7 +350,7 @@
   50% { transform: translateY(-1px) rotate(2deg); }
 }
 
-/* ===== EXCITED STATE - Happy Jumping (Less Arm Movement) ===== */
+/* ===== EXCITED STATE ===== */
 .mascot-excited .mascot-container {
   animation: excited-happy-jump 0.9s ease-in-out infinite;
 }
@@ -385,6 +376,22 @@
   animation: excited-happy-eyes 2s ease-in-out infinite;
 }
 
+/* Environment - Excited confetti */
+.mascot-excited .env-excited {
+  display: block;
+  opacity: 1;
+}
+
+.mascot-excited .confetti {
+  animation: confetti-fall 2.5s ease-in-out infinite;
+}
+
+.mascot-excited .confetti:nth-child(1) { animation-delay: 0s; }
+.mascot-excited .confetti:nth-child(2) { animation-delay: 0.2s; }
+.mascot-excited .confetti:nth-child(3) { animation-delay: 0.4s; }
+.mascot-excited .confetti:nth-child(4) { animation-delay: 0.6s; }
+
+/* EXCITED KEYFRAMES */
 @keyframes excited-happy-jump {
   0%, 100% { transform: translateY(0) scale(1); }
   50% { transform: translateY(-5px) scale(1.02); }
@@ -415,7 +422,12 @@
   50% { transform: scaleY(1.1) scaleX(0.9); }
 }
 
-/* ===== DANCING STATE - Rhythmic Side-to-Side Dance ===== */
+@keyframes confetti-fall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(30px) rotate(180deg); opacity: 0; }
+}
+
+/* ===== DANCING STATE ===== */
 .mascot-dancing .mascot-container {
   animation: dancing-groove 1.4s ease-in-out infinite;
 }
@@ -448,6 +460,21 @@
   animation: dancing-hair-bounce 1.4s ease-in-out infinite;
 }
 
+/* Environment - Dancing music notes */
+.mascot-dancing .env-dancing {
+  display: block;
+  opacity: 1;
+}
+
+.mascot-dancing .music-note {
+  animation: music-note-float 2.8s ease-in-out infinite;
+}
+
+.mascot-dancing .music-note:nth-child(1) { animation-delay: 0s; }
+.mascot-dancing .music-note:nth-child(2) { animation-delay: 0.3s; }
+.mascot-dancing .music-note:nth-child(3) { animation-delay: 0.6s; }
+
+/* DANCING KEYFRAMES */
 @keyframes dancing-groove {
   0%, 100% { transform: translateX(0) rotate(0deg); }
   25% { transform: translateX(-4px) rotate(-2deg); }
@@ -490,156 +517,13 @@
   50% { transform: translateY(-1px); }
 }
 
-/* ===== CREATING STATE - Flowing Artistic Movement ===== */
-.mascot-creating .mascot-container {
-  animation: creating-artistic-flow 3s ease-in-out infinite;
+@keyframes music-note-float {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+  50% { transform: translateY(-15px) rotate(10deg); opacity: 1; }
+  100% { transform: translateY(-30px) rotate(20deg); opacity: 0; }
 }
 
-.mascot-creating .mascot-head {
-  animation: creating-head-sway 2.5s ease-in-out infinite;
-}
-
-.mascot-creating .mascot-tool {
-  animation: creating-tool-paint-strokes 1.8s ease-in-out infinite;
-}
-
-.mascot-creating .mascot-arm-right {
-  animation: creating-flowing-arm 1.8s ease-in-out infinite;
-}
-
-.mascot-creating .mascot-arm-left {
-  animation: creating-support-gesture 2.5s ease-in-out infinite;
-}
-
-.mascot-creating .mascot-eye-left,
-.mascot-creating .mascot-eye-right {
-  animation: creating-inspired-eyes 3s ease-in-out infinite;
-}
-
-.mascot-creating .mascot-hair {
-  animation: creating-inspired-hair 3s ease-in-out infinite;
-}
-
-@keyframes creating-artistic-flow {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-1px) rotate(1deg); }
-  75% { transform: translateY(-1px) rotate(-1deg); }
-}
-
-@keyframes creating-head-sway {
-  0%, 100% { transform: rotate(2deg); }
-  50% { transform: rotate(-3deg); }
-}
-
-@keyframes creating-tool-paint-strokes {
-  0%, 100% { transform: rotate(-5deg) translateY(0); }
-  25% { transform: rotate(-25deg) translateY(-2px); }
-  50% { transform: rotate(15deg) translateY(1px); }
-  75% { transform: rotate(-15deg) translateY(-1px); }
-}
-
-@keyframes creating-flowing-arm {
-  0%, 100% { transform: rotate(-8deg) translateY(0); }
-  25% { transform: rotate(-20deg) translateY(-2px); }
-  75% { transform: rotate(5deg) translateY(1px); }
-}
-
-@keyframes creating-support-gesture {
-  0%, 100% { transform: rotate(8deg) translateY(-1px); }
-  50% { transform: rotate(-5deg) translateY(1px); }
-}
-
-@keyframes creating-inspired-eyes {
-  0%, 100% { transform: scaleY(1) scaleX(1); }
-  50% { transform: scaleY(1.2) scaleX(0.9); }
-}
-
-@keyframes creating-inspired-hair {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-0.5px); }
-}
-
-/* ===== SLEEPY STATE - Sitting Down & Sleepy ===== */
-.mascot-sleepy .mascot-container {
-  animation: sleepy-sit-down 4s ease-in-out infinite;
-}
-
-.mascot-sleepy .mascot-head,
-.mascot-sleepy .mascot-hair,
-.mascot-sleepy .mascot-beard {
-  animation: sleepy-head-droop 4s ease-in-out infinite;
-}
-
-.mascot-sleepy .mascot-eye-left,
-.mascot-sleepy .mascot-eye-right {
-  animation: sleepy-head-droop 4s ease-in-out infinite, sleepy-sleepy-eyes 5s ease-in-out infinite;
-}
-
-.mascot-sleepy .mascot-body {
-  animation: sleepy-body-lower 4s ease-in-out infinite;
-}
-
-.mascot-sleepy .mascot-arm-left {
-  animation: sleepy-arm-hang 3s ease-in-out infinite;
-}
-
-.mascot-sleepy .mascot-arm-right {
-  animation: sleepy-arm-support 3s ease-in-out infinite;
-}
-
-.mascot-sleepy .mascot-leg-left,
-.mascot-sleepy .mascot-leg-right {
-  animation: sleepy-legs-sitting 4s ease-in-out infinite;
-}
-
-.mascot-sleepy .mascot-tool {
-  animation: sleepy-tool-dropped 6s ease-in-out infinite;
-}
-
-@keyframes sleepy-sit-down {
-  0%, 100% { transform: translateY(6px); }
-  50% { transform: translateY(8px); }
-}
-
-@keyframes sleepy-head-droop {
-  0%, 100% { transform: rotate(-15deg) translateY(6px); }
-  25% { transform: rotate(-18deg) translateY(7px); }
-  50% { transform: rotate(-20deg) translateY(8px); }
-  75% { transform: rotate(-18deg) translateY(7px); }
-}
-
-@keyframes sleepy-sleepy-eyes {
-  0%, 70%, 100% { transform: scaleY(0.1); opacity: 0.4; }
-  5%, 65% { transform: scaleY(0.6); opacity: 0.8; }
-  10%, 60% { transform: scaleY(0.1); opacity: 0.4; }
-}
-
-@keyframes sleepy-body-lower {
-  0%, 100% { transform: translateY(6px) rotate(-2deg); }
-  50% { transform: translateY(8px) rotate(-3deg); }
-}
-
-@keyframes sleepy-arm-hang {
-  0%, 100% { transform: rotate(-15deg) translateY(8px); }
-  50% { transform: rotate(-20deg) translateY(10px); }
-}
-
-@keyframes sleepy-arm-support {
-  0%, 100% { transform: rotate(25deg) translateY(6px); }
-  50% { transform: rotate(30deg) translateY(8px); }
-}
-
-@keyframes sleepy-legs-sitting {
-  0%, 100% { transform: rotate(20deg) translateY(6px); }
-  50% { transform: rotate(25deg) translateY(8px); }
-}
-
-@keyframes sleepy-tool-dropped {
-  0%, 100% { transform: rotate(50deg) translateY(12px) translateX(8px); opacity: 0.6; }
-  50% { transform: rotate(55deg) translateY(14px) translateX(10px); opacity: 0.4; }
-}
-
-/* ===== COFFEE STATE - Coffee Break & Sipping ===== */
+/* ===== COFFEE STATE ===== */
 .mascot-coffee .mascot-container {
   animation: coffee-break-relaxed 6s ease-in-out infinite;
 }
@@ -669,6 +553,19 @@
   animation: coffee-tool-resting 6s ease-in-out infinite;
 }
 
+/* Environment - Coffee steam */
+.mascot-coffee .env-coffee {
+  display: block;
+  opacity: 1;
+}
+
+.mascot-coffee .steam {
+  animation: steam-rise 2.2s ease-in-out infinite;
+}
+
+.mascot-coffee .steam:nth-child(1) { animation-delay: 0.3s; }
+.mascot-coffee .steam:nth-child(2) { animation-delay: 0.6s; }
+
 /* Coffee Mug - visible coffee cup */
 .mascot-coffee .mascot-tool::before {
   content: '';
@@ -696,6 +593,7 @@
   animation: coffee-steam 2s ease-in-out infinite;
 }
 
+/* COFFEE KEYFRAMES */
 @keyframes coffee-break-relaxed {
   0%, 100% { transform: translateY(0); }
   20% { transform: translateY(-0.5px); }
@@ -752,7 +650,399 @@
   50% { opacity: 0.8; transform: translateY(-2px) scaleY(1.2); }
 }
 
-/* ===== REVEALING STATE - Entrance Animation ===== */
+@keyframes steam-rise {
+  0% { transform: translateY(0) scaleX(1); opacity: 0.4; }
+  50% { transform: translateY(-8px) scaleX(1.2); opacity: 0.8; }
+  100% { transform: translateY(-16px) scaleX(0.8); opacity: 0; }
+}
+
+/* ===== CREATING STATE ===== */
+.mascot-creating .mascot-container {
+  animation: creating-artistic-flow 3s ease-in-out infinite;
+}
+
+.mascot-creating .mascot-head {
+  animation: creating-head-sway 2.5s ease-in-out infinite;
+}
+
+.mascot-creating .mascot-tool {
+  animation: creating-tool-paint-strokes 1.8s ease-in-out infinite;
+}
+
+.mascot-creating .mascot-arm-right {
+  animation: creating-flowing-arm 1.8s ease-in-out infinite;
+}
+
+.mascot-creating .mascot-arm-left {
+  animation: creating-support-gesture 2.5s ease-in-out infinite;
+}
+
+.mascot-creating .mascot-eye-left,
+.mascot-creating .mascot-eye-right {
+  animation: creating-inspired-eyes 3s ease-in-out infinite;
+}
+
+.mascot-creating .mascot-hair {
+  animation: creating-inspired-hair 3s ease-in-out infinite;
+}
+
+/* Environment - Thinking bubble */
+.mascot-creating .env-thinking {
+  display: block;
+  opacity: 1;
+}
+
+.mascot-creating .thought-bubble {
+  animation: bubble-think 10s ease-in-out 1;
+}
+
+.mascot-creating .question-mark {
+  animation: question-thinking-sequence 10s linear 1;
+}
+
+.mascot-creating .lightbulb {
+  animation: lightbulb-thinking-sequence 10s linear 1;
+}
+
+/* CREATING KEYFRAMES */
+@keyframes creating-artistic-flow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-1px) rotate(1deg); }
+  75% { transform: translateY(-1px) rotate(-1deg); }
+}
+
+@keyframes creating-head-sway {
+  0%, 100% { transform: rotate(2deg); }
+  50% { transform: rotate(-3deg); }
+}
+
+@keyframes creating-tool-paint-strokes {
+  0%, 100% { transform: rotate(-5deg) translateY(0); }
+  25% { transform: rotate(-25deg) translateY(-2px); }
+  50% { transform: rotate(15deg) translateY(1px); }
+  75% { transform: rotate(-15deg) translateY(-1px); }
+}
+
+@keyframes creating-flowing-arm {
+  0%, 100% { transform: rotate(-8deg) translateY(0); }
+  25% { transform: rotate(-20deg) translateY(-2px); }
+  75% { transform: rotate(5deg) translateY(1px); }
+}
+
+@keyframes creating-support-gesture {
+  0%, 100% { transform: rotate(8deg) translateY(-1px); }
+  50% { transform: rotate(-5deg) translateY(1px); }
+}
+
+@keyframes creating-inspired-eyes {
+  0%, 100% { transform: scaleY(1) scaleX(1); }
+  50% { transform: scaleY(1.2) scaleX(0.9); }
+}
+
+@keyframes creating-inspired-hair {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-0.5px); }
+}
+
+@keyframes bubble-think {
+  0% { transform: scale(0); opacity: 0; }
+  10% { transform: scale(1); opacity: 1; }
+  90% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+@keyframes question-thinking-sequence {
+  0% { opacity: 1; transform: scale(1); }
+  45% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 0; transform: scale(0.8); }
+}
+
+@keyframes lightbulb-thinking-sequence {
+  0% { opacity: 0; transform: scale(0.8); }
+  45% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* ===== SLEEPY STATE ===== */
+.mascot-sleepy .mascot-container {
+  animation: sleepy-sit-down 4s ease-in-out infinite;
+}
+
+.mascot-sleepy .mascot-head,
+.mascot-sleepy .mascot-hair,
+.mascot-sleepy .mascot-beard {
+  animation: sleepy-head-droop 4s ease-in-out infinite;
+}
+
+.mascot-sleepy .mascot-eye-left,
+.mascot-sleepy .mascot-eye-right {
+  animation: sleepy-head-droop 4s ease-in-out infinite, sleepy-sleepy-eyes 5s ease-in-out infinite;
+}
+
+.mascot-sleepy .mascot-body {
+  animation: sleepy-body-lower 4s ease-in-out infinite;
+}
+
+.mascot-sleepy .mascot-arm-left {
+  animation: sleepy-arm-hang 3s ease-in-out infinite;
+}
+
+.mascot-sleepy .mascot-arm-right {
+  animation: sleepy-arm-support 3s ease-in-out infinite;
+}
+
+.mascot-sleepy .mascot-leg-left,
+.mascot-sleepy .mascot-leg-right {
+  animation: sleepy-legs-sitting 4s ease-in-out infinite;
+}
+
+.mascot-sleepy .mascot-tool {
+  animation: sleepy-tool-dropped 6s ease-in-out infinite;
+}
+
+/* Environment - Sleep zzz */
+.mascot-sleepy .env-sleepy {
+  display: block;
+  opacity: 1;
+}
+
+.mascot-sleepy .zzz {
+  animation: zzz-float 3.2s ease-in-out infinite;
+}
+
+/* SLEEPY KEYFRAMES */
+@keyframes sleepy-sit-down {
+  0%, 100% { transform: translateY(6px); }
+  50% { transform: translateY(8px); }
+}
+
+@keyframes sleepy-head-droop {
+  0%, 100% { transform: rotate(-15deg) translateY(6px); }
+  25% { transform: rotate(-18deg) translateY(7px); }
+  50% { transform: rotate(-20deg) translateY(8px); }
+  75% { transform: rotate(-18deg) translateY(7px); }
+}
+
+@keyframes sleepy-sleepy-eyes {
+  0%, 70%, 100% { transform: scaleY(0.1); opacity: 0.4; }
+  5%, 65% { transform: scaleY(0.6); opacity: 0.8; }
+  10%, 60% { transform: scaleY(0.1); opacity: 0.4; }
+}
+
+@keyframes sleepy-body-lower {
+  0%, 100% { transform: translateY(6px) rotate(-2deg); }
+  50% { transform: translateY(8px) rotate(-3deg); }
+}
+
+@keyframes sleepy-arm-hang {
+  0%, 100% { transform: rotate(-15deg) translateY(8px); }
+  50% { transform: rotate(-20deg) translateY(10px); }
+}
+
+@keyframes sleepy-arm-support {
+  0%, 100% { transform: rotate(25deg) translateY(6px); }
+  50% { transform: rotate(30deg) translateY(8px); }
+}
+
+@keyframes sleepy-legs-sitting {
+  0%, 100% { transform: rotate(20deg) translateY(6px); }
+  50% { transform: rotate(25deg) translateY(8px); }
+}
+
+@keyframes sleepy-tool-dropped {
+  0%, 100% { transform: rotate(50deg) translateY(12px) translateX(8px); opacity: 0.6; }
+  50% { transform: rotate(55deg) translateY(14px) translateX(10px); opacity: 0.4; }
+}
+
+@keyframes zzz-float {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+  50% { transform: translateY(-10px) rotate(5deg); opacity: 1; }
+  100% { transform: translateY(-20px) rotate(10deg); opacity: 0; }
+}
+
+/* ===== ENVIRONMENTAL ELEMENTS ===== */
+
+/* Base environmental elements - hidden by default */
+.env-excited,
+.env-dancing, 
+.env-thinking,
+.env-coffee,
+.env-sleepy {
+  display: none;
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Excited - Confetti */
+.env-excited {
+  top: -25px;
+  left: -10px;
+  width: 80px;
+  height: 50px;
+}
+
+.confetti {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #EBC533;
+  border-radius: 50%;
+}
+
+.confetti:nth-child(1) { background: #EBC533; top: 5px; left: 10px; }
+.confetti:nth-child(2) { background: #D66422; top: 8px; left: 25px; }
+.confetti:nth-child(3) { background: #EBC533; top: 3px; left: 40px; }
+.confetti:nth-child(4) { background: #D66422; top: 10px; left: 55px; }
+
+/* Dancing - Music notes */
+.env-dancing {
+  top: -35px;
+  left: -15px;
+  width: 90px;
+  height: 60px;
+}
+
+.music-note {
+  position: absolute;
+  font-size: 16px;
+  color: #333;
+}
+
+.music-note:nth-child(1) { content: '♪'; top: 5px; left: 15px; }
+.music-note:nth-child(2) { content: '♫'; top: 15px; left: 35px; }
+.music-note:nth-child(3) { content: '♪'; top: 8px; left: 55px; }
+
+.music-note:nth-child(1)::before { content: '♪'; }
+.music-note:nth-child(2)::before { content: '♫'; }
+.music-note:nth-child(3)::before { content: '♪'; }
+
+/* Thinking - Thought bubble */
+.env-thinking {
+  top: -40px;
+  left: -20px;
+  width: 100px;
+  height: 70px;
+}
+
+.thought-bubble {
+  position: absolute;
+  top: 5px;
+  left: 20px;
+  width: 40px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thought-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 15px;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  border-top: none;
+  border-left: none;
+}
+
+.thought-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 10px;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  border-top: none;
+  border-left: none;
+}
+
+.question-mark,
+.lightbulb {
+  position: absolute;
+  top: 5px;
+  left: 20px;
+  width: 40px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.question-mark {
+  color: #666;
+}
+
+.question-mark::before {
+  content: '?';
+}
+
+.lightbulb {
+  color: #EBC533;
+}
+
+.lightbulb::before {
+  content: '💡';
+}
+
+/* Coffee - Steam */
+.env-coffee {
+  top: -25px;
+  left: 15px;
+  width: 30px;
+  height: 50px;
+}
+
+.steam {
+  position: absolute;
+  width: 2px;
+  height: 8px;
+  background: linear-gradient(to top, rgba(255,255,255,0.8), rgba(255,255,255,0));
+  border-radius: 1px;
+}
+
+.steam:nth-child(1) { left: 8px; }
+.steam:nth-child(2) { left: 12px; }
+
+/* Sleepy - ZZZ */
+.env-sleepy {
+  top: -30px;
+  left: -10px;
+  width: 60px;
+  height: 50px;
+}
+
+.zzz {
+  position: absolute;
+  font-size: 14px;
+  color: #888;
+  font-weight: bold;
+  top: 10px;
+  left: 20px;
+}
+
+.zzz::before {
+  content: 'zzz';
+}
+
+/* ===== UTILITY STATES ===== */
+
+/* Revealing State - Entrance Animation */
 .mascot-revealing .mascot-container {
   animation: revealing-entrance 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
 }
@@ -812,7 +1102,7 @@
   100% { transform: rotate(0deg) scale(1) translateY(0); opacity: 1; }
 }
 
-/* ===== HIDING STATE - Exit Animation ===== */
+/* Hiding State - Exit Animation */
 .mascot-hiding .mascot-container {
   animation: hiding-exit 0.6s ease-in forwards;
 }
@@ -859,7 +1149,7 @@
   100% { transform: rotate(720deg) scale(0); opacity: 0; }
 }
 
-/* ===== HIDDEN STATE - Completely Hidden ===== */
+/* Hidden State - Completely Hidden */
 .mascot-hidden {
   transform: scale(0) rotate(180deg);
   opacity: 0;

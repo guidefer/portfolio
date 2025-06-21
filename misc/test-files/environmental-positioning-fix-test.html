@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Environmental Positioning Fix Test</title>
+    
+    <!-- Use our production CSS files -->
+    <link rel="stylesheet" href="css/main.css">
+    
+    <style>
+        body {
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f9f9f9;
+            min-height: 100vh;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .controls button {
+            padding: 12px 16px;
+            background: var(--color-accent-yellow);
+            border: 2px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        
+        .controls button:hover {
+            background: var(--color-accent-orange);
+            transform: translateY(-2px);
+        }
+        
+        .status {
+            background: #f0f8ff;
+            padding: 15px;
+            border-left: 4px solid #007acc;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .notes {
+            background: #fff8e1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .notes h3 {
+            margin-top: 0;
+            color: #f57f17;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎭 Environmental Positioning Fix Test</h1>
+        <p>Testing improved positioning of environmental elements relative to character anatomy.</p>
+        
+        <div class="status">
+            <strong>Fixed Issues:</strong>
+            <ul>
+                <li>✅ Thought bubble positioned higher above head</li>
+                <li>✅ Question mark & lightbulb properly centered in bubble</li>
+                <li>✅ Coffee positioned near right arm</li>
+                <li>✅ Moon positioned much higher for better visibility</li>
+                <li>✅ ZZZ letters properly animated and positioned</li>
+                <li>✅ Design tools positioned near hands</li>
+                <li>✅ Confetti falling around character realistically</li>
+            </ul>
+        </div>
+        
+        <div class="controls">
+            <button onclick="testState('thinking')">🤔 Thinking</button>
+            <button onclick="testState('coffee')">☕ Coffee</button>
+            <button onclick="testState('sleepy')">😴 Sleepy</button>
+            <button onclick="testState('creating')">🎨 Creating</button>
+            <button onclick="testState('excited')">🎉 Excited</button>
+            <button onclick="testState('dancing')">💃 Dancing</button>
+            <button onclick="testState('idle')">😊 Idle</button>
+        </div>
+        
+        <div class="notes">
+            <h3>🔍 What to Look For:</h3>
+            <ul>
+                <li><strong>Thinking:</strong> Thought bubble should be well above head, with ? and 💡 centered inside</li>
+                <li><strong>Coffee:</strong> ☕ should appear near character's right arm with steam rising</li>
+                <li><strong>Sleepy:</strong> 🌙 should be high above, ZZZ letters should animate upward from head</li>
+                <li><strong>Creating:</strong> Design tools and colors should appear near hands and sides</li>
+                <li><strong>Excited:</strong> Confetti should fall around character, ✨ sparkles on the side</li>
+                <li><strong>Dancing:</strong> Musical notes should bounce around character rhythmically</li>
+            </ul>
+        </div>
+        
+        <div class="status" id="current-state">
+            <strong>Current State:</strong> <span id="state-display">idle</span>
+        </div>
+    </div>
+
+    <!-- Include our JavaScript modules -->
+    <script type="module">
+        import { getMascot, initializeMascot } from './js/modules/mascot.js';
+        
+        let mascotInstance = null;
+        
+        function testState(state) {
+            document.getElementById('state-display').textContent = state;
+            
+            if (mascotInstance) {
+                // Use the mascot's setState method
+                if (typeof mascotInstance.setState === 'function') {
+                    mascotInstance.setState(state);
+                } else {
+                    console.log('🎭 Triggering state:', state);
+                    // Try to trigger specific state methods
+                    switch(state) {
+                        case 'thinking':
+                            if (typeof mascotInstance.triggerThinking === 'function') {
+                                mascotInstance.triggerThinking();
+                            }
+                            break;
+                        case 'coffee':
+                            if (typeof mascotInstance.triggerCoffee === 'function') {
+                                mascotInstance.triggerCoffee();
+                            }
+                            break;
+                        case 'sleepy':
+                            if (typeof mascotInstance.triggerSleepy === 'function') {
+                                mascotInstance.triggerSleepy();
+                            }
+                            break;
+                        case 'creating':
+                            if (typeof mascotInstance.triggerCreating === 'function') {
+                                mascotInstance.triggerCreating();
+                            }
+                            break;
+                        case 'excited':
+                            if (typeof mascotInstance.triggerExcited === 'function') {
+                                mascotInstance.triggerExcited();
+                            }
+                            break;
+                        case 'dancing':
+                            if (typeof mascotInstance.triggerDancing === 'function') {
+                                mascotInstance.triggerDancing();
+                            }
+                            break;
+                        case 'idle':
+                            if (typeof mascotInstance.returnToIdle === 'function') {
+                                mascotInstance.returnToIdle();
+                            }
+                            break;
+                    }
+                }
+            } else {
+                console.warn('Mascot instance not available');
+            }
+        }
+        
+        // Make function available globally
+        window.testState = testState;
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                mascotInstance = getMascot() || initializeMascot();
+                
+                if (mascotInstance) {
+                    console.log('✅ Connected to mascot for environmental positioning test');
+                } else {
+                    console.warn('❌ Could not connect to mascot instance');
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

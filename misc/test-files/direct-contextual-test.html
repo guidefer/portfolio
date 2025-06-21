@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Contextual Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f0f0f0;
+        }
+        
+        .test-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-btn {
+            margin: 10px;
+            padding: 12px 24px;
+            background: #EBC533;
+            color: #333;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .test-btn:hover {
+            background: #D66422;
+            color: white;
+        }
+        
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border-left: 4px solid #007acc;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .log {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #000;
+            color: #00ff00;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 11px;
+            border-radius: 4px;
+        }
+    </style>
+    
+    <!-- Import CSS system -->
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+    <div class="test-panel">
+        <h3>🎯 Direct Contextual Animation Test</h3>
+        <p>This test bypasses section detection and directly calls the contextual animation methods.</p>
+        
+        <div>
+            <button class="test-btn" onclick="testDirect('hero')">HERO → Creating</button>
+            <button class="test-btn" onclick="testDirect('work')">WORK → Coffee</button>
+            <button class="test-btn" onclick="testDirect('about')">ABOUT → Dancing</button>
+            <button class="test-btn" onclick="testDirect('contact')">CONTACT → Excited</button>
+        </div>
+        
+        <div>
+            <button class="test-btn" onclick="resetCooldown()">Reset Cooldown</button>
+            <button class="test-btn" onclick="forceIdle()">Force Idle</button>
+            <button class="test-btn" onclick="showInfo()">Show Info</button>
+            <button class="test-btn" onclick="clearLog()">Clear Log</button>
+        </div>
+        
+        <div class="status" id="status">
+            Status: Loading...
+        </div>
+    </div>
+    
+    <div class="test-panel">
+        <h3>📊 Console Log</h3>
+        <div class="log" id="log">
+            Initializing...
+        </div>
+    </div>
+    
+    <script type="module">
+        import { DesignerMascot } from '../../js/modules/mascot.js';
+        
+        let mascot;
+        let logElement;
+        
+        // Capture console.log
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            if (logElement) {
+                const message = args.map(arg => 
+                    typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+                ).join(' ');
+                logElement.innerHTML += message + '<br>';
+                logElement.scrollTop = logElement.scrollHeight;
+            }
+        };
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            logElement = document.getElementById('log');
+            console.log('🧪 Starting direct contextual test...');
+            
+            // Initialize mascot
+            mascot = new DesignerMascot();
+            
+            // Update status
+            setInterval(updateStatus, 1000);
+            
+            // Make functions global
+            window.testDirect = testDirect;
+            window.resetCooldown = resetCooldown;
+            window.forceIdle = forceIdle;
+            window.showInfo = showInfo;
+            window.clearLog = clearLog;
+            
+            console.log('🧪 Direct test ready');
+        });
+        
+        function testDirect(section) {
+            console.log(`🧪 DIRECT TEST: Calling triggerContextualAnimation('${section}')`);
+            
+            if (mascot && typeof mascot.triggerContextualAnimation === 'function') {
+                mascot.triggerContextualAnimation(section);
+            } else {
+                console.error('🧪 ❌ triggerContextualAnimation not available on mascot');
+                console.log('🧪 Mascot object:', mascot);
+                console.log('🧪 Available methods:', Object.getOwnPropertyNames(Object.getPrototypeOf(mascot)));
+            }
+        }
+        
+        function resetCooldown() {
+            if (mascot) {
+                mascot.lastContextualTrigger = 0;
+                console.log('🧪 Cooldown reset');
+            }
+        }
+        
+        function forceIdle() {
+            if (mascot) {
+                mascot.contextualAnimationActive = false;
+                mascot.setState('idle');
+                console.log('🧪 Forced to idle state');
+            }
+        }
+        
+        function showInfo() {
+            if (mascot) {
+                console.log('🧪 Mascot Info:', {
+                    currentState: mascot.currentState,
+                    contextualActive: mascot.contextualAnimationActive,
+                    lastContextualTrigger: mascot.lastContextualTrigger,
+                    lastInteraction: mascot.lastInteraction,
+                    timeSinceLastContextual: Date.now() - mascot.lastContextualTrigger,
+                    config: mascot.config
+                });
+            }
+        }
+        
+        function clearLog() {
+            if (logElement) {
+                logElement.innerHTML = '';
+            }
+        }
+        
+        function updateStatus() {
+            const statusEl = document.getElementById('status');
+            if (statusEl && mascot) {
+                const timeSinceContextual = Date.now() - mascot.lastContextualTrigger;
+                statusEl.textContent = `State: ${mascot.currentState} | Contextual: ${mascot.contextualAnimationActive} | Last trigger: ${timeSinceContextual}ms ago`;
+            }
+        }
+    </script>
+</body>
+</html>

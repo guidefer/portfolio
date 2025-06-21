@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mascot CSS State Debug</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: monospace;
+            background: #f0f0f0;
+        }
+        .debug-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            z-index: 2000;
+            max-width: 300px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        .button-group {
+            margin: 10px 0;
+        }
+        .debug-btn {
+            margin: 5px;
+            padding: 8px 12px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .debug-btn:hover {
+            background: #555;
+        }
+        .state-info {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 4px;
+        }
+        .highlight {
+            background: yellow;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-panel">
+        <h3>🎭 Mascot CSS State Debug</h3>
+        
+        <div class="state-info">
+            <div>Current State: <span id="current-state" class="highlight">loading...</span></div>
+            <div>CSS Classes: <span id="css-classes">loading...</span></div>
+            <div>Element exists: <span id="element-exists">loading...</span></div>
+        </div>
+        
+        <div class="button-group">
+            <button class="debug-btn" onclick="testState('idle')">Test Idle</button>
+            <button class="debug-btn" onclick="testState('excited')">Test Excited</button>
+            <button class="debug-btn" onclick="testState('dancing')">Test Dancing</button>
+            <button class="debug-btn" onclick="testState('coffee')">Test Coffee</button>
+            <button class="debug-btn" onclick="testState('coding')">Test Coding</button>
+        </div>
+        
+        <div class="button-group">
+            <button class="debug-btn" onclick="inspectMascotElement()">Inspect Element</button>
+            <button class="debug-btn" onclick="inspectCSS()">Inspect CSS</button>
+            <button class="debug-btn" onclick="forceAnimation()">Force Animation</button>
+        </div>
+        
+        <div id="debug-log" style="margin-top: 10px; font-size: 10px; max-height: 200px; overflow-y: auto;"></div>
+    </div>
+
+    <!-- Test content sections -->
+    <div style="height: 100vh; padding: 50px;">
+        <h1>CSS State Debug Test</h1>
+        <p>Use the debug panel to test mascot states and inspect the CSS application.</p>
+        <p>The mascot should be visible in the bottom-right corner and should animate when you change states.</p>
+        
+        <div style="margin-top: 40px;">
+            <h2>Expected Behavior:</h2>
+            <ul>
+                <li><strong>Idle:</strong> Subtle breathing animation</li>
+                <li><strong>Excited:</strong> Happy jumping with arm movements</li>
+                <li><strong>Dancing:</strong> Rhythmic body movements</li>
+                <li><strong>Coffee:</strong> Sipping coffee animation</li>
+                <li><strong>Coding:</strong> Typing/thinking animation</li>
+            </ul>
+        </div>
+    </div>
+
+    <script type="module">
+        import { Mascot } from '../../js/modules/mascot.js';
+        
+        let mascot;
+        
+        // Initialize mascot
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('🎭 Initializing mascot for CSS debug test...');
+            
+            try {
+                mascot = new Mascot();
+                window.mascot = mascot; // Make globally available
+                
+                // Wait a moment for initialization
+                setTimeout(() => {
+                    updateDebugInfo();
+                    log('✅ Mascot initialized successfully');
+                }, 500);
+                
+            } catch (error) {
+                console.error('❌ Failed to initialize mascot:', error);
+                log('❌ Failed to initialize mascot: ' + error.message);
+            }
+        });
+        
+        // Debug functions
+        window.testState = function(state) {
+            if (!mascot) {
+                log('❌ Mascot not initialized');
+                return;
+            }
+            
+            log(`🎭 Testing state: ${state}`);
+            mascot.setState(state, true);
+            
+            setTimeout(() => {
+                updateDebugInfo();
+            }, 100);
+        };
+        
+        window.inspectMascotElement = function() {
+            if (!mascot || !mascot.element) {
+                log('❌ Mascot element not available');
+                return;
+            }
+            
+            const element = mascot.element;
+            log('🔍 Mascot element inspection:');
+            log(`  - tagName: ${element.tagName}`);
+            log(`  - className: ${element.className}`);
+            log(`  - classList: ${[...element.classList].join(', ')}`);
+            log(`  - innerHTML length: ${element.innerHTML.length}`);
+            log(`  - children count: ${element.children.length}`);
+            
+            // Check for mascot-container
+            const container = element.querySelector('.mascot-container');
+            if (container) {
+                log(`  - Found .mascot-container`);
+                log(`  - Container children: ${container.children.length}`);
+            } else {
+                log(`  - ❌ .mascot-container not found!`);
+            }
+            
+            console.log('🔍 Full mascot element:', element);
+        };
+        
+        window.inspectCSS = function() {
+            if (!mascot || !mascot.element) {
+                log('❌ Mascot element not available');
+                return;
+            }
+            
+            const element = mascot.element;
+            const computedStyle = getComputedStyle(element);
+            
+            log('🎨 CSS inspection:');
+            log(`  - position: ${computedStyle.position}`);
+            log(`  - bottom: ${computedStyle.bottom}`);
+            log(`  - right: ${computedStyle.right}`);
+            log(`  - width: ${computedStyle.width}`);
+            log(`  - height: ${computedStyle.height}`);
+            log(`  - z-index: ${computedStyle.zIndex}`);
+            log(`  - display: ${computedStyle.display}`);
+            log(`  - visibility: ${computedStyle.visibility}`);
+            
+            // Check container
+            const container = element.querySelector('.mascot-container');
+            if (container) {
+                const containerStyle = getComputedStyle(container);
+                log(`  - container animation: ${containerStyle.animation}`);
+                log(`  - container transform: ${containerStyle.transform}`);
+            }
+        };
+        
+        window.forceAnimation = function() {
+            if (!mascot || !mascot.element) {
+                log('❌ Mascot element not available');
+                return;
+            }
+            
+            const element = mascot.element;
+            log('🚀 Forcing animation by manually adding CSS class...');
+            
+            // Remove all state classes first
+            const classes = [...element.classList];
+            classes.forEach(cls => {
+                if (cls.startsWith('mascot-') && cls !== 'mascot-container') {
+                    element.classList.remove(cls);
+                }
+            });
+            
+            // Add excited class manually
+            element.classList.add('mascot-excited');
+            log('✅ Added .mascot-excited class manually');
+            
+            setTimeout(() => {
+                updateDebugInfo();
+            }, 100);
+        };
+        
+        function updateDebugInfo() {
+            if (!mascot) return;
+            
+            const currentStateEl = document.getElementById('current-state');
+            const cssClassesEl = document.getElementById('css-classes');
+            const elementExistsEl = document.getElementById('element-exists');
+            
+            if (currentStateEl) {
+                currentStateEl.textContent = mascot.currentState || 'unknown';
+            }
+            
+            if (cssClassesEl && mascot.element) {
+                cssClassesEl.textContent = mascot.element.className || 'none';
+            }
+            
+            if (elementExistsEl) {
+                elementExistsEl.textContent = mascot.element ? 'Yes' : 'No';
+            }
+        }
+        
+        function log(message) {
+            const logEl = document.getElementById('debug-log');
+            if (logEl) {
+                const timestamp = new Date().toLocaleTimeString();
+                logEl.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+                logEl.scrollTop = logEl.scrollHeight;
+            }
+            console.log(message);
+        }
+        
+        // Auto-update debug info every 2 seconds
+        setInterval(updateDebugInfo, 2000);
+    </script>
+</body>
+</html>
