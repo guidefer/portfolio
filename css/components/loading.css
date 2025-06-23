@@ -1,4 +1,4 @@
-/* Loading Screen Styles */
+/* Loading Screen Styles - Enhanced */
 
 .loading-screen {
   position: fixed;
@@ -24,9 +24,24 @@
   text-align: center;
   max-width: 400px;
   padding: var(--space-xl);
+  position: relative;
 }
 
-/* Loading Spinner */
+/* ===== ENHANCED MULTI-STAGE LOADING ===== */
+
+/* Stage indicators */
+.loading-stage {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.loading-stage.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Loading Spinner - Enhanced */
 .loading-spinner {
   width: var(--loading-spinner-size);
   height: var(--loading-spinner-size);
@@ -35,11 +50,84 @@
   border-radius: 50%;
   animation: loadingSpinner 1s linear infinite;
   margin: 0 auto var(--space-lg);
+  position: relative;
+}
+
+.loading-spinner::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: var(--color-accent-orange);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes loadingSpinner {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.7; }
+}
+
+/* Multi-stage mascot animations */
+.loading-mascot {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--space-lg);
+  background: var(--color-accent-yellow);
+  border-radius: 50%;
+  position: relative;
+  transition: all 0.8s ease;
+}
+
+.loading-stage-1 .loading-mascot {
+  animation: mascot-wake-up 1s ease-out;
+}
+
+.loading-stage-2 .loading-mascot {
+  animation: mascot-stretch 0.8s ease-in-out;
+  background: linear-gradient(45deg, var(--color-accent-yellow), var(--color-accent-orange));
+}
+
+.loading-stage-3 .loading-mascot {
+  animation: mascot-grab-tools 1.2s ease-out;
+  transform: scale(1.1);
+}
+
+.loading-stage-4 .loading-mascot {
+  animation: mascot-ready-stance 0.6s ease-out;
+  transform: scale(1) rotate(360deg);
+}
+
+@keyframes mascot-wake-up {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes mascot-stretch {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.2) scaleX(0.9); }
+}
+
+@keyframes mascot-grab-tools {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg) scale(1.05); }
+  75% { transform: rotate(10deg) scale(1.05); }
+  100% { transform: rotate(0deg) scale(1.1); }
+}
+
+@keyframes mascot-ready-stance {
+  0% { transform: scale(1.1) rotate(0deg); }
+  50% { transform: scale(1.2) rotate(180deg); }
+  100% { transform: scale(1) rotate(360deg); }
 }
 
 /* Loading Text */
@@ -50,21 +138,23 @@
   font-weight: 500;
 }
 
-/* Progress Bar */
+/* Enhanced Progress Bar with Interactive Elements */
 .loading-progress {
   width: 100%;
   max-width: 300px;
   margin: 0 auto;
+  position: relative;
 }
 
 .loading-progress-bar {
   width: 100%;
-  height: 4px;
+  height: 6px;
   background-color: var(--color-secondary);
   border-radius: var(--radius-full);
   overflow: hidden;
   margin-bottom: var(--space-md);
   position: relative;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .loading-progress-fill {
@@ -72,8 +162,9 @@
   background: linear-gradient(90deg, var(--color-accent-yellow), var(--color-accent-orange));
   border-radius: var(--radius-full);
   width: 0%;
-  transition: width 0.3s ease;
+  transition: width 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
   position: relative;
+  box-shadow: 0 0 10px rgba(235, 197, 51, 0.5);
 }
 
 .loading-progress-fill::after {
@@ -83,7 +174,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
   animation: progressShimmer 2s ease-in-out infinite;
 }
 
@@ -98,6 +189,107 @@
   font-weight: 600;
   text-align: center;
   font-family: var(--font-mono);
+  margin-bottom: var(--space-md);
+}
+
+/* Interactive Loading Elements */
+.loading-elements {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  height: 20px;
+}
+
+.loading-element {
+  width: 8px;
+  height: 8px;
+  background: var(--color-accent-yellow);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: collectElements 3s ease-in-out infinite;
+}
+
+.loading-element:nth-child(1) { animation-delay: 0s; }
+.loading-element:nth-child(2) { animation-delay: 0.2s; }
+.loading-element:nth-child(3) { animation-delay: 0.4s; }
+.loading-element:nth-child(4) { animation-delay: 0.6s; }
+.loading-element:nth-child(5) { animation-delay: 0.8s; }
+
+@keyframes collectElements {
+  0%, 80% { 
+    opacity: 0.3;
+    transform: translateY(0) scale(1);
+  }
+  10%, 20% { 
+    opacity: 1;
+    transform: translateY(-10px) scale(1.2);
+    background: var(--color-accent-orange);
+  }
+  30% { 
+    opacity: 0.3;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Floating Thumbnails */
+.loading-thumbnails {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floating-thumbnail {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(45deg, var(--color-accent-yellow), var(--color-accent-orange));
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  animation: floatThumbnail 4s ease-in-out infinite;
+}
+
+.floating-thumbnail:nth-child(1) {
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.floating-thumbnail:nth-child(2) {
+  left: 30%;
+  animation-delay: 1s;
+}
+
+.floating-thumbnail:nth-child(3) {
+  left: 50%;
+  animation-delay: 2s;
+}
+
+.floating-thumbnail:nth-child(4) {
+  left: 70%;
+  animation-delay: 3s;
+}
+
+@keyframes floatThumbnail {
+  0% { 
+    opacity: 0;
+    transform: translateY(100px) rotate(0deg) scale(0.5);
+  }
+  25% { 
+    opacity: 1;
+    transform: translateY(50px) rotate(90deg) scale(1);
+  }
+  75% { 
+    opacity: 1;
+    transform: translateY(-20px) rotate(270deg) scale(0.8);
+  }
+  100% { 
+    opacity: 0;
+    transform: translateY(-100px) rotate(360deg) scale(0);
+  }
 }
 
 /* Enhanced spinner with mascot-style animation */

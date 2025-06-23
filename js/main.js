@@ -53,8 +53,7 @@ class PortfolioApp {
         setTimeout(() => {
           galleryItem.blur();
           galleryItem.style.outline = 'none';
-          galleryItem.style.boxShadow = 'none';
-          galleryItem.style.border = 'none';
+          // DON'T override box-shadow or border - let CSS handle hover effects
         }, 100); // Increased delay to let gallery navigation happen first
       }
     });
@@ -65,8 +64,7 @@ class PortfolioApp {
       if (galleryItem && !isUsingKeyboard) {
         setTimeout(() => {
           e.target.style.outline = 'none';
-          e.target.style.boxShadow = 'none';
-          e.target.style.border = 'none';
+          // DON'T override box-shadow or border - let CSS handle hover effects
         }, 50); // Minimal delay, only remove visual focus
       }
     });
@@ -107,25 +105,19 @@ class PortfolioApp {
   }
 
   forceFocusRemoval() {
-    // Add force-no-focus class to all gallery items
+    // Handle focus removal without conflicting with hover effects
     const galleryItems = document.querySelectorAll('.gallery-item');
     galleryItems.forEach(item => {
-      item.classList.add('force-no-focus');
-      item.style.outline = 'none';
-      item.style.boxShadow = 'none';
-      item.style.border = 'none';
-      
-      // Keep it focusable but remove visual focus - DON'T set tabindex="-1"
-      // This was preventing click events from working properly
+      // Only remove focus visuals when not using keyboard
+      item.addEventListener('mousedown', () => {
+        setTimeout(() => {
+          if (!document.body.classList.contains('using-keyboard')) {
+            item.style.outline = 'none';
+            item.blur();
+          }
+        }, 50);
+      });
     });
-    
-    // Also add to gallery grid
-    const galleryGrid = document.querySelector('.gallery-grid');
-    if (galleryGrid) {
-      galleryGrid.classList.add('force-no-focus');
-      galleryGrid.style.outline = 'none';
-      galleryGrid.style.boxShadow = 'none';
-    }
   }
 
   setupModuleCommunication() {

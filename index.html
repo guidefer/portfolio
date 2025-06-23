@@ -13,40 +13,6 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/main.css">
     
-    <!-- Ultimate Focus Border Removal -->
-    <style>
-        /* ABSOLUTE FOCUS BORDER REMOVAL - INLINE STYLES FOR MAXIMUM PRIORITY */
-        *, *:focus, *:focus-visible, *:focus-within, *:active,
-        .gallery-item, .gallery-item:focus, .gallery-item:focus-visible, .gallery-item:active,
-        .gallery-grid *, .gallery-grid *:focus, .gallery-grid *:focus-visible, .gallery-grid *:active,
-        div, div:focus, div:focus-visible, div:active,
-        section, section:focus, section:focus-visible, section:active {
-            outline: none !important;
-            box-shadow: none !important;
-            border: none !important;
-            -webkit-tap-highlight-color: transparent !important;
-        }
-        
-        /* Specifically target gallery items */
-        .gallery-section .gallery-container .gallery-grid .gallery-item,
-        .gallery-section .gallery-container .gallery-grid .gallery-item:focus,
-        .gallery-section .gallery-container .gallery-grid .gallery-item:focus-visible,
-        .gallery-section .gallery-container .gallery-grid .gallery-item:active {
-            outline: none !important;
-            box-shadow: none !important;
-            border: none !important;
-        }
-        
-        /* Remove any possible yellow outlines */
-        *[style*="outline"],
-        *[style*="border"],
-        *[style*="box-shadow"] {
-            outline: none !important;
-            box-shadow: none !important;
-            border: none !important;
-        }
-    </style>
-    
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -82,8 +48,33 @@
     <!-- Loading Screen -->
     <div id="loading-screen" class="loading-screen" aria-hidden="true">
         <div class="loading-content">
-            <div class="loading-spinner"></div>
-            <p class="loading-text">Loading portfolio...</p>
+            <!-- Multi-stage loading elements -->
+            <div class="loading-stage loading-stage-1 active">
+                <div class="loading-mascot"></div>
+                <p class="loading-text">Waking up the designer...</p>
+            </div>
+            
+            <!-- Enhanced spinner with shimmer -->
+            <div class="loading-spinner mascot-style"></div>
+            
+            <!-- Interactive loading elements -->
+            <div class="loading-elements">
+                <div class="loading-element"></div>
+                <div class="loading-element"></div>
+                <div class="loading-element"></div>
+                <div class="loading-element"></div>
+                <div class="loading-element"></div>
+            </div>
+            
+            <!-- Progress tracking will be added by JavaScript -->
+        </div>
+        
+        <!-- Floating thumbnails -->
+        <div class="loading-thumbnails">
+            <div class="floating-thumbnail"></div>
+            <div class="floating-thumbnail"></div>
+            <div class="floating-thumbnail"></div>
+            <div class="floating-thumbnail"></div>
         </div>
     </div>
 

@@ -17,6 +17,15 @@ class GalleryController {
     this.isLoading = false;
     this.observer = null;
     
+    // Animation state management
+    this.animationState = {
+      isAnimating: false,
+      currentHero: null,
+      animationTimeouts: [],
+      debounceTimer: null,
+      lastHoverTime: 0
+    };
+    
     this.init();
   }
 
@@ -69,10 +78,7 @@ class GalleryController {
       });
     }
     
-    // SIMPLIFIED GALLERY CLICK HANDLING - Direct attachment to each item
-    // This will be called after items are created
-    
-    // Handle hover events for mascot interaction
+    // Handle hover events for mascot interaction only
     this.grid.addEventListener('mouseenter', (e) => {
       const galleryItem = e.target.closest('.gallery-item');
       if (galleryItem) {
@@ -105,6 +111,11 @@ class GalleryController {
       // Show load more button if there are more items
       this.updateLoadMoreButton();
       
+      // Setup context dimming for newly loaded items (with small delay to ensure DOM is ready)
+      setTimeout(() => {
+        this.setupContextDimming();
+      }, 100);
+      
     } catch (error) {
       console.error('Failed to load initial gallery items:', error);
       this.showError();
@@ -134,6 +145,11 @@ class GalleryController {
       // Update observer and load more button
       this.updateObserver();
       this.updateLoadMoreButton();
+      
+      // Re-setup context dimming for all items including new ones (with delay)
+      setTimeout(() => {
+        this.setupContextDimming();
+      }, 100);
       
       this.dispatchEvent('gallery:items-loaded', { 
         count: itemsToLoad.length,
@@ -170,7 +186,7 @@ class GalleryController {
 
   async createGalleryItem(data) {
     const item = document.createElement('article');
-    item.className = 'gallery-item force-no-focus';
+    item.className = 'gallery-item'; // Removed force-no-focus to allow hover effects
     item.setAttribute('data-project-id', data.id);
     
     // Create image with lazy loading
@@ -208,6 +224,11 @@ class GalleryController {
     cta.textContent = 'View Project';
     cta.setAttribute('aria-hidden', 'true');
     
+    // Create loading overlay for selection animation
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'gallery-item-loading';
+    loadingOverlay.innerHTML = '<div class="gallery-item-loading-spinner"></div>';
+    
     // Assemble the item
     content.appendChild(category);
     content.appendChild(title);
@@ -217,6 +238,7 @@ class GalleryController {
     imageContainer.appendChild(image);
     item.appendChild(imageContainer);
     item.appendChild(overlay);
+    item.appendChild(loadingOverlay);
     
     // Setup lazy loading
     this.setupLazyLoading(image);
@@ -279,10 +301,23 @@ class GalleryController {
     
     console.log('🖱️ Gallery item clicked:', projectId);
     
+    // Add selection animation classes
+    item.classList.add('selecting');
+    
+    // Add context dimming to other items
+    const allItems = this.grid.querySelectorAll('.gallery-item');
+    allItems.forEach(otherItem => {
+      if (otherItem !== item) {
+        otherItem.classList.add('context-dimmed');
+      }
+    });
+    
     this.dispatchEvent('gallery:item-click', { projectId });
     
-    // Navigate to project page
-    this.navigateToProject(projectId);
+    // Navigate to project page after animation
+    setTimeout(() => {
+      this.navigateToProject(projectId);
+    }, 600); // Allow animation to play
   }
 
   handleItemHover(item) {
@@ -403,6 +438,186 @@ class GalleryController {
         }
       }
     }, 3000);
+  }
+
+  setupContextDimming() {
+    // Skip cascade dimming on mobile devices
+    if (window.innerWidth <= 768) {
+      console.log('📱 Mobile detected - skipping context dimming');
+      return;
+    }
+
+    console.log('🎭 Setting up cascade context dimming...');
+
+    // JavaScript-driven cascade context dimming for smooth animations
+    const galleryItems = this.grid.querySelectorAll('.gallery-item');
+    console.log('🖼️ Found', galleryItems.length, 'gallery items for cascade dimming');
+    
+    // Remove any existing event listeners to avoid duplicates
+    galleryItems.forEach(item => {
+      // Store original event handlers to clean up properly
+      item.onmouseenter = null;
+      item.onmouseleave = null;
+    });
+    
+    // Setup cascade dimming with staggered timing
+    galleryItems.forEach((item, index) => {
+      item.addEventListener('mouseenter', (e) => {
+        this.handleHoverStart(item, galleryItems);
+      });
+      
+      item.addEventListener('mouseleave', (e) => {
+        this.handleHoverEnd(item, galleryItems);
+      });
+    });
+
+    console.log('✅ Context dimming cascade setup complete');
+  }
+
+  handleHoverStart(heroItem, allItems) {
+    const now = Date.now();
+    
+    // Reduced debounce since we simplified the animation
+    if (now - this.animationState.lastHoverTime < 50) {
+      console.log('⏭️ Hover too rapid, skipping');
+      return;
+    }
+    
+    // Clear any existing debounce timer
+    if (this.animationState.debounceTimer) {
+      clearTimeout(this.animationState.debounceTimer);
+    }
+    
+    // If already animating the same item, ignore
+    if (this.animationState.currentHero === heroItem) {
+      console.log('🔄 Same hero item, ignoring');
+      return;
+    }
+    
+    console.log('🎯 Hover start - cleaning previous state');
+    
+    // Cancel all existing animations immediately
+    this.cancelAllAnimations(allItems);
+    
+    // Minimal delay since we simplified everything
+    this.animationState.debounceTimer = setTimeout(() => {
+      this.cascadeContextDimming(heroItem, allItems);
+      this.animationState.lastHoverTime = now;
+    }, 20);
+  }
+
+  handleHoverEnd(heroItem, allItems) {
+    // Clear debounce timer
+    if (this.animationState.debounceTimer) {
+      clearTimeout(this.animationState.debounceTimer);
+    }
+    
+    // Immediate reset since we simplified everything
+    console.log('👋 Hover end - resetting state');
+    this.resetContextDimming(allItems);
+  }
+
+  cancelAllAnimations(allItems) {
+    console.log('� Cancelling all animations');
+    
+    // Clear all existing timeouts
+    this.animationState.animationTimeouts.forEach(timeout => {
+      clearTimeout(timeout);
+    });
+    this.animationState.animationTimeouts = [];
+    
+    // Immediately reset all items to base state (no animation)
+    allItems.forEach(item => {
+      // Remove all animation classes
+      item.classList.remove('gallery-item-hero');
+      item.classList.remove('gallery-item-blurred');
+      
+      // Remove any remaining inline styles
+      item.style.removeProperty('transform');
+      item.style.removeProperty('opacity');
+      item.style.removeProperty('filter');
+      item.style.removeProperty('border-radius');
+      item.style.removeProperty('box-shadow');
+      item.style.removeProperty('-webkit-box-shadow');
+      item.style.removeProperty('z-index');
+      item.style.removeProperty('position');
+      item.style.removeProperty('transition');
+      
+      // Also reset images
+      const img = item.querySelector('.gallery-item-img');
+      if (img) {
+        img.style.removeProperty('transform');
+        img.style.removeProperty('border-radius');
+        img.style.removeProperty('transition');
+      }
+      
+      // Trigger reflow to ensure changes are applied
+      item.offsetHeight;
+    });
+    
+    // Reset animation state
+    this.animationState.isAnimating = false;
+    this.animationState.currentHero = null;
+  }
+
+  cascadeContextDimming(heroItem, allItems) {
+    console.log('🚀 Starting simplified blur effect');
+    
+    // Set animation state
+    this.animationState.isAnimating = true;
+    this.animationState.currentHero = heroItem;
+    
+    // Animate hero immediately
+    this.animateHeroItem(heroItem);
+    
+    // Apply blur to all non-hero items immediately (no cascade)
+    allItems.forEach(item => {
+      if (item !== heroItem) {
+        this.blurNonHeroItem(item);
+      }
+    });
+    
+    console.log('✅ Hero scaled and non-hero items blurred');
+  }
+
+  blurNonHeroItem(item) {
+    console.log('🌫️ Adding blur to non-hero item');
+    item.classList.add('gallery-item-blurred');
+  }
+
+  animateHeroItem(heroItem) {
+    console.log('💫 Adding hero class for smooth CSS transition');
+    
+    // Use CSS class for smooth animation
+    heroItem.classList.add('gallery-item-hero');
+  }
+
+  // Remove the old animateNonHeroItem method - replaced with simple blur
+
+  resetContextDimming(allItems) {
+    console.log('🔄 Resetting simplified blur effect');
+    
+    // Cancel any ongoing animations first
+    this.cancelAllAnimations(allItems);
+    
+    // Reset all items immediately (no cascade)
+    allItems.forEach(item => {
+      this.resetItemToNormal(item);
+    });
+    
+    // Clear state
+    this.animationState.currentHero = null;
+    this.animationState.isAnimating = false;
+    
+    console.log('✅ All items reset');
+  }
+
+  resetItemToNormal(item) {
+    console.log('📈 Removing animation classes for clean reset');
+    
+    // Remove both animation classes
+    item.classList.remove('gallery-item-hero');
+    item.classList.remove('gallery-item-blurred');
   }
 
   updateObserver() {

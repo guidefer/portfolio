@@ -8,11 +8,13 @@ class LoadingController {
     this.loadingScreen = null;
     this.loadingText = null;
     this.progressBar = null;
+    this.currentStage = 1;
+    this.totalStages = 4;
     this.assetQueue = [];
     this.loadedAssets = 0;
     this.totalAssets = 0;
     this.isComplete = false;
-    this.minLoadingTime = 2000; // Minimum 2 seconds for smooth experience
+    this.minLoadingTime = 3000; // Minimum 3 seconds for multi-stage experience
     this.loadingStartTime = 0;
     
     this.init();
@@ -52,21 +54,27 @@ class LoadingController {
     this.loadingStartTime = Date.now();
     this.dispatchEvent('loading:start');
     
-    console.log('🚀 Starting loading sequence...');
+    console.log('🚀 Starting enhanced loading sequence...');
     
     // Show loading screen
     this.showLoadingScreen();
     
+    // Start multi-stage progression
+    const stagePromise = this.progressStages();
+    
     // Gather all assets to preload
     this.gatherAssets();
     
-    // Start preloading
-    await this.preloadAssets();
+    // Start preloading assets in parallel with stages
+    const preloadPromise = this.preloadAssets();
+    
+    // Wait for both stages and preloading to complete
+    await Promise.all([stagePromise, preloadPromise]);
     
     // Ensure minimum loading time has passed
     await this.ensureMinimumLoadTime();
     
-    console.log('✅ Loading sequence complete');
+    console.log('✅ Enhanced loading sequence complete');
   }
 
   async complete() {
@@ -212,6 +220,39 @@ class LoadingController {
     this.updateLoadingText(asset);
     
     console.log(`📁 Loaded ${asset.type}: ${asset.url} (${this.loadedAssets}/${this.totalAssets})`);
+  }
+
+  // Multi-stage loading progression
+  async progressStages() {
+    const stages = [
+      { text: "Waking up the designer...", duration: 800 },
+      { text: "Stretching creative muscles...", duration: 600 },
+      { text: "Grabbing design tools...", duration: 800 },
+      { text: "Ready to showcase work!", duration: 500 }
+    ];
+    
+    for (let i = 0; i < stages.length; i++) {
+      await this.activateStage(i + 1, stages[i]);
+    }
+  }
+  
+  async activateStage(stageNumber, stageData) {
+    const currentStageEl = this.loadingScreen.querySelector('.loading-stage.active');
+    const nextStageEl = this.loadingScreen.querySelector(`.loading-stage-${stageNumber}`);
+    
+    // Update stage text
+    if (currentStageEl) {
+      const text = currentStageEl.querySelector('.loading-text');
+      if (text) text.textContent = stageData.text;
+    }
+    
+    // Add stage class to loading screen for CSS targeting
+    this.loadingScreen.className = `loading-screen loading-stage-${stageNumber}`;
+    
+    // Wait for stage duration
+    await this.delay(stageData.duration);
+    
+    this.currentStage = stageNumber;
   }
 
   updateProgress(percentage) {
