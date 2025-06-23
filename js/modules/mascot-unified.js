@@ -48,6 +48,7 @@ export class UnifiedMascot {
     this.bindEvents();
     this.setState('revealing');
     this.startAutoCycle();
+    this.exposeDebugMethods(); // Add debug methods
     
     // Mark as initialized
     this.isInitialized = true;
@@ -109,8 +110,20 @@ export class UnifiedMascot {
         </div>
       </div>
       
+      <!-- Creating State Elements -->
+      <div class="env-creating">
+        <div class="creative-font">Aa</div>
+        <div class="creative-font">Bb</div>
+        <div class="creative-font">Cc</div>
+        <div class="color-swatch"></div>
+        <div class="color-swatch"></div>
+        <div class="color-swatch"></div>
+        <div class="design-cursor"></div>
+      </div>
+      
       <!-- Coffee State Elements -->
       <div class="env-coffee">
+        <div class="coffee-cup"></div>
         <div class="steam"></div>
         <div class="steam"></div>
       </div>
@@ -297,6 +310,12 @@ export class UnifiedMascot {
     }
     
     console.log(`🎭 🎯 🔧 executeContextualAnimation called: ${sectionName} → ${animation}`);
+    console.log(`🎭 🎯 📊 Section mapping check: sectionAnimationMap[${sectionName}] = ${this.sectionAnimationMap[sectionName]}`);
+    
+    // DEBUG: Log if this is specifically the "creating" animation
+    if (animation === 'creating') {
+      console.log(`🎭 🎨 ✨ CREATING ANIMATION TRIGGERED! Section: ${sectionName}`);
+    }
     
     // Check cooldown (but allow navigation to bypass)
     if (now - this.lastContextualTrigger < this.config.contextualCooldown) {
@@ -337,8 +356,11 @@ export class UnifiedMascot {
       return;
     }
     
+    console.log(`🎭 📍 Found ${sections.length} sections for animation binding`);
+    
     sections.forEach(section => {
       const sectionId = section.id || section.className.split(' ')[0];
+      console.log(`🎭 📍 Binding section: ${sectionId} (id: ${section.id}, classes: ${section.className})`);
       
       // Create intersection observer for this section
       const observer = new IntersectionObserver((entries) => {
@@ -439,7 +461,7 @@ export class UnifiedMascot {
     }
     
     // Cycle through different animations
-    const cycleAnimations = ['creating', 'coffee', 'excited'];
+    const cycleAnimations = ['thinking', 'creating', 'coffee', 'excited'];
     const randomAnimation = cycleAnimations[Math.floor(Math.random() * cycleAnimations.length)];
     
     console.log(`🎭 🔄 AUTO-CYCLE: ${randomAnimation} (no contextual activity)`);
@@ -612,7 +634,7 @@ export class UnifiedMascot {
   }
   
   debugTestAllStates() {
-    const states = ['idle', 'excited', 'dancing', 'coffee', 'creating', 'sleepy'];
+    const states = ['idle', 'excited', 'dancing', 'coffee', 'creating', 'thinking', 'sleepy'];
     let index = 0;
     
     const testNext = () => {
@@ -629,6 +651,39 @@ export class UnifiedMascot {
     };
     
     testNext();
+  }
+  
+  // DEBUG: Add a method to manually test the creating animation
+  testCreatingAnimation() {
+    console.log('🎭 🧪 MANUAL TEST: Triggering creating animation (artistic movements + creative elements)');
+    this.setState('creating');
+  }
+  
+  testThinkingAnimation() {
+    console.log('🎭 🧪 MANUAL TEST: Triggering thinking animation (contemplative pose + dark thought bubble)');
+    this.setState('thinking');
+  }
+  
+  testCoffeeAnimation() {
+    console.log('🎭 🧪 MANUAL TEST: Triggering coffee animation (relaxed pose + coffee cup with steam)');
+    this.setState('coffee');
+  }
+  
+  // DEBUG: Add to window for testing
+  exposeDebugMethods() {
+    if (typeof window !== 'undefined') {
+      window.mascotDebug = {
+        testCreating: () => this.testCreatingAnimation(),
+        testThinking: () => this.testThinkingAnimation(),
+        testCoffee: () => this.testCoffeeAnimation(),
+        currentState: () => this.currentState,
+        sectionMap: this.sectionAnimationMap
+      };
+      console.log('🎭 🧪 Debug methods exposed: window.mascotDebug');
+      console.log('🎭 🧪 - testCreating(): Artistic movements + fonts/swatches/cursor');
+      console.log('🎭 🧪 - testThinking(): Contemplative pose + dark thought bubble');
+      console.log('🎭 🧪 - testCoffee(): Relaxed pose + coffee cup with steam');
+    }
   }
   
   // === ANIMATION VERIFICATION ===
