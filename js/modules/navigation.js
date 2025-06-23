@@ -30,6 +30,8 @@ class NavigationController {
     
     this.bindEvents();
     this.setupSmoothScrolling();
+    
+    // Set initial active link state
     this.updateActiveLink();
     
     console.log('🧭 Navigation initialized');
@@ -87,13 +89,23 @@ class NavigationController {
     // Prevent body scroll when menu is open
     document.body.classList.toggle('nav-menu-open', this.isMenuOpen);
     
-    // Focus management
+    // Update active link state when menu opens
     if (this.isMenuOpen) {
-      // Focus first menu item
-      const firstLink = this.navMenu.querySelector('.nav-link');
-      if (firstLink) {
-        firstLink.focus();
-      }
+      this.updateActiveLink();
+      
+      // Force clear any stuck hover/focus states on navigation links
+      this.navLinks.forEach(link => {
+        link.blur(); // Remove focus
+        // Force a style recalculation to clear hover states
+        link.style.pointerEvents = 'none';
+        setTimeout(() => {
+          link.style.pointerEvents = '';
+        }, 10);
+      });
+      
+      // Don't focus the first link - this might be causing the hover state
+      // Keep focus on the toggle button instead
+      this.navToggle.blur();
     } else {
       // Return focus to toggle button
       this.navToggle.focus();
@@ -211,21 +223,32 @@ class NavigationController {
     
     let activeSection = '';
     
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
-      
-      if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-        activeSection = section.id;
-      }
-    });
+    // Default to 'home' if we're at the very top
+    if (window.scrollY < 100) {
+      activeSection = 'home';
+    } else {
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+          activeSection = section.id;
+        }
+      });
+    }
     
     // Update active navigation link
     this.navLinks.forEach(link => {
       const href = link.getAttribute('href');
       if (href && href.startsWith('#')) {
         const targetId = href.substring(1);
-        link.classList.toggle('nav-link-active', targetId === activeSection);
+        
+        // If activeSection is 'home', no nav links should be active
+        if (activeSection === 'home') {
+          link.classList.remove('nav-link-active');
+        } else {
+          link.classList.toggle('nav-link-active', targetId === activeSection);
+        }
       }
     });
   }

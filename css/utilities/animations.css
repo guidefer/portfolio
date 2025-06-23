@@ -290,27 +290,86 @@
   100% { transform: translateX(0%); }
 }
 
-/* Page Transition Animations */
-.page-transition-enter {
+/* ===== PAGE TRANSITIONS ===== */
+
+/* Page transition overlay */
+.page-transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, var(--color-accent-yellow), var(--color-accent-orange));
+  z-index: 9999;
+  pointer-events: none;
   opacity: 0;
-  transform: translateX(100px);
+  transform: scale(0.8);
+  transition: all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
-.page-transition-enter-active {
+.page-transition-overlay.active {
   opacity: 1;
-  transform: translateX(0);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: scale(1);
 }
 
-.page-transition-exit {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.page-transition-exit-active {
+.page-transition-overlay.exit {
   opacity: 0;
-  transform: translateX(-100px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: scale(1.2);
+  transition: all 0.8s cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+/* Content reveal animations */
+.content-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 1s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.content-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered content reveals */
+.content-reveal:nth-child(1) { transition-delay: 0.1s; }
+.content-reveal:nth-child(2) { transition-delay: 0.2s; }
+.content-reveal:nth-child(3) { transition-delay: 0.3s; }
+.content-reveal:nth-child(4) { transition-delay: 0.4s; }
+
+/* Page entrance animation */
+.page-enter {
+  animation: pageEnter 1.2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+}
+
+@keyframes pageEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateY(-5px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Page exit animation */
+.page-exit {
+  animation: pageExit 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+}
+
+@keyframes pageExit {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.98);
+  }
 }
 
 /* Utility Classes for Animation Control */
@@ -362,8 +421,15 @@
   .gradient-shift,
   .focus-pulse,
   .float,
-  .wobble {
+  .wobble,
+  .page-transition-overlay,
+  .content-reveal,
+  .page-enter,
+  .page-exit,
+  .card-hover-enhanced,
+  .btn-ripple::before {
     animation: none;
+    transition: none !important;
   }
   
   /* Maintain visibility for faded elements */
