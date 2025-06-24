@@ -2,6 +2,57 @@
 /* Merged from mascot.css + mascot-environment.css */
 /* Single file controlling both character and environmental elements */
 
+/* ===== LOADING STATE CONTROL ===== */
+
+/* Hide mascot completely during loading for uninterrupted cherry blossom experience */
+.loading .character-mascot {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(100px) scale(0) !important;
+  transition: none !important;
+  animation: none !important; /* Stop all animations during loading */
+}
+
+/* Mascot entrance animation after loading completes - SINGLE CLEAN ANIMATION */
+.loading-complete .character-mascot {
+  /* Clear any conflicting transitions first */
+  transition: none !important;
+  /* Only use the entrance animation */
+  animation: mascotEntrance 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.8s forwards;
+}
+
+/* Mascot visible state after entrance completes */
+.loading-complete .character-mascot.entrance-complete {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  transition: transform 0.3s ease-out; /* Restore transitions for hover effects */
+  animation: none; /* Clear entrance animation */
+}
+
+@keyframes mascotEntrance {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(100px) scale(0) rotate(-10deg);
+  }
+  1% {
+    visibility: visible; /* Make visible early in animation */
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.1) rotate(5deg);
+  }
+  80% {
+    transform: translateY(5px) scale(0.95) rotate(-2deg);
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
 /* ===== BASE CHARACTER STYLES ===== */
 
 .character-mascot {
@@ -1112,9 +1163,9 @@
   width: 3px;
   height: 5px;
   border: 1px solid #8B4513;
-  border-left: none;
-  border-radius: 0 8px 8px 0;
-  right: -4px;
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  left: -4px;
   top: 2px;
   background: #E8E8E8; /* Match cup color */
 }
@@ -1279,10 +1330,7 @@
   pointer-events: none;
 }
 
-/* Debug mode - show all element borders */
-.debug-mascot .mascot-character > * {
-  border: 1px solid red !important;
-}
+
 
 /* Hover effects for interactive moments */
 .mascot-interactive:hover .mascot-container {

@@ -127,7 +127,7 @@
 }
 
 .gallery-item-blurred {
-  filter: blur(2px) !important;
+  filter: blur(0.5px) !important;
   transition: filter 0.3s ease-out !important;
 }
 

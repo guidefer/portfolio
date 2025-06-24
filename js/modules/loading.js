@@ -1,100 +1,98 @@
 /**
- * Loading Controller
- * Handles asset preloading and loading screen animations
+ * Cherry Blossom Loading Controller
+ * Handles asset preloading and beautiful cherry blossom loading screen
  */
 
 class LoadingController {
   constructor() {
     this.loadingScreen = null;
     this.loadingText = null;
-    this.progressBar = null;
-    this.currentStage = 1;
-    this.totalStages = 4;
+    this.progressBarFill = null;
     this.assetQueue = [];
     this.loadedAssets = 0;
     this.totalAssets = 0;
     this.isComplete = false;
-    this.minLoadingTime = 3000; // Minimum 3 seconds for multi-stage experience
+    this.navigationTriggered = false; // Track if navigation has been triggered
+    this.minLoadingTime = 2000; // Reduced to 2 seconds for better UX
     this.loadingStartTime = 0;
+    this.currentProgress = 0;
+    
+    this.loadingMessages = [
+      "Loading portfolio...",
+      "Preparing gallery...",
+      "Setting up animations...",
+      "Almost ready...",
+      "Welcome!"
+    ];
     
     this.init();
   }
 
   init() {
     this.loadingScreen = document.getElementById('loading-screen');
-    this.loadingText = this.loadingScreen?.querySelector('.loading-text');
+    this.loadingText = document.getElementById('loading-text');
+    this.progressBarFill = document.getElementById('loading-bar-fill');
     
     if (!this.loadingScreen) {
       console.warn('Loading screen not found - skipping loading sequence');
       return;
     }
     
-    this.createProgressBar();
-    console.log('⏳ Loading controller initialized');
-  }
-
-  createProgressBar() {
-    // Create progress bar element
-    this.progressBar = document.createElement('div');
-    this.progressBar.className = 'loading-progress';
-    this.progressBar.innerHTML = `
-      <div class="loading-progress-bar">
-        <div class="loading-progress-fill"></div>
-      </div>
-      <div class="loading-percentage">0%</div>
-    `;
-    
-    const loadingContent = this.loadingScreen.querySelector('.loading-content');
-    if (loadingContent) {
-      loadingContent.appendChild(this.progressBar);
-    }
+    console.log('🌸 Cherry blossom loading controller initialized');
   }
 
   async start() {
     this.loadingStartTime = Date.now();
     this.dispatchEvent('loading:start');
     
-    console.log('🚀 Starting enhanced loading sequence...');
+    console.log('🚀 Starting cherry blossom loading sequence...');
     
     // Show loading screen
     this.showLoadingScreen();
     
-    // Start multi-stage progression
-    const stagePromise = this.progressStages();
+    // Start progress simulation
+    const progressPromise = this.simulateProgress();
     
     // Gather all assets to preload
     this.gatherAssets();
     
-    // Start preloading assets in parallel with stages
+    // Start preloading assets in parallel
     const preloadPromise = this.preloadAssets();
     
-    // Wait for both stages and preloading to complete
-    await Promise.all([stagePromise, preloadPromise]);
+    // Wait for both progress and preloading to complete
+    await Promise.all([progressPromise, preloadPromise]);
     
-    // Ensure minimum loading time has passed
+    // Ensure minimum loading time has passed for cherry blossom enjoyment
     await this.ensureMinimumLoadTime();
     
-    console.log('✅ Enhanced loading sequence complete');
+    console.log('✅ Cherry blossom loading sequence complete');
+    
+    // Auto-complete when timing is right (not when modules are ready)
+    await this.complete();
   }
 
   async complete() {
     if (this.isComplete) return;
     
     this.isComplete = true;
+    
+    // Don't allow external complete() calls to bypass our timing
+    console.log('🎬 Loading complete requested');
+    
     this.updateProgress(100);
     
-    await this.delay(500); // Brief pause at 100%
+    await this.delay(800); // Brief pause at 100% to enjoy the completion
     
     // Hide loading screen with animation
     await this.hideLoadingScreen();
     
     this.dispatchEvent('loading:complete');
-    console.log('🎉 Loading complete - content revealed');
+    console.log('🎉 Loading complete - portfolio revealed');
   }
 
   showLoadingScreen() {
     if (this.loadingScreen) {
-      this.loadingScreen.style.display = 'flex';
+      this.loadingScreen.classList.add('loading-active');
       this.loadingScreen.setAttribute('aria-hidden', 'false');
       document.body.classList.add('loading');
       document.body.classList.remove('loading-complete');
@@ -110,26 +108,88 @@ class LoadingController {
     }
     
     return new Promise((resolve) => {
-      this.loadingScreen.classList.add('loading-fade-out');
+      // Set up animation end listener for header to reset z-index
+      const header = document.querySelector('.header');
+      if (header) {
+        const handleAnimationEnd = () => {
+          console.log('🎭 Navigation slide-down animation complete');
+          header.classList.add('slidedown-complete');
+          header.removeEventListener('animationend', handleAnimationEnd);
+        };
+        header.addEventListener('animationend', handleAnimationEnd);
+      }
       
+      // Start fade out - navigation was already triggered when progress hit 100%
+      this.loadingScreen.classList.add('loading-fade-out');
+      console.log('🌸 Loading screen fade out started - navigation already triggered by progress bar');
+      
+      // Complete cleanup when transition fully ends
       setTimeout(() => {
-        this.loadingScreen.style.display = 'none';
+        console.log('� Loading screen fade complete - final cleanup');
+        
+        // Remove loading screen from DOM and drop z-index
+        this.loadingScreen.classList.remove('loading-active');
         this.loadingScreen.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('loading');
-        document.body.classList.add('loading-complete');
+        this.loadingScreen.style.zIndex = '-1';
+        
         resolve();
-      }, 800); // Match CSS animation duration
+      }, 1000); // Full 1s transition duration
     });
+  }
+
+  async simulateProgress() {
+    return new Promise((resolve) => {
+      const progressInterval = setInterval(() => {
+        // Simulate realistic loading progression - slower increments
+        const increment = Math.random() * 2 + 0.5; // Random 0.5-2.5% increments (slower)
+        this.currentProgress += increment;
+        
+        console.log(`📊 Progress: ${Math.round(this.currentProgress)}%`);
+        
+        if (this.currentProgress >= 100) {
+          this.currentProgress = 100;
+          clearInterval(progressInterval);
+          console.log('📊 Progress simulation complete - reached 100%');
+          resolve();
+        }
+        
+        this.updateProgress(this.currentProgress);
+        
+      }, 200 + Math.random() * 150); // Faster timing: 200-350ms intervals
+    });
+  }
+
+  updateProgress(progress) {
+    progress = Math.min(100, Math.max(0, progress));
+    
+    if (this.progressBarFill) {
+      this.progressBarFill.style.width = progress + '%';
+      console.log(`🎯 Visual progress bar updated: ${Math.round(progress)}%`);
+    }
+    
+    // Update loading text based on progress
+    const messageIndex = Math.floor((progress / 100) * (this.loadingMessages.length - 1));
+    if (this.loadingText && this.loadingMessages[messageIndex]) {
+      this.loadingText.textContent = this.loadingMessages[messageIndex];
+    }
+    
+    // TRIGGER NAVIGATION EXACTLY WHEN PROGRESS REACHES 100%
+    if (progress >= 100 && !this.navigationTriggered) {
+      this.navigationTriggered = true;
+      console.log('🎯 Progress bar reached 100% - triggering navigation NOW!');
+      
+      // Trigger navigation immediately when progress hits 100%
+      document.body.classList.remove('loading');
+      document.body.classList.add('loading-complete');
+      console.log('🚀 Added loading-complete class - navigation ready');
+      
+      // Dispatch event for module initialization
+      this.dispatchEvent('progress:complete');
+    }
   }
 
   gatherAssets() {
     this.assetQueue = [];
-    
-    // Critical CSS files (already loaded via <link> tags)
-    // We'll just simulate their loading
-    
-    // JavaScript modules (already loading)
-    // We'll just simulate their loading
     
     // Hero section images
     const heroImages = this.findImageAssets('.hero-section img');
@@ -143,16 +203,11 @@ class LoadingController {
     const iconAssets = this.findImageAssets('[src*="icon"], [src*="logo"]');
     this.assetQueue.push(...iconAssets);
     
-    // Critical background images from CSS
-    const bgImages = this.findBackgroundImages();
-    this.assetQueue.push(...bgImages);
-    
-    // Add some simulated assets for demo purposes
+    // Add some simulated assets for realistic loading
     this.assetQueue.push(
-      { type: 'script', url: 'js/main.js' },
-      { type: 'style', url: 'css/main.css' },
-      { type: 'font', url: 'System Fonts' },
-      { type: 'data', url: 'Portfolio Data' }
+      { type: 'script', src: 'js/main.js', critical: true },
+      { type: 'style', src: 'css/main.css', critical: true },
+      { type: 'font', src: 'fonts/system', critical: true }
     );
     
     this.totalAssets = this.assetQueue.length;
@@ -163,138 +218,68 @@ class LoadingController {
     const images = document.querySelectorAll(selector);
     return Array.from(images).map(img => ({
       type: 'image',
-      url: img.src || img.getAttribute('data-src'),
-      element: img
-    })).filter(asset => asset.url);
-  }
-
-  findBackgroundImages() {
-    // This would normally parse CSS for background-image URLs
-    // For now, return empty array
-    return [];
+      src: img.src || img.dataset.src || img.getAttribute('src'),
+      element: img,
+      critical: img.classList.contains('critical')
+    })).filter(asset => asset.src);
   }
 
   async preloadAssets() {
-    const loadPromises = this.assetQueue.map((asset, index) => 
+    if (this.assetQueue.length === 0) {
+      console.log('📦 No assets to preload');
+      return;
+    }
+    
+    console.log(`🔄 Preloading ${this.assetQueue.length} assets...`);
+    
+    const preloadPromises = this.assetQueue.map((asset, index) => 
       this.preloadAsset(asset, index)
     );
     
-    try {
-      await Promise.all(loadPromises);
-    } catch (error) {
-      console.warn('Some assets failed to load:', error);
-    }
+    await Promise.allSettled(preloadPromises);
   }
 
   async preloadAsset(asset, index) {
-    return new Promise((resolve) => {
-      // Simulate loading time based on asset type
-      const loadTime = this.getSimulatedLoadTime(asset.type);
+    try {
+      if (asset.type === 'image') {
+        await this.preloadImage(asset.src);
+      } else {
+        // Simulate loading time for other asset types
+        await this.delay(this.getSimulatedLoadTime(asset.type));
+      }
       
-      setTimeout(() => {
-        this.onAssetLoaded(asset, index);
-        resolve();
-      }, loadTime);
-    });
+      this.onAssetLoaded(asset, index);
+    } catch (error) {
+      console.warn(`⚠️ Failed to load asset: ${asset.src}`, error);
+      this.onAssetLoaded(asset, index); // Continue anyway
+    }
   }
 
   getSimulatedLoadTime(type) {
-    const baseTimes = {
-      image: 300,
-      script: 200,
-      style: 150,
-      font: 400,
-      data: 100
+    const times = {
+      'script': 200 + Math.random() * 300,
+      'style': 100 + Math.random() * 200,
+      'font': 150 + Math.random() * 250,
+      'data': 50 + Math.random() * 100
     };
-    
-    const baseTime = baseTimes[type] || 200;
-    // Add random variation
-    return baseTime + Math.random() * 200;
+    return times[type] || 100;
   }
 
   onAssetLoaded(asset, index) {
     this.loadedAssets++;
-    const progress = Math.round((this.loadedAssets / this.totalAssets) * 100);
+    const progress = (this.loadedAssets / this.totalAssets) * 100;
     
-    this.updateProgress(progress);
-    this.updateLoadingText(asset);
+    console.log(`✅ Loaded asset ${index + 1}/${this.totalAssets}: ${asset.src}`);
     
-    console.log(`📁 Loaded ${asset.type}: ${asset.url} (${this.loadedAssets}/${this.totalAssets})`);
-  }
-
-  // Multi-stage loading progression
-  async progressStages() {
-    const stages = [
-      { text: "Waking up the designer...", duration: 800 },
-      { text: "Stretching creative muscles...", duration: 600 },
-      { text: "Grabbing design tools...", duration: 800 },
-      { text: "Ready to showcase work!", duration: 500 }
-    ];
-    
-    for (let i = 0; i < stages.length; i++) {
-      await this.activateStage(i + 1, stages[i]);
-    }
-  }
-  
-  async activateStage(stageNumber, stageData) {
-    const currentStageEl = this.loadingScreen.querySelector('.loading-stage.active');
-    const nextStageEl = this.loadingScreen.querySelector(`.loading-stage-${stageNumber}`);
-    
-    // Update stage text
-    if (currentStageEl) {
-      const text = currentStageEl.querySelector('.loading-text');
-      if (text) text.textContent = stageData.text;
-    }
-    
-    // Add stage class to loading screen for CSS targeting
-    this.loadingScreen.className = `loading-screen loading-stage-${stageNumber}`;
-    
-    // Wait for stage duration
-    await this.delay(stageData.duration);
-    
-    this.currentStage = stageNumber;
-  }
-
-  updateProgress(percentage) {
-    if (!this.progressBar) return;
-    
-    const progressFill = this.progressBar.querySelector('.loading-progress-fill');
-    const progressText = this.progressBar.querySelector('.loading-percentage');
-    
-    if (progressFill) {
-      progressFill.style.width = `${percentage}%`;
-    }
-    
-    if (progressText) {
-      progressText.textContent = `${percentage}%`;
-    }
-    
-    // Update ARIA attributes for accessibility
-    this.loadingScreen?.setAttribute('aria-valuenow', percentage.toString());
-  }
-
-  updateLoadingText(asset) {
-    if (!this.loadingText) return;
-    
-    const messages = {
-      image: 'Loading images...',
-      script: 'Loading scripts...',
-      style: 'Loading styles...',
-      font: 'Loading fonts...',
-      data: 'Loading content...'
-    };
-    
-    const message = messages[asset.type] || 'Loading...';
-    this.loadingText.textContent = message;
+    // Assets contribute to overall progress but progress simulation handles display
   }
 
   async ensureMinimumLoadTime() {
-    const elapsedTime = Date.now() - this.loadingStartTime;
-    const remainingTime = this.minLoadingTime - elapsedTime;
-    
-    if (remainingTime > 0) {
-      console.log(`⏱️ Waiting ${remainingTime}ms to ensure smooth loading experience`);
-      await this.delay(remainingTime);
+    const elapsed = Date.now() - this.loadingStartTime;
+    if (elapsed < this.minLoadingTime) {
+      const remaining = this.minLoadingTime - elapsed;
+      console.log(`⏱️ Waiting ${remaining}ms more for cherry blossom enjoyment...`);
+      await this.delay(remaining);
     }
   }
 
@@ -302,7 +287,6 @@ class LoadingController {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  // Simulate loading for specific asset types
   async preloadImage(src) {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -312,48 +296,11 @@ class LoadingController {
     });
   }
 
-  async preloadScript(src) {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.onload = () => resolve(script);
-      script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-      script.src = src;
-      // Don't actually append to avoid duplicate loading
-      resolve(script);
-    });
-  }
-
-  // Public API methods
-  setProgress(percentage) {
-    this.updateProgress(Math.min(100, Math.max(0, percentage)));
-  }
-
-  setLoadingText(text) {
-    if (this.loadingText) {
-      this.loadingText.textContent = text;
-    }
-  }
-
-  addAsset(asset) {
-    this.assetQueue.push(asset);
-    this.totalAssets++;
-  }
-
-  // Event system
   dispatchEvent(eventName, detail = {}) {
     const event = new CustomEvent(eventName, { detail });
     document.dispatchEvent(event);
   }
-
-  // Cleanup
-  destroy() {
-    this.loadingScreen = null;
-    this.loadingText = null;
-    this.progressBar = null;
-    this.assetQueue = [];
-    
-    console.log('⏳ Loading controller destroyed');
-  }
 }
 
+// Export for module system
 export default LoadingController;

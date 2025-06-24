@@ -1,5 +1,40 @@
 /* Header and Navigation Styles */
 
+/* Loading state - header hidden during cherry blossom loading */
+.loading .header {
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: none; /* No transition during loading */
+}
+
+/* Loading complete - header slides down beautifully with animation */
+.loading-complete .header {
+  animation: slideDownFromTop 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+  z-index: 10000; /* Temporary boost during entrance to ensure visibility */
+}
+
+/* Reset z-index after animation completes */
+.loading-complete .header.slidedown-complete {
+  z-index: 1000;
+}
+
+@keyframes slideDownFromTop {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Override default transition during loading sequence */
+.loading .header,
+.loading-complete .header {
+  transition: none; /* Clear default transition first */
+}
+
 .header {
   position: fixed;
   top: 0;
@@ -8,7 +43,14 @@
   background-color: #ffffff;
   border-bottom: 1px solid #C8C8BC;
   z-index: 1000;
+  /* Default transition - will be overridden during loading states */
   transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* Override default transition during loading sequence */
+.loading .header,
+.loading-complete .header {
+  transition: none; /* Clear default transition first */
 }
 
 .header.scrolled {

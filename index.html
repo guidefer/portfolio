@@ -44,37 +44,51 @@
     }
     </script>
 </head>
-<body>
-    <!-- Loading Screen -->
+<body class="loading">
+    <!-- Cherry Blossom Loading Screen -->
     <div id="loading-screen" class="loading-screen" aria-hidden="true">
-        <div class="loading-content">
-            <!-- Multi-stage loading elements -->
-            <div class="loading-stage loading-stage-1 active">
-                <div class="loading-mascot"></div>
-                <p class="loading-text">Waking up the designer...</p>
-            </div>
-            
-            <!-- Enhanced spinner with shimmer -->
-            <div class="loading-spinner mascot-style"></div>
-            
-            <!-- Interactive loading elements -->
-            <div class="loading-elements">
-                <div class="loading-element"></div>
-                <div class="loading-element"></div>
-                <div class="loading-element"></div>
-                <div class="loading-element"></div>
-                <div class="loading-element"></div>
-            </div>
-            
-            <!-- Progress tracking will be added by JavaScript -->
+        <!-- Cherry Blossom Petals -->
+        <div class="petals-container">
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
         </div>
-        
-        <!-- Floating thumbnails -->
-        <div class="loading-thumbnails">
-            <div class="floating-thumbnail"></div>
-            <div class="floating-thumbnail"></div>
-            <div class="floating-thumbnail"></div>
-            <div class="floating-thumbnail"></div>
+
+        <!-- Loading Area -->
+        <div class="loading-area">
+            <div class="loading-text" id="loading-text">Loading portfolio...</div>
+            <div class="loading-bar-container">
+                <div class="loading-bar-fill" id="loading-bar-fill"></div>
+            </div>
         </div>
     </div>
 
@@ -225,6 +239,8 @@
 
     <!-- Scripts -->
     <script type="module" src="js/main.js"></script>
+    
+
     
     <!-- Service Worker for PWA (optional) -->
     <script>

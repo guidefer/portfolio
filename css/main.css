@@ -39,6 +39,28 @@ body {
   overflow-x: hidden;
 }
 
+/* Loading and Content Animation States */
+
+/* During loading - hide all main content */
+.loading .main-content {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: none;
+}
+
+/* After loading complete - beautiful content entrance */
+.loading-complete .main-content {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.8s ease-out 0.2s,
+              transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) 0.2s;
+}
+
+/* Ensure loading screen covers everything */
+.loading-screen.loading-active {
+  z-index: 9999;
+}
+
 /* Main Layout */
 .main-content {
   padding-top: var(--header-height);
@@ -193,13 +215,4 @@ body.loading .main-content {
 body.loading-complete .main-content {
   opacity: 1;
   pointer-events: auto;
-}
-
-/* Smooth Scrolling for Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  
-  /* This rule is now handled in reset.css with mascot exceptions */
 }

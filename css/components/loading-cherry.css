@@ -10,7 +10,7 @@
   display: none; /* Hidden by default, shown via JavaScript */
   flex-direction: column;
   justify-content: flex-end;
-  z-index: 9999; /* Much higher than header to ensure complete coverage */
+  z-index: var(--z-modal);
   opacity: 1;
   visibility: visible;
   transition: opacity 1s ease-out, visibility 1s ease-out;
@@ -24,9 +24,6 @@
 .loading-screen.loading-fade-out {
   opacity: 0;
   visibility: hidden;
-  /* Keep z-index high during fade out, only drop it after transition completes */
-  z-index: 9999;
-  pointer-events: none; /* Disable interactions during fade out */
 }
 
 /* Cherry Blossom Petals Container */

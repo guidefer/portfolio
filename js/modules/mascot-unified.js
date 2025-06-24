@@ -46,7 +46,9 @@ export class UnifiedMascot {
     this.createCharacterElement();
     this.createEnvironmentElement();
     this.bindEvents();
-    this.setState('revealing');
+    
+    // Start in idle state - CSS loading states will handle the entrance animation
+    this.setState('idle');
     this.startAutoCycle();
     this.exposeDebugMethods(); // Add debug methods
     
@@ -140,6 +142,18 @@ export class UnifiedMascot {
   }
   
   bindEvents() {
+    // Entrance animation completion listener
+    if (this.characterElement) {
+      this.characterElement.addEventListener('animationend', (event) => {
+        if (event.animationName === 'mascotEntrance') {
+          console.log('🐾 Mascot entrance animation complete - adding entrance-complete class');
+          this.characterElement.classList.add('entrance-complete');
+          // Start normal behavior after entrance
+          this.setState('idle');
+        }
+      });
+    }
+    
     // Mouse movement tracking for proximity detection
     let mouseMoveThrottled = this.throttle((e) => {
       this.mousePosition = { x: e.clientX, y: e.clientY };
@@ -179,6 +193,19 @@ export class UnifiedMascot {
   setState(newState, immediate = false) {
     if (!this.characterElement || !this.environmentElement) {
       console.error('🎭 ❌ setState: Elements not available!');
+      return;
+    }
+    
+    // Don't allow state changes during loading (except initial idle setup)
+    if (document.body.classList.contains('loading') && newState !== 'idle') {
+      console.log(`🎭 setState blocked during loading: ${newState}`);
+      return;
+    }
+    
+    // Don't allow state changes during entrance animation (except to idle initially)
+    if (!this.characterElement.classList.contains('entrance-complete') && 
+        this.currentState !== '' && newState !== 'idle') {
+      console.log(`🎭 setState blocked during entrance: ${newState}`);
       return;
     }
     
@@ -400,9 +427,10 @@ export class UnifiedMascot {
   }
   
   onPageBlur() {
-    // Start sleepy timer if idle
+    // Go sleepy immediately when window loses focus
     if (this.currentState === 'idle') {
-      this.startSleepyTimer();
+      console.log('🎭 Window lost focus - going sleepy immediately');
+      this.setState('sleepy');
     }
   }
   
@@ -439,6 +467,12 @@ export class UnifiedMascot {
   }
   
   autoCycleBehavior() {
+    // Don't auto-cycle until entrance is complete
+    if (!this.characterElement.classList.contains('entrance-complete')) {
+      console.log('🎭 Auto-cycle skipped: entrance not complete');
+      return;
+    }
+    
     // Only auto-cycle when idle and not sleepy and no contextual animation is active
     if (this.currentState !== 'idle' || this.contextualAnimationActive) {
       console.log(`🎭 Auto-cycle skipped: state=${this.currentState}, contextual=${this.contextualAnimationActive}`);

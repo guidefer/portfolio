@@ -74,11 +74,7 @@ class PortfolioApp {
     console.log('🚀 Initializing Portfolio App...');
     
     try {
-      // Start loading sequence
-      this.loading = new LoadingController();
-      await this.loading.start();
-      
-      // Initialize core modules
+      // INITIALIZE MODULES BEFORE LOADING STARTS
       this.navigation = new NavigationController();
       this.gallery = new GalleryController();
       this.mascot = new UnifiedMascot();
@@ -86,17 +82,12 @@ class PortfolioApp {
       // Setup cross-module communication
       this.setupModuleCommunication();
       
-      // Complete loading and reveal content
-      await this.loading.complete();
+      // Start loading sequence - this will run completely and trigger loading:complete when done
+      this.loading = new LoadingController();
+      await this.loading.start();
       
       this.isInitialized = true;
-      console.log('✅ Portfolio App initialized successfully');
-      
-      // Force remove focus from all gallery items
-      this.forceFocusRemoval();
-      
-      // Trigger initial mascot celebration
-      this.mascot.onInteraction('page-load');
+      console.log('✅ Portfolio App fully initialized');
       
     } catch (error) {
       console.error('❌ Failed to initialize app:', error);
@@ -145,10 +136,22 @@ class PortfolioApp {
     
     // Loading events
     document.addEventListener('loading:start', () => {
-      this.mascot?.showLoading();
+      // Mascot will be initialized after loading completes
+      console.log('🌸 Loading started');
     });
     
+    // Progress completion event - triggered when progress bar reaches 100%
+    document.addEventListener('progress:complete', () => {
+      console.log('🎯 Progress complete - modules already initialized');
+    });
+
     document.addEventListener('loading:complete', () => {
+      console.log('🌸 Loading screen fade complete');
+      
+      // Force remove focus from all gallery items after loading completes
+      this.forceFocusRemoval();
+      
+      // Trigger mascot celebration
       this.mascot?.setState('excited');
       setTimeout(() => {
         this.mascot?.setState('idle');
@@ -231,21 +234,21 @@ window.addEventListener('beforeunload', () => {
   window.portfolioApp?.destroy();
 });
 
-// Fallback: Ensure content is always visible after a maximum time
-setTimeout(() => {
-  document.body.classList.remove('loading');
-  document.body.classList.add('loading-complete');
-  console.log('🔄 Loading fallback: Content made visible');
-}, 5000); // 5 second fallback
+// Fallback: Ensure content is always visible after a maximum time (DISABLED - using progress bar trigger)
+// setTimeout(() => {
+//   document.body.classList.remove('loading');
+//   document.body.classList.add('loading-complete');
+//   console.log('🔄 Loading fallback: Content made visible');
+// }, 5000); // 5 second fallback
 
-// Also ensure content is visible on page load
-document.addEventListener('DOMContentLoaded', () => {
-  // Add loading-complete class after a brief delay if loading hasn't started
-  setTimeout(() => {
-    if (!document.body.classList.contains('loading')) {
-      document.body.classList.add('loading-complete');
-    }
-  }, 100);
-});
+// Also ensure content is visible on page load (DISABLED - using progress bar trigger)
+// document.addEventListener('DOMContentLoaded', () => {
+//   // Add loading-complete class after a brief delay if loading hasn't started
+//   setTimeout(() => {
+//     if (!document.body.classList.contains('loading')) {
+//       document.body.classList.add('loading-complete');
+//     }
+//   }, 100);
+// });
 
 export default PortfolioApp;
