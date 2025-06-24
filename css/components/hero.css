@@ -90,7 +90,7 @@
 
 .hero-cta:hover,
 .hero-cta:focus {
-  background-color: var(--color-primary);
+  background-color: var(--color-accent-orange);
   color: var(--color-background);
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
