@@ -47,7 +47,9 @@
   background-color: var(--color-background);
   padding: var(--space-2xl);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-sm);
+  /* Subtle drop shadow matching gallery items non-active state */
+  -webkit-box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
 .skills-title {

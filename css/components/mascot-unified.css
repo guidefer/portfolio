@@ -535,7 +535,7 @@
 
 .mascot-coffee .mascot-eye-left,
 .mascot-coffee .mascot-eye-right {
-  animation: coffee-content-eyes 4s ease-in-out infinite;
+  animation: coffee-eyes-enjoying 10s ease-in-out infinite; /* Match 10-second cycle */
 }
 
 .mascot-coffee .mascot-body {
@@ -543,7 +543,8 @@
 }
 
 .mascot-coffee .mascot-arm-left {
-  animation: coffee-arm-reaching 3s ease-in-out infinite;
+  animation: coffee-arm-drinking 3s ease-in-out infinite; /* Changed to drinking animation */
+  z-index: 9; /* Bring arm in front of body (z-index: 8) for drinking motion */
 }
 
 .mascot-coffee .mascot-arm-right {
@@ -562,6 +563,10 @@
 
 .mascot-coffee .steam {
   animation: steam-rise 2.2s ease-in-out infinite;
+}
+
+.mascot-coffee .coffee-cup {
+  animation: coffee-cup-drinking 10s ease-in-out infinite; /* Match mascot animation duration */
 }
 
 .mascot-coffee .steam:nth-child(2) { animation-delay: 0.3s; }
@@ -589,6 +594,17 @@
   85%, 95% { transform: scaleY(0.4); }
 }
 
+@keyframes coffee-eyes-enjoying {
+  /* 0-32% (3.2 seconds): Eyes open while bringing cup to mouth */
+  0%, 32% { transform: scaleY(1); }
+  
+  /* 32-72% (4 seconds): Eyes closed while drinking */
+  35%, 70% { transform: scaleY(0.2); }
+  
+  /* 72-100% (2.8 seconds): Eyes open, satisfied */
+  75%, 100% { transform: scaleY(1); }
+}
+
 @keyframes coffee-body-satisfied {
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(0.5px) rotate(-0.5deg); }
@@ -597,6 +613,12 @@
 @keyframes coffee-arm-reaching {
   0%, 100% { transform: rotate(15deg) translateY(-1px); }
   50% { transform: rotate(25deg) translateY(-3px); }
+}
+
+@keyframes coffee-arm-drinking {
+  0%, 100% { transform: rotate(45deg) translateY(-6px); } /* Same as thinking-arm-chin */
+  30% { transform: rotate(50deg) translateY(-8px); } /* Bring cup to mouth */
+  70% { transform: rotate(50deg) translateY(-8px); } /* Hold at mouth */
 }
 
 @keyframes coffee-arm-casual {
@@ -613,6 +635,23 @@
   0% { transform: translateY(0) scaleX(1); opacity: 0.6; }
   50% { transform: translateY(-8px) scaleX(1.2); opacity: 0.9; }
   100% { transform: translateY(-16px) scaleX(0.8); opacity: 0; }
+}
+
+@keyframes coffee-cup-drinking {
+  /* 0-20% (2 seconds): Entry point - mug ready */
+  0%, 20% { transform: translateY(0); }
+  
+  /* 20-32% (1.2 seconds): Slow upward movement to mouth */
+  32% { transform: translateY(-8px); }
+  
+  /* 32-72% (4 seconds): Stays at mouth while drinking with eyes closed */
+  72% { transform: translateY(-8px); }
+  
+  /* 72-82% (1 second): Slow downward movement to pause position */
+  82% { transform: translateY(-4px); }
+  
+  /* 82-100% (1.8 seconds): Hold final pose */
+  100% { transform: translateY(-4px); }
 }
 
 /* ===== CREATING STATE ===== */
@@ -1049,8 +1088,8 @@
 
 /* Coffee - Coffee cup with steam */
 .env-coffee {
-  top: -25px;
-  left: 45px; /* Position to the right of character */
+  top: -5px; /* Positioned higher to align with beard/mouth area */
+  left: 18px; /* In front of beard (beard left: 25px) */
   width: 40px;
   height: 50px;
 }
@@ -1327,7 +1366,7 @@
   height: 8px;
   top: 20px;
   left: 70px;
-  border: 1px solid var(--color-primary);
+  /* Remove border that was creating unwanted box around cursor */
   border-radius: 1px;
 }
 
