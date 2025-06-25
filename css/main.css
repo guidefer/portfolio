@@ -13,10 +13,12 @@
 @import url('./components/footer.css');
 @import url('./components/loading.css');
 @import url('./components/mascot-unified.css');
+@import url('./components/project-content.css');
 
 /* Utility Classes */
 @import url('./utilities/accessibility.css');
 @import url('./utilities/animations.css');
+@import url('./utilities/liquid-morphing.css');
 
 /* Global Styles */
 html {

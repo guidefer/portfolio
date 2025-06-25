@@ -122,6 +122,14 @@
   /* Loading Variables */
   --loading-spinner-size: 40px;
   --loading-backdrop: rgba(255, 255, 255, 0.95);
+  
+  /* RGB Values for transparency */
+  --color-background-rgb: 255, 255, 255;
+  --color-primary-rgb: 51, 51, 51;
+  --color-secondary-rgb: 200, 200, 188;
+  --color-tertiary-rgb: 128, 128, 128;
+  --color-accent-yellow-rgb: 235, 197, 51;
+  --color-accent-orange-rgb: 214, 100, 34;
 }
 
 /* Responsive Font Size Adjustments */

@@ -7,6 +7,7 @@ import UnifiedMascot from './modules/mascot-unified.js';
 import GalleryController from './modules/gallery.js';
 import NavigationController from './modules/navigation.js';
 import LoadingController from './modules/loading.js';
+import ProjectContentManager from './modules/project-content.js';
 
 class PortfolioApp {
   constructor() {
@@ -14,6 +15,7 @@ class PortfolioApp {
     this.gallery = null;
     this.navigation = null;
     this.loading = null;
+    this.projectContent = null;
     this.isInitialized = false;
     
     this.setupFocusManagement();
@@ -78,13 +80,31 @@ class PortfolioApp {
       this.navigation = new NavigationController();
       this.gallery = new GalleryController();
       this.mascot = new UnifiedMascot();
+      this.projectContent = new ProjectContentManager();
+      
+      // INITIALIZE LOADING CONTROLLER
+      this.loading = new LoadingController();
+      
+      // CONNECT LOADING TO NAVIGATION BEFORE STARTING LOADING
+      this.navigation.setLoadingController(this.loading);
+      
+      // CONNECT NAVIGATION TO GALLERY FOR ENHANCED PROJECT NAVIGATION
+      this.gallery.setNavigationController(this.navigation);
+      
+      // CONNECT PROJECT CONTENT MANAGER TO GALLERY FOR SPA NAVIGATION
+      this.gallery.setProjectContentManager(this.projectContent);
+      this.projectContent.setNavigationController(this.navigation);
       
       // Setup cross-module communication
       this.setupModuleCommunication();
       
       // Start loading sequence - this will run completely and trigger loading:complete when done
-      this.loading = new LoadingController();
       await this.loading.start();
+      
+      // After initial loading, hide petals for better performance during browsing
+      setTimeout(() => {
+        this.loading.hideForBrowsing();
+      }, 3000);
       
       this.isInitialized = true;
       console.log('✅ Portfolio App fully initialized');
@@ -123,6 +143,15 @@ class PortfolioApp {
     
     document.addEventListener('gallery:load-more', () => {
       this.mascot?.onInteraction('gallery-load');
+    });
+    
+    // Project content events
+    document.addEventListener('project:show', () => {
+      this.mascot?.onInteraction('project-view');
+    });
+    
+    document.addEventListener('project:hide', () => {
+      this.mascot?.onInteraction('project-close');
     });
     
     // Navigation events trigger mascot reactions
@@ -196,6 +225,10 @@ class PortfolioApp {
     return this.navigation;
   }
   
+  getLoading() {
+    return this.loading;
+  }
+  
   // Debug methods
   debug() {
     return {
@@ -214,6 +247,7 @@ class PortfolioApp {
     this.gallery?.destroy();
     this.navigation?.destroy();
     this.loading?.destroy();
+    this.projectContent?.destroy();
     
     console.log('🧹 Portfolio App destroyed');
   }
@@ -222,11 +256,23 @@ class PortfolioApp {
 // Initialize app when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   window.portfolioApp = new PortfolioApp();
+  
+  // Make project content manager globally accessible
+  setTimeout(() => {
+    window.projectContentManager = window.portfolioApp?.projectContent;
+  }, 1000);
 });
 
 // Make debug available globally in development
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
   window.debug = () => window.portfolioApp?.debug();
+  
+  // Load debug helper for enhanced loading
+  import('./modules/debug-loading.js').then(module => {
+    console.log('🔧 Debug helper loaded');
+  }).catch(err => {
+    console.warn('Debug helper failed to load:', err);
+  });
 }
 
 // Handle page unload

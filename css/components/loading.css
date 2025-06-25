@@ -29,6 +29,74 @@
   pointer-events: none; /* Disable interactions during fade out */
 }
 
+/* Navigation-specific loading - faster transitions */
+.loading-screen.navigation-loading {
+  transition: opacity 0.4s ease-out, visibility 0.4s ease-out;
+  background: linear-gradient(135deg, #EBC533 0%, #D66422 100%);
+}
+
+.loading-screen.navigation-loading .loading-text {
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.loading-screen.navigation-loading .loading-area {
+  padding: 30px;
+  height: 100px;
+}
+
+/* Paused state - petals stop animating but remain visible */
+.loading-screen.petals-paused .petal {
+  animation-play-state: paused;
+}
+
+/* Hidden state - petals invisible but maintain their positions and animation state */
+.loading-screen.petals-hidden .petals-container {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+}
+
+.loading-screen.petals-hidden .petal {
+  animation-play-state: paused; /* Keep animation paused while hidden */
+}
+
+/* Resume state - petals become visible and resume animation from current position */
+.loading-screen.petals-resumed .petals-container {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease-in, visibility 0.3s ease-in;
+}
+
+.loading-screen.petals-resumed .petal {
+  animation-play-state: running;
+}
+
+/* Navigation loading - ensure petals are visible and running */
+.loading-screen.navigation-loading .petals-container {
+  opacity: 1;
+  visibility: visible;
+}
+
+.loading-screen.navigation-loading .petal {
+  animation-play-state: running;
+}
+
+/* Override hidden/paused states during navigation loading */
+.loading-screen.navigation-loading.petals-hidden .petals-container {
+  opacity: 1;
+  visibility: visible;
+}
+
+.loading-screen.navigation-loading.petals-paused .petal {
+  animation-play-state: running;
+}
+
+/* Faster navigation transitions */
+.loading-screen.navigation-loading {
+  transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+}
+
 /* Cherry Blossom Petals Container */
 .petals-container {
   position: absolute;

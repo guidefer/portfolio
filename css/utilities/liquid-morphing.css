@@ -1,0 +1,174 @@
+/**
+ * Universal Liquid Morphing Effect
+ * 
+ * This utility class provides the beautiful liquid morphing effect
+ * used in the gallery items, applied to buttons and interactive elements
+ * across the entire website.
+ * 
+ * Key features:
+ * - Smooth border-radius transitions (base → increased roundness on hover)
+ * - Subtle transform effects
+ * - Enhanced box-shadow on hover
+ * - Consistent timing and easing
+ */
+
+/* Base Liquid Morphing Class */
+.liquid-morph {
+  border-radius: 8px !important;
+  -webkit-transition: 
+    border-radius 0.4s ease-out,
+    transform 0.3s ease-out,
+    box-shadow 0.4s ease-out;
+  transition: 
+    border-radius 0.4s ease-out,
+    transform 0.3s ease-out,
+    box-shadow 0.4s ease-out;
+  will-change: border-radius, transform, box-shadow;
+}
+
+/* Hover State */
+.liquid-morph:hover {
+  border-radius: 50px !important;
+  transform: translateY(-2px) scale(1.08) !important;
+  -webkit-box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Variant for buttons with accent colors */
+.liquid-morph.accent-shadow:hover {
+  -webkit-box-shadow: 
+    0 8px 20px rgba(235, 197, 51, 0.3),
+    0 4px 10px rgba(214, 100, 34, 0.2) !important;
+  box-shadow: 
+    0 8px 20px rgba(235, 197, 51, 0.3),
+    0 4px 10px rgba(214, 100, 34, 0.2) !important;
+}
+
+/* Variant for larger elements */
+.liquid-morph.large {
+  border-radius: 12px !important;
+  -webkit-transition: 
+    border-radius 0.5s ease-out,
+    transform 0.4s ease-out,
+    box-shadow 0.5s ease-out;
+  transition: 
+    border-radius 0.5s ease-out,
+    transform 0.4s ease-out,
+    box-shadow 0.5s ease-out;
+}
+
+.liquid-morph.large:hover {
+  border-radius: 60px !important;
+  transform: translateY(-4px) scale(1.12) !important;
+  -webkit-box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Variant for subtle effects (like skills section) */
+.liquid-morph.subtle {
+  border-radius: 8px !important;
+  -webkit-transition: 
+    border-radius 0.4s ease-out,
+    transform 0.3s ease-out,
+    box-shadow 0.4s ease-out;
+  transition: 
+    border-radius 0.4s ease-out,
+    transform 0.3s ease-out,
+    box-shadow 0.4s ease-out;
+}
+
+.liquid-morph.subtle:hover {
+  border-radius: 40px !important;
+  transform: scale(1.06) !important;
+  -webkit-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Variant for small buttons */
+.liquid-morph.small {
+  border-radius: 6px !important;
+}
+
+.liquid-morph.small:hover {
+  border-radius: 30px !important;
+  transform: translateY(-1px) scale(1.08) !important;
+  -webkit-box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Specific override for hero CTA button - Maximum specificity */
+.hero-section .hero-cta.liquid-morph,
+.hero-cta.liquid-morph.accent-shadow {
+  /* Override base liquid-morph border-radius for CTA */
+  border-radius: 8px !important;
+  /* Force hardware acceleration */
+  -webkit-transform: translate3d(0, 0, 0) !important;
+  transform: translate3d(0, 0, 0) !important;
+  /* Safari-specific transitions */
+  -webkit-transition: 
+    background-color 0.3s ease,
+    color 0.3s ease,
+    -webkit-transform 0.3s ease-out,
+    border-radius 0.4s ease-out,
+    box-shadow 0.4s ease-out !important;
+  transition: 
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease-out,
+    border-radius 0.4s ease-out,
+    box-shadow 0.4s ease-out !important;
+  will-change: transform, border-radius, box-shadow !important;
+}
+
+.hero-section .hero-cta.liquid-morph:hover,
+.hero-cta.liquid-morph.accent-shadow:hover {
+  border-radius: 50px !important;
+  -webkit-transform: translate3d(0, -2px, 0) scale(1.12) !important;
+  transform: translate3d(0, -2px, 0) scale(1.12) !important;
+  -webkit-box-shadow: 
+    0 8px 20px rgba(235, 197, 51, 0.3),
+    0 4px 10px rgba(214, 100, 34, 0.2) !important;
+  box-shadow: 
+    0 8px 20px rgba(235, 197, 51, 0.3),
+    0 4px 10px rgba(214, 100, 34, 0.2) !important;
+}
+
+/* Ensure active state doesn't override */
+.hero-section .hero-cta.liquid-morph:active,
+.hero-cta.liquid-morph.accent-shadow:active {
+  -webkit-transform: translate3d(0, -1px, 0) scale(1.05) !important;
+  transform: translate3d(0, -1px, 0) scale(1.05) !important;
+}
+
+/* Focus states for accessibility */
+.liquid-morph:focus {
+  outline: 2px solid var(--color-accent-yellow);
+  outline-offset: 2px;
+}
+
+/* Disabled state */
+.liquid-morph:disabled {
+  transform: none;
+  box-shadow: none;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.liquid-morph:disabled:hover {
+  border-radius: 20px;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .liquid-morph {
+    transition: 
+      border-radius 0.2s ease-out,
+      box-shadow 0.2s ease-out;
+  }
+  
+  .liquid-morph:hover {
+    transform: none;
+  }
+}

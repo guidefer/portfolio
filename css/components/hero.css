@@ -64,10 +64,12 @@
   background-color: var(--color-accent-yellow);
   color: var(--color-primary);
   text-decoration: none;
-  border-radius: var(--radius-lg);
   font-weight: 500;
   font-size: var(--text-base);
-  transition: all var(--transition-base);
+  /* Only animate background and color, let liquid-morph handle the rest */
+  transition: 
+    background-color var(--transition-base), 
+    color var(--transition-base);
   position: relative;
   overflow: hidden;
   min-height: 48px; /* Touch target size */
@@ -92,12 +94,11 @@
 .hero-cta:focus {
   background-color: var(--color-accent-orange);
   color: var(--color-background);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
 }
 
 .hero-cta:active {
-  transform: translateY(0);
+  /* Allow liquid-morph to handle transforms, only reduce scale slightly */
+  transform: scale(0.98) !important;
 }
 
 /* Responsive Typography */
@@ -169,8 +170,15 @@
 
 .hero-cta {
   opacity: 0;
-  transform: translateY(20px);
-  animation: heroFadeIn 0.8s ease-out 1.3s forwards;
+  /* Remove initial transform to avoid conflicts with liquid-morph */
+  animation: heroFadeInNoTransform 0.8s ease-out 1.3s forwards;
+}
+
+/* Special keyframe for CTA that doesn't set transform */
+@keyframes heroFadeInNoTransform {
+  to {
+    opacity: 1;
+  }
 }
 
 /* Subtle background pattern */
@@ -233,6 +241,13 @@
   .hero-cta {
     animation: none;
     opacity: 1;
+    /* Don't override transform for non-CTA elements */
+  }
+  
+  .hero-content,
+  .hero-name,
+  .hero-role,
+  .hero-description {
     transform: none;
   }
   
@@ -240,9 +255,7 @@
     animation: none;
   }
   
-  .hero-cta:hover {
-    transform: none;
-  }
+  /* Don't override liquid-morph transform for CTA - let the utility handle reduced motion */
 }
 
 /* High contrast mode */

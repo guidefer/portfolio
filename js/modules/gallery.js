@@ -16,6 +16,8 @@ class GalleryController {
     this.batchSize = 3;
     this.isLoading = false;
     this.observer = null;
+    this.navigationController = null; // Add navigation controller reference
+    this.projectContentManager = null; // Add project content manager reference
     
     // Animation state management
     this.animationState = {
@@ -27,6 +29,22 @@ class GalleryController {
     };
     
     this.init();
+  }
+
+  /**
+   * Connect the navigation controller for enhanced navigation
+   */
+  setNavigationController(navigationController) {
+    this.navigationController = navigationController;
+    console.log('🔗 Navigation controller connected to gallery:', !!navigationController);
+  }
+
+  /**
+   * Connect the project content manager for SPA navigation
+   */
+  setProjectContentManager(projectContentManager) {
+    this.projectContentManager = projectContentManager;
+    console.log('🔗 Project content manager connected to gallery:', !!projectContentManager);
   }
 
   init() {
@@ -328,6 +346,9 @@ class GalleryController {
 
   navigateToProject(projectId) {
     console.log(`🚀 Navigating to project: ${projectId}`);
+    console.log('📊 Navigation controller available:', !!this.navigationController);
+    console.log('📊 Project content manager available:', !!this.projectContentManager);
+    console.log('📊 Enhanced navigation ready:', this.navigationController?.isEnhancedNavigationReady());
     
     // Add loading state to clicked item
     const item = document.querySelector(`[data-project-id="${projectId}"]`);
@@ -335,40 +356,80 @@ class GalleryController {
       item.classList.add('loading');
     }
     
-    // Create the project page URL based on the project ID
-    let projectUrl;
+    // Find project data to get link information
+    const projectData = portfolioData.find(project => project.id === projectId);
+    console.log('📊 Project data found:', !!projectData, projectData?.link);
     
-    // Map project IDs to their corresponding folder paths
-    const projectPaths = {
-      'restaurant-rebrand': 'restaurant',
-      'dashboard-ux-design': 'dashboard',
-      'book-covers-design': 'book-covers',
-      'fitness-app-design': 'fitness-app',
-      'magazine-layout': 'magazine',
-      'icon-system-design': 'icons'
-    };
-    
-    const folderName = projectPaths[projectId];
-    
-    if (folderName) {
-      // Navigate to the project page
-      projectUrl = `assets/images/projects/${folderName}/index.html`;
+    // PRIORITY 1: Use project content manager for SPA navigation
+    if (this.projectContentManager) {
+      console.log('🌸 Using SPA project content manager for:', projectId);
+      this.projectContentManager.showProject(projectId, true);
       
-      // Add a small delay for UX
+      // Remove loading state after showing project
       setTimeout(() => {
-        window.location.href = projectUrl;
-      }, 300);
-    } else {
-      // Fallback: scroll to project section or show coming soon
-      console.warn(`Project page not found for: ${projectId}`);
-      
-      // Remove loading state
-      if (item) {
-        item.classList.remove('loading');
+        if (item) {
+          item.classList.remove('loading');
+        }
+      }, 600);
+      return;
+    }
+    
+    // PRIORITY 2: Use enhanced navigation if available (fallback to external pages)
+    if (projectData && projectData.link) {
+      if (this.navigationController && this.navigationController.isEnhancedNavigationReady()) {
+        console.log('🌸 Using enhanced navigation for project:', projectData.link);
+        this.navigationController.navigateToPage(projectData.link, true);
+        return;
       }
       
-      // Show a temporary message
-      this.showProjectComingSoon(projectId, item);
+      // Fallback to regular navigation
+      console.log('📍 Using regular navigation for project:', projectData.link);
+      setTimeout(() => {
+        window.location.href = projectData.link;
+      }, 300);
+      
+    } else {
+      // PRIORITY 3: Legacy project path mapping for backward compatibility
+      const projectPaths = {
+        'restaurant-rebrand': 'restaurant',
+        'dashboard-ux-design': 'dashboard',
+        'book-covers-design': 'book-covers',
+        'fitness-app-design': 'fitness-app',
+        'magazine-layout': 'magazine',
+        'icon-system-design': 'icons'
+      };
+      
+      const folderName = projectPaths[projectId];
+      let projectUrl;
+      
+      if (folderName) {
+        // Navigate to the project page
+        projectUrl = `assets/images/projects/${folderName}/index.html`;
+        
+        // Use enhanced navigation if available
+        if (this.navigationController && this.navigationController.isEnhancedNavigationReady()) {
+          console.log('🌸 Using enhanced navigation for legacy project:', projectUrl);
+          this.navigationController.navigateToPage(projectUrl, true);
+          return;
+        }
+        
+        // Fallback to regular navigation
+        console.log('📍 Using regular navigation for legacy project:', projectUrl);
+        setTimeout(() => {
+          window.location.href = projectUrl;
+        }, 300);
+      } else {
+        // Fallback: show coming soon
+        console.warn(`Project page not found for: ${projectId}`);
+        
+        // Remove loading state
+        if (item) {
+          item.classList.remove('loading');
+        }
+        
+        // Show a temporary message
+        this.showProjectComingSoon(projectId, item);
+      }
     }
   }
   

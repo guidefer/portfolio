@@ -15,7 +15,9 @@ export const portfolioData = [
     },
     year: '2024',
     client: 'Bella Vista Restaurant',
-    tags: ['Branding', 'Restaurant Design', 'Visual Identity']
+    tags: ['Branding', 'Restaurant Design', 'Visual Identity'],
+    link: 'project-sample.html', // Enhanced navigation link
+    enhancedNav: true
   },
   {
     id: 'dashboard-ux-design',
@@ -28,7 +30,9 @@ export const portfolioData = [
     },
     year: '2024',
     client: 'DataFlow Analytics',
-    tags: ['UX Design', 'Dashboard', 'Data Visualization']
+    tags: ['UX Design', 'Dashboard', 'Data Visualization'],
+    link: 'project-sample.html', // Enhanced navigation link
+    enhancedNav: true
   },
   {
     id: 'book-covers-design',
@@ -41,7 +45,9 @@ export const portfolioData = [
     },
     year: '2024',
     client: 'Classic Literature Press',
-    tags: ['Editorial Design', 'Book Design', 'Typography']
+    tags: ['Editorial Design', 'Book Design', 'Typography'],
+    link: 'project-sample.html', // Enhanced navigation link
+    enhancedNav: true
   },
   {
     id: 'fitness-app-design',

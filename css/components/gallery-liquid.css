@@ -219,7 +219,6 @@
   padding: var(--space-lg) var(--space-2xl);
   font-size: var(--text-base);
   font-weight: 500;
-  border-radius: var(--radius-full);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
   position: relative;
@@ -248,8 +247,6 @@
 
 .load-more-btn:hover {
   background-color: var(--color-accent-orange);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(214, 100, 34, 0.3);
 }
 
 .load-more-btn:disabled {

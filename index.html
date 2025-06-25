@@ -99,7 +99,7 @@
     <header class="header" role="banner">
         <nav class="navigation" role="navigation" aria-label="Main navigation">
             <div class="nav-container">
-                <a href="#home" class="nav-logo" aria-label="Guilherme Ferreira - Home">
+                <a href="#home" class="nav-logo" aria-label="Guilherme Ferreira - Home" data-enhanced-nav="true">
                     <span class="logo-text">GF</span>
                 </a>
                 
@@ -111,13 +111,13 @@
                 
                 <ul id="nav-menu" class="nav-menu" role="menubar">
                     <li role="none">
-                        <a href="#work" class="nav-link" role="menuitem">Work</a>
+                        <a href="#work" class="nav-link" role="menuitem" data-enhanced-nav="true">Work</a>
                     </li>
                     <li role="none">
-                        <a href="#about" class="nav-link" role="menuitem">About</a>
+                        <a href="#about" class="nav-link" role="menuitem" data-enhanced-nav="true">About</a>
                     </li>
                     <li role="none">
-                        <a href="#contact" class="nav-link" role="menuitem">Contact</a>
+                        <a href="#contact" class="nav-link" role="menuitem" data-enhanced-nav="true">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -137,7 +137,7 @@
                     <p class="hero-description">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Creating exceptional digital experiences through strategic design thinking and innovative creative solutions.
                     </p>
-                    <a href="#work" class="hero-cta" aria-describedby="hero-cta-desc">
+                    <a href="#work" class="hero-cta liquid-morph accent-shadow" aria-describedby="hero-cta-desc" data-enhanced-nav="true">
                         View Selected Work
                         <span id="hero-cta-desc" class="sr-only">Navigate to portfolio gallery</span>
                     </a>
@@ -159,7 +159,7 @@
                 
                 <!-- Load More Button -->
                 <div class="gallery-actions">
-                    <button id="load-more-btn" class="load-more-btn" aria-describedby="load-more-desc">
+                    <button id="load-more-btn" class="load-more-btn liquid-morph accent-shadow" aria-describedby="load-more-desc">
                         Load More Projects
                         <span id="load-more-desc" class="sr-only">Load additional portfolio items</span>
                     </button>
@@ -187,12 +187,12 @@
                     <div class="about-skills">
                         <h3 class="skills-title">Expertise</h3>
                         <ul class="skills-list">
-                            <li>Brand Identity Design</li>
-                            <li>Digital Design & UX</li>
-                            <li>Creative Direction</li>
-                            <li>Typography & Layout</li>
-                            <li>Motion Graphics</li>
-                            <li>Art Direction</li>
+                            <li class="liquid-morph small">Brand Identity Design</li>
+                            <li class="liquid-morph small">Digital Design & UX</li>
+                            <li class="liquid-morph small">Creative Direction</li>
+                            <li class="liquid-morph small">Typography & Layout</li>
+                            <li class="liquid-morph small">Motion Graphics</li>
+                            <li class="liquid-morph small">Art Direction</li>
                         </ul>
                     </div>
                 </div>
@@ -209,15 +209,15 @@
                     </p>
                     
                     <div class="contact-links">
-                        <a href="mailto:hello@guilhermeferreira.com" class="contact-link" aria-label="Send email to Guilherme">
+                        <a href="mailto:hello@guilhermeferreira.com" class="contact-link liquid-morph accent-shadow" aria-label="Send email to Guilherme">
                             <span class="contact-icon">✉</span>
                             hello@guilhermeferreira.com
                         </a>
-                        <a href="https://linkedin.com/in/guilhermeferreira" class="contact-link" target="_blank" rel="noopener noreferrer" aria-label="View LinkedIn profile (opens in new tab)">
+                        <a href="https://linkedin.com/in/guilhermeferreira" class="contact-link liquid-morph accent-shadow" target="_blank" rel="noopener noreferrer" aria-label="View LinkedIn profile (opens in new tab)">
                             <span class="contact-icon">🔗</span>
                             LinkedIn
                         </a>
-                        <a href="https://behance.net/guilhermeferreira" class="contact-link" target="_blank" rel="noopener noreferrer" aria-label="View Behance portfolio (opens in new tab)">
+                        <a href="https://behance.net/guilhermeferreira" class="contact-link liquid-morph accent-shadow" target="_blank" rel="noopener noreferrer" aria-label="View Behance portfolio (opens in new tab)">
                             <span class="contact-icon">🎨</span>
                             Behance
                         </a>
@@ -226,6 +226,15 @@
             </div>
         </section>
     </main>
+
+    <!-- Project Content Container (for SPA navigation) -->
+    <div id="project-content" class="project-content-container">
+        <div class="project-content-wrapper">
+            <div class="project-content-body" id="project-content-body">
+                <!-- Project content will be loaded here -->
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer" role="contentinfo">

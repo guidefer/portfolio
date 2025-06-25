@@ -61,7 +61,7 @@
   right: 20px;
   width: 64px;
   height: 64px;
-  z-index: 1000;
+  z-index: 1100; /* Above project content overlay (z-index: 1000) */
   pointer-events: none;
   transition: transform 0.3s ease-out;
   /* Image rendering for pixel art crispness - Broadly compatible */
@@ -301,7 +301,7 @@
   width: 64px;    /* Same size as mascot */
   height: 64px;   /* Same size as mascot */
   pointer-events: none;
-  z-index: 1001;  /* Above mascot (1000) to ensure visibility */
+  z-index: 1150;  /* Above mascot (1100) to ensure visibility */
   overflow: visible;
   /* Extended bounds for environmental elements while preventing viewport overflow */
   contain: layout;
