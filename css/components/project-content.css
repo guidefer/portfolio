@@ -524,6 +524,45 @@
   outline-offset: 4px;
 }
 
+/* ===== SUBTLE BACK BUTTON ===== */
+.project-back-header {
+  margin-bottom: 1rem;
+  padding-top: 0.5rem;
+}
+
+.project-back-btn {
+  background: none;
+  border: none;
+  color: var(--color-tertiary);
+  font-size: 0.85rem;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  padding: 8px 0;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-transform: lowercase;
+  letter-spacing: 0.025em;
+}
+
+.project-back-btn:hover {
+  color: var(--color-primary);
+  transform: translateX(-2px);
+}
+
+.project-back-btn:active {
+  transform: translateX(-1px) scale(0.98);
+}
+
+/* Responsive back button */
+@media (max-width: 640px) {
+  .project-back-btn {
+    font-size: 0.8rem;
+    padding: 6px 0;
+  }
+}
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
   .project-hero {
@@ -659,7 +698,7 @@ body.project-active .character-mascot {
 }
 
 /* ===== LOADING STATES ===== */
-.project-content-body.loading {
+.project-content_body.loading {
   opacity: 0.5;
   pointer-events: none;
 }

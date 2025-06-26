@@ -2,6 +2,7 @@
  * Cherry Blossom Loading Controller
  * Handles asset preloading and beautiful cherry blossom loading screen
  * Enhanced with pause/resume functionality for internal navigation
+ * @class
  */
 
 class LoadingController {
@@ -391,7 +392,7 @@ class LoadingController {
       
       // Complete cleanup when transition fully ends
       setTimeout(() => {
-        console.log('� Loading screen fade complete - final cleanup');
+        console.log('🌸 Loading screen fade complete - final cleanup');
         
         // Remove loading screen from DOM and drop z-index
         this.loadingScreen.classList.remove('loading-active');

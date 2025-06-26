@@ -70,8 +70,8 @@ class ProjectContentManager {
     this.isActive = true;
     this.currentProjectId = projectId;
     
-    // Focus management
-    this.backButton.focus();
+    // Focus management - focus the container for keyboard accessibility
+    this.container.focus();
     
     // Dispatch event
     this.dispatchEvent('project:show', { projectId });
@@ -170,6 +170,12 @@ class ProjectContentManager {
 
         <!-- Project Content Body -->
         <div class="project-content-section">
+          <!-- Subtle Back Button -->
+          <div class="project-back-header">
+            <button class="project-back-btn" onclick="window.goBackToGallery()">
+              ← back
+            </button>
+          </div>
           <header class="project-header-content">
             <div class="project-category-badge">
               <span class="project-category">${projectData.category}</span>
@@ -240,7 +246,7 @@ class ProjectContentManager {
         </div>
         
         <div class="project-back-section">
-          <button class="related-project-link back-to-gallery-btn liquid-morph accent-shadow" onclick="window.projectContentManager?.hideProject()">
+          <button class="related-project-link back-to-gallery-btn liquid-morph accent-shadow" onclick="window.goBackToGallery()">
             ← Back to All Projects
           </button>
         </div>
@@ -256,7 +262,7 @@ class ProjectContentManager {
       <div class="project-error">
         <h1>Project Not Found</h1>
         <p>Sorry, we couldn't load the project "${projectId}". Please try again or go back to the gallery.</p>
-        <button onclick="window.projectContentManager?.hideProject()" class="error-back-btn liquid-morph accent-shadow">
+        <button onclick="window.goBackToGallery()" class="error-back-btn liquid-morph accent-shadow">
           Back to Gallery
         </button>
       </div>
@@ -385,6 +391,8 @@ class ProjectContentManager {
     // Wait for animation, then navigate to the new project
     setTimeout(() => {
       this.showProject(projectId, true);
+      // Scroll to top of project content
+      this.container.scrollTo({ top: 0, behavior: 'smooth' });
     }, 600);
   }
 

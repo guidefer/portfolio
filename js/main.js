@@ -82,6 +82,9 @@ class PortfolioApp {
       this.mascot = new UnifiedMascot();
       this.projectContent = new ProjectContentManager();
       
+      // Make project content manager globally accessible immediately
+      window.projectContentManager = this.projectContent;
+      
       // INITIALIZE LOADING CONTROLLER
       this.loading = new LoadingController();
       
@@ -256,12 +259,16 @@ class PortfolioApp {
 // Initialize app when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   window.portfolioApp = new PortfolioApp();
-  
-  // Make project content manager globally accessible
-  setTimeout(() => {
-    window.projectContentManager = window.portfolioApp?.projectContent;
-  }, 1000);
 });
+
+// Global fallback function for back button
+window.goBackToGallery = function() {
+  if (window.projectContentManager) {
+    window.projectContentManager.hideProject();
+  } else {
+    console.warn('Project content manager not available');
+  }
+};
 
 // Make debug available globally in development
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
