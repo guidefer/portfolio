@@ -158,52 +158,37 @@ class NavigationController {
       const targetElement = document.getElementById(targetId);
       
       if (targetElement) {
-        // Check if enhanced navigation should be used
-        const useEnhanced = link.dataset.enhancedNav === 'true' && 
-                           this.loadingController && 
-                           !this.isInitialLoad;
+        console.log('📍 Using smooth scrolling for section:', targetId);
         
-        console.log('🎯 Section navigation decision:', {
-          targetId,
-          enhancedNavAttr: link.dataset.enhancedNav === 'true',
-          hasLoadingController: !!this.loadingController,
-          notInitialLoad: !this.isInitialLoad,
-          useEnhanced
-        });
+        // Use regular smooth scrolling navigation
+        this.scrollToElement(targetElement);
         
-        if (useEnhanced) {
-          console.log('🌸 Using enhanced navigation for section:', targetId);
-          // Use enhanced navigation
-          this.navigateToSection(targetId, true);
-        } else {
-          console.log('📍 Using regular navigation for section:', targetId);
-          // Use regular navigation
-          this.scrollToElement(targetElement);
-          
-          // Close mobile menu if open
-          if (this.isMenuOpen) {
-            this.closeMobileMenu();
-          }
-          
-          // Update URL without jumping
-          history.pushState(null, null, href);
-          
-          // Dispatch event for mascot reaction
-          this.dispatchEvent('navigation:link-click', { 
-            target: targetId,
-            link: link 
-          });
+        // Close mobile menu if open
+        if (this.isMenuOpen) {
+          this.closeMobileMenu();
         }
+        
+        // Update URL without jumping
+        history.pushState(null, null, href);
+        
+        // Update active link
+        this.setActiveLink(targetId);
+        
+        // Dispatch event for mascot reaction
+        this.dispatchEvent('navigation:link-click', { 
+          target: targetId,
+          link: link 
+        });
       }
     }
   }
 
   scrollToElement(element) {
     const headerHeight = this.header.offsetHeight;
-    const elementTop = element.offsetTop - headerHeight - 20; // Add some padding
+    const elementTop = element.offsetTop - headerHeight; // No gap - header bottom touches section top
     
     window.scrollTo({
-      top: elementTop,
+      top: Math.max(0, elementTop), // Ensure we don't scroll negative
       behavior: 'smooth'
     });
   }
@@ -258,19 +243,32 @@ class NavigationController {
 
   updateActiveLink() {
     const sections = document.querySelectorAll('section[id]');
-    const scrollPosition = window.scrollY + window.innerHeight / 3;
+    const headerHeight = this.header.offsetHeight;
     
     let activeSection = '';
+    let maxVisibleArea = 0;
     
-    // Default to 'home' if we're at the very top
+    // If we're at the very top (above all sections), default to 'home'
     if (window.scrollY < 100) {
       activeSection = 'home';
     } else {
+      // Find the section with the most visible area in the viewport
       sections.forEach(section => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.offsetHeight;
+        const sectionBottom = sectionTop + sectionHeight;
         
-        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+        // Calculate visible area of this section
+        const viewportTop = window.scrollY + headerHeight;
+        const viewportBottom = window.scrollY + window.innerHeight;
+        
+        const visibleTop = Math.max(sectionTop, viewportTop);
+        const visibleBottom = Math.min(sectionBottom, viewportBottom);
+        const visibleArea = Math.max(0, visibleBottom - visibleTop);
+        
+        // If this section has more visible area, make it active
+        if (visibleArea > maxVisibleArea) {
+          maxVisibleArea = visibleArea;
           activeSection = section.id;
         }
       });
