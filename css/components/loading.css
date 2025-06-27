@@ -6,6 +6,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh; /* Use dynamic viewport height for better mobile support */
   background: linear-gradient(135deg, #EBC533 0%, #D66422 100%);
   display: none; /* Hidden by default, shown via JavaScript */
   flex-direction: column;
@@ -189,7 +190,7 @@
 .loading-area {
   position: relative;
   padding: 40px;
-  height: 120px;
+  min-height: 120px; /* Use min-height instead of fixed height */
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -466,7 +467,8 @@
 @media (max-width: 640px) {
   .loading-area {
     padding: 20px;
-    height: 100px;
+    min-height: 100px; /* Use min-height for flexibility */
+    padding-bottom: 60px; /* Extra space for signature */
   }
   
   .loading-text {
@@ -555,7 +557,8 @@
 @media (max-width: 480px) {
   .loading-area {
     padding: 16px;
-    height: 80px;
+    min-height: 80px; /* Use min-height for flexibility */
+    padding-bottom: 50px; /* Extra space for signature */
   }
   
   .loading-text {
@@ -578,7 +581,8 @@
 @media (max-width: 960px) and (orientation: landscape) {
   .loading-area {
     padding: 16px 24px;
-    height: 80px;
+    min-height: 80px; /* Use min-height for flexibility */
+    padding-bottom: 50px; /* Extra space for signature */
   }
   
   /* Better wind coverage for landscape */
@@ -614,7 +618,7 @@
 /* GF Signature - Static */
 .gf-signature {
   position: absolute;
-  bottom: 25px;
+  bottom: max(25px, env(safe-area-inset-bottom, 0px) + 25px); /* Respect safe area */
   right: 5.5%; /* Center in the 11% empty space (89% + 11%/2 = 94.5%, so right: 5.5%) */
   font-family: Georgia, serif;
   font-size: 2.2rem;
@@ -632,7 +636,7 @@
 @media (max-width: 640px) {
   .gf-signature {
     font-size: 1.8rem;
-    bottom: 16px;
+    bottom: max(16px, env(safe-area-inset-bottom, 0px) + 16px); /* Respect safe area */
     right: 5.5%; /* Maintain centered positioning in empty space */
   }
 }
@@ -640,7 +644,7 @@
 @media (max-width: 480px) {
   .gf-signature {
     font-size: 1.5rem;
-    bottom: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom, 0px) + 12px); /* Respect safe area */
     right: 5.5%; /* Maintain centered positioning in empty space */
   }
 }
