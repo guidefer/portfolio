@@ -7,6 +7,19 @@
   width: 100vw;
   height: 100vh;
   height: 100dvh; /* Use dynamic viewport height for better mobile support */
+  
+  /* iPhone-specific fixes for Dynamic Island and Safari UI */
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  
+  /* Ensure full coverage including behind system UI */
+  margin-top: calc(-1 * env(safe-area-inset-top, 0px));
+  margin-bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
+  margin-left: calc(-1 * env(safe-area-inset-left, 0px));
+  margin-right: calc(-1 * env(safe-area-inset-right, 0px));
+  
   background: linear-gradient(135deg, #EBC533 0%, #D66422 100%);
   display: none; /* Hidden by default, shown via JavaScript */
   flex-direction: column;
@@ -191,6 +204,10 @@
   position: relative;
   padding: 40px;
   min-height: 120px; /* Use min-height instead of fixed height */
+  
+  /* Account for iPhone safe areas */
+  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+  
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -468,7 +485,7 @@
   .loading-area {
     padding: 20px;
     min-height: 100px; /* Use min-height for flexibility */
-    padding-bottom: 60px; /* Extra space for signature */
+    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)); /* Extra space for signature + safe area */
   }
   
   .loading-text {
@@ -558,7 +575,7 @@
   .loading-area {
     padding: 16px;
     min-height: 80px; /* Use min-height for flexibility */
-    padding-bottom: 50px; /* Extra space for signature */
+    padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px)); /* Extra space for signature + safe area */
   }
   
   .loading-text {
@@ -582,7 +599,7 @@
   .loading-area {
     padding: 16px 24px;
     min-height: 80px; /* Use min-height for flexibility */
-    padding-bottom: 50px; /* Extra space for signature */
+    padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px)); /* Extra space for signature + safe area */
   }
   
   /* Better wind coverage for landscape */
@@ -618,7 +635,7 @@
 /* GF Signature - Static */
 .gf-signature {
   position: absolute;
-  bottom: max(25px, env(safe-area-inset-bottom, 0px) + 25px); /* Respect safe area */
+  bottom: calc(25px + env(safe-area-inset-bottom, 0px)); /* Always respect safe area */
   right: 5.5%; /* Center in the 11% empty space (89% + 11%/2 = 94.5%, so right: 5.5%) */
   font-family: Georgia, serif;
   font-size: 2.2rem;
@@ -636,7 +653,7 @@
 @media (max-width: 640px) {
   .gf-signature {
     font-size: 1.8rem;
-    bottom: max(16px, env(safe-area-inset-bottom, 0px) + 16px); /* Respect safe area */
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px)); /* Always respect safe area */
     right: 5.5%; /* Maintain centered positioning in empty space */
   }
 }
@@ -644,7 +661,7 @@
 @media (max-width: 480px) {
   .gf-signature {
     font-size: 1.5rem;
-    bottom: max(12px, env(safe-area-inset-bottom, 0px) + 12px); /* Respect safe area */
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px)); /* Always respect safe area */
     right: 5.5%; /* Maintain centered positioning in empty space */
   }
 }
