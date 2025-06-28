@@ -388,6 +388,21 @@ class LoadingController {
     console.log(`📡 Event dispatched: ${eventName}`, detail);
   }
 
+  /**
+   * Hide petals and minimal UI elements for better browsing performance
+   */
+  hideForBrowsing() {
+    // This method is for hiding petals during browsing, but since we removed
+    // internal loading screens, we can make this a no-op or just hide petals
+    console.log('📱 Optimizing for browsing performance');
+    
+    // If loading screen is still visible, keep it as-is
+    // This method is called after loading completion for performance optimization
+    if (this.petalsContainer && this.isComplete) {
+      this.petalsContainer.style.display = 'none';
+    }
+  }
+
   // Simplified public API - no navigation loading
   getState() {
     return {
