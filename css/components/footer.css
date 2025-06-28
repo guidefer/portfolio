@@ -5,12 +5,20 @@
   color: var(--color-background);
   padding: var(--space-xl) 0;
   text-align: center;
+  
+  /* iPhone Safari viewport fixes - extend behind URL bar */
+  padding-bottom: calc(var(--space-xl) + env(safe-area-inset-bottom, 0px));
+  margin-bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
 }
 
 .footer-container {
   max-width: var(--container-max-width);
   margin: 0 auto;
   padding: 0 var(--space-md);
+  
+  /* Ensure content stays within safe areas on iPhone */
+  padding-left: calc(var(--space-md) + env(safe-area-inset-left, 0px));
+  padding-right: calc(var(--space-md) + env(safe-area-inset-right, 0px));
 }
 
 .footer-text {
@@ -22,7 +30,8 @@
 /* Responsive adjustments */
 @media (min-width: 768px) {
   .footer-container {
-    padding: 0 var(--space-lg);
+    padding-left: calc(var(--space-lg) + env(safe-area-inset-left, 0px));
+    padding-right: calc(var(--space-lg) + env(safe-area-inset-right, 0px));
   }
   
   .footer-text {
@@ -32,6 +41,19 @@
 
 @media (min-width: 1024px) {
   .footer-container {
-    padding: 0 var(--space-xl);
+    padding-left: calc(var(--space-xl) + env(safe-area-inset-left, 0px));
+    padding-right: calc(var(--space-xl) + env(safe-area-inset-right, 0px));
+  }
+}
+
+/* iPhone Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .footer {
+    /* Ensure proper rendering on iOS Safari */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    
+    /* Fix for iOS Safari footer positioning */
+    min-height: calc(var(--space-xl) * 2 + env(safe-area-inset-bottom, 0px));
   }
 }
