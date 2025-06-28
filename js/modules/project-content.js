@@ -140,6 +140,11 @@ class ProjectContentManager {
       // Setup lazy loading for images
       this.setupImageLazyLoading();
       
+      // Smooth animated scroll to top after content is fully loaded
+      requestAnimationFrame(() => {
+        this.smoothScrollToTop();
+      });
+      
     } catch (error) {
       console.error('Failed to load project content:', error);
       this.contentBody.innerHTML = this.generateErrorHTML(projectId);
@@ -382,10 +387,8 @@ class ProjectContentManager {
     });
     
     // Wait for animation, then navigate to the new project
-    setTimeout(() => {
-      this.showProject(projectId, true);
-      // Scroll to top of project content
-      this.container.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(async () => {
+      await this.showProject(projectId);
     }, 600);
   }
 
@@ -441,6 +444,39 @@ class ProjectContentManager {
     allMiniItems.forEach(otherItem => {
       otherItem.classList.remove('gallery-blur');
     });
+  }
+
+  /**
+   * Custom smooth scroll to top with enhanced animation
+   */
+  smoothScrollToTop() {
+    const startPosition = this.container.scrollTop;
+    const distance = startPosition;
+    const duration = Math.min(800, Math.max(400, distance * 0.8)); // Dynamic duration based on distance
+    let startTime = null;
+
+    // Easing function for smooth animation
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+    const animateScroll = (currentTime) => {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const progress = Math.min(timeElapsed / duration, 1);
+      const easedProgress = easeOutCubic(progress);
+      
+      const currentPosition = startPosition - (distance * easedProgress);
+      this.container.scrollTop = currentPosition;
+      
+      if (progress < 1) {
+        requestAnimationFrame(animateScroll);
+      } else {
+        // Ensure we're exactly at the top
+        this.container.scrollTop = 0;
+        console.log('📍 Smooth scroll to top completed');
+      }
+    };
+
+    requestAnimationFrame(animateScroll);
   }
 
   /**
