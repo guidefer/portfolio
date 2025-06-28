@@ -27,6 +27,14 @@
   margin: 0;
 }
 
+.footer-version {
+  font-size: 8px;
+  color: rgba(100, 100, 100, 0.5);
+  margin: 8px 0 0 0;
+  font-family: monospace;
+  letter-spacing: 0.5px;
+}
+
 /* Responsive adjustments */
 @media (min-width: 768px) {
   .footer-container {
@@ -43,6 +51,14 @@
   .footer-container {
     padding-left: calc(var(--space-xl) + env(safe-area-inset-left, 0px));
     padding-right: calc(var(--space-xl) + env(safe-area-inset-right, 0px));
+  }
+}
+
+/* Mobile responsive for version */
+@media (max-width: 640px) {
+  .footer-version {
+    font-size: 7px;
+    margin: 6px 0 0 0;
   }
 }
 
