@@ -88,12 +88,6 @@ class PortfolioApp {
       // INITIALIZE LOADING CONTROLLER
       this.loading = new LoadingController();
       
-      // CONNECT LOADING TO NAVIGATION BEFORE STARTING LOADING
-      this.navigation.setLoadingController(this.loading);
-      
-      // CONNECT NAVIGATION TO GALLERY FOR ENHANCED PROJECT NAVIGATION
-      this.gallery.setNavigationController(this.navigation);
-      
       // CONNECT PROJECT CONTENT MANAGER TO GALLERY FOR SPA NAVIGATION
       this.gallery.setProjectContentManager(this.projectContent);
       this.projectContent.setNavigationController(this.navigation);

@@ -665,3 +665,53 @@
     right: 5.5%; /* Maintain centered positioning in empty space */
   }
 }
+
+/* Skip Button for Returning Visitors */
+.loading-skip-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  z-index: 20;
+}
+
+.loading-skip-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.loading-skip-btn:active {
+  transform: translateY(0);
+}
+
+/* Mobile responsive for skip button */
+@media (max-width: 640px) {
+  .loading-skip-btn {
+    top: calc(16px + env(safe-area-inset-top, 0px));
+    right: 16px;
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loading-skip-btn {
+    top: calc(12px + env(safe-area-inset-top, 0px));
+    right: 12px;
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+}

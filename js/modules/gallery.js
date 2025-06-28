@@ -16,7 +16,6 @@ class GalleryController {
     this.batchSize = 3;
     this.isLoading = false;
     this.observer = null;
-    this.navigationController = null; // Add navigation controller reference
     this.projectContentManager = null; // Add project content manager reference
     
     // Animation state management
@@ -29,14 +28,6 @@ class GalleryController {
     };
     
     this.init();
-  }
-
-  /**
-   * Connect the navigation controller for enhanced navigation
-   */
-  setNavigationController(navigationController) {
-    this.navigationController = navigationController;
-    console.log('🔗 Navigation controller connected to gallery:', !!navigationController);
   }
 
   /**
@@ -242,11 +233,6 @@ class GalleryController {
     cta.textContent = 'View Project';
     cta.setAttribute('aria-hidden', 'true');
     
-    // Create loading overlay for selection animation
-    const loadingOverlay = document.createElement('div');
-    loadingOverlay.className = 'gallery-item-loading';
-    loadingOverlay.innerHTML = '<div class="gallery-item-loading-spinner"></div>';
-    
     // Assemble the item
     content.appendChild(category);
     content.appendChild(title);
@@ -256,7 +242,6 @@ class GalleryController {
     imageContainer.appendChild(image);
     item.appendChild(imageContainer);
     item.appendChild(overlay);
-    item.appendChild(loadingOverlay);
     
     // Setup lazy loading
     this.setupLazyLoading(image);
@@ -346,9 +331,7 @@ class GalleryController {
 
   navigateToProject(projectId) {
     console.log(`🚀 Navigating to project: ${projectId}`);
-    console.log('📊 Navigation controller available:', !!this.navigationController);
     console.log('📊 Project content manager available:', !!this.projectContentManager);
-    console.log('📊 Enhanced navigation ready:', this.navigationController?.isEnhancedNavigationReady());
     
     // Add loading state to clicked item
     const item = document.querySelector(`[data-project-id="${projectId}"]`);
@@ -374,16 +357,9 @@ class GalleryController {
       return;
     }
     
-    // PRIORITY 2: Use enhanced navigation if available (fallback to external pages)
+    // Navigate to project page
     if (projectData && projectData.link) {
-      if (this.navigationController && this.navigationController.isEnhancedNavigationReady()) {
-        console.log('🌸 Using enhanced navigation for project:', projectData.link);
-        this.navigationController.navigateToPage(projectData.link, true);
-        return;
-      }
-      
-      // Fallback to regular navigation
-      console.log('📍 Using regular navigation for project:', projectData.link);
+      console.log('📍 Navigating to project:', projectData.link);
       setTimeout(() => {
         window.location.href = projectData.link;
       }, 300);
@@ -406,15 +382,7 @@ class GalleryController {
         // Navigate to the project page
         projectUrl = `assets/images/projects/${folderName}/index.html`;
         
-        // Use enhanced navigation if available
-        if (this.navigationController && this.navigationController.isEnhancedNavigationReady()) {
-          console.log('🌸 Using enhanced navigation for legacy project:', projectUrl);
-          this.navigationController.navigateToPage(projectUrl, true);
-          return;
-        }
-        
-        // Fallback to regular navigation
-        console.log('📍 Using regular navigation for legacy project:', projectUrl);
+        console.log('📍 Navigating to legacy project:', projectUrl);
         setTimeout(() => {
           window.location.href = projectUrl;
         }, 300);

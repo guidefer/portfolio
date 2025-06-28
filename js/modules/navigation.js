@@ -136,18 +136,11 @@ class NavigationController {
     const href = link.getAttribute('href');
     
     console.log('🖱️ Navigation click detected:', href);
-    console.log('📊 Enhanced nav attribute:', link.dataset.enhancedNav);
-    console.log('📊 Loading controller available:', !!this.loadingController);
-    console.log('📊 Is initial load:', this.isInitialLoad);
     
-    // Handle external links with enhanced navigation
+    // Handle external links
     if (href && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
-      e.preventDefault();
-      
-      console.log('🔗 External link detected, using enhanced navigation');
-      // Use enhanced navigation for external pages
-      this.navigateToPage(href, true);
-      return;
+      // For external links, just navigate normally
+      return; // Let the browser handle it
     }
     
     // Handle hash links (smooth scrolling)
@@ -330,139 +323,6 @@ class NavigationController {
   dispatchEvent(eventName, detail = {}) {
     const event = new CustomEvent(eventName, { detail });
     document.dispatchEvent(event);
-  }
-
-  /**
-   * Set the loading controller for enhanced navigation
-   */
-  setLoadingController(loadingController) {
-    this.loadingController = loadingController;
-    console.log('🔗 Loading controller connected to navigation:', !!loadingController);
-    
-    // Listen for loading complete to enable enhanced navigation
-    document.addEventListener('loading:complete', () => {
-      this.isInitialLoad = false;
-      console.log('🎯 Initial loading complete - enhanced navigation now enabled');
-      console.log('📊 Navigation state after loading complete:', {
-        hasLoadingController: !!this.loadingController,
-        isInitialLoad: this.isInitialLoad,
-        enhancedReady: this.isEnhancedNavigationReady()
-      });
-    });
-  }
-
-  /**
-   * Enhanced navigation with loading animation
-   */
-  async navigateToSection(sectionId, useLoading = false) {
-    if (this.isNavigating) {
-      console.log('🚫 Navigation already in progress, skipping');
-      return;
-    }
-    
-    this.isNavigating = true;
-    
-    console.log('🚀 Starting enhanced section navigation:', {
-      sectionId,
-      useLoading,
-      hasLoadingController: !!this.loadingController
-    });
-    
-    try {
-      // If loading controller is available and requested, use enhanced loading
-      if (this.loadingController && useLoading) {
-        console.log(`🔄 Starting enhanced loading for section: #${sectionId}`);
-        await this.loadingController.startNavigation(`#${sectionId}`);
-      }
-      
-      // Navigate to section
-      const targetElement = document.getElementById(sectionId);
-      if (targetElement) {
-        this.scrollToElement(targetElement);
-        
-        // Update URL
-        history.pushState(null, null, `#${sectionId}`);
-        
-        // Update active link
-        this.setActiveLink(sectionId);
-        
-        // Close mobile menu if open
-        if (this.isMenuOpen) {
-          this.closeMobileMenu();
-        }
-        
-        // Dispatch event
-        this.dispatchEvent('navigation:enhanced-link-click', { 
-          target: sectionId,
-          enhanced: useLoading
-        });
-        
-        console.log('✅ Enhanced section navigation completed:', sectionId);
-      } else {
-        console.warn('⚠️ Target element not found:', sectionId);
-      }
-      
-    } catch (error) {
-      console.error('❌ Enhanced navigation failed:', error);
-    } finally {
-      this.isNavigating = false;
-    }
-  }
-
-  /**
-   * Navigate to external page with loading animation
-   */
-  async navigateToPage(url, useLoading = true) {
-    if (this.isNavigating) return;
-    
-    this.isNavigating = true;
-    
-    try {
-      if (this.loadingController && useLoading) {
-        console.log(`🔄 Starting enhanced navigation to: ${url}`);
-        await this.loadingController.startNavigation(url);
-      }
-      
-      // Navigate to the page
-      window.location.href = url;
-      
-    } catch (error) {
-      console.error('Enhanced page navigation failed:', error);
-      // Fallback to regular navigation
-      window.location.href = url;
-    } finally {
-      this.isNavigating = false;
-    }
-  }
-
-  /**
-   * Check if enhanced navigation is available
-   */
-  isEnhancedNavigationReady() {
-    const ready = this.loadingController && 
-                  this.loadingController.isComplete && 
-                  !this.isInitialLoad;
-    
-    console.log('🔍 Enhanced navigation readiness check:', {
-      hasLoadingController: !!this.loadingController,
-      loadingComplete: this.loadingController?.isComplete,
-      notInitialLoad: !this.isInitialLoad,
-      ready
-    });
-    
-    return ready;
-  }
-
-  /**
-   * Get navigation state information
-   */
-  getNavigationState() {
-    return {
-      isNavigating: this.isNavigating,
-      isMenuOpen: this.isMenuOpen,
-      hasLoadingController: !!this.loadingController,
-      enhancedReady: this.isEnhancedNavigationReady()
-    };
   }
 
   throttle(func, limit) {

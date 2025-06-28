@@ -50,16 +50,10 @@ class ProjectContentManager {
   }
 
   /**
-   * Show project content with enhanced loading
+   * Show project content
    */
-  async showProject(projectId, useEnhancedLoading = true) {
+  async showProject(projectId) {
     console.log('📄 Showing project content:', projectId);
-    
-    // Use enhanced loading if available
-    if (useEnhancedLoading && this.navigationController) {
-      console.log('🌸 Using enhanced loading for project content');
-      await this.navigationController.loadingController?.startNavigation(`project:${projectId}`);
-    }
     
     // Load project content
     await this.loadProjectContent(projectId);
@@ -91,12 +85,6 @@ class ProjectContentManager {
     this.isActive = false;
     this.currentProjectId = null;
     
-    // Use enhanced loading for transition back
-    if (this.navigationController?.loadingController) {
-      console.log('🌸 Using enhanced loading for back navigation');
-      await this.navigationController.loadingController.startNavigation('gallery');
-    }
-    
     // Clear content after animation
     setTimeout(() => {
       this.contentBody.innerHTML = '';
@@ -121,13 +109,18 @@ class ProjectContentManager {
     this.contentBody.classList.add('loading');
     
     try {
+      console.log('📄 Loading project content for:', projectId);
+      
       // Get project data from portfolio config
       const { portfolioData } = await import('../config/portfolio-data.js');
       const projectData = portfolioData.find(project => project.id === projectId);
       
       if (!projectData) {
+        console.error('❌ Project not found:', projectId);
         throw new Error(`Project not found: ${projectId}`);
       }
+      
+      console.log('✅ Project data loaded:', projectData.title);
       
       // Get other projects for mini gallery
       const otherProjects = await this.getRandomOtherProjects(projectId, 2);
