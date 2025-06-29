@@ -122,6 +122,9 @@ class PortfolioApp {
   async init() {
     console.log('🚀 Initializing Portfolio App...');
     
+    // Log browser compatibility info for debugging
+    this.logBrowserInfo();
+    
     try {
       // Add more detailed error logging for Safari debugging
       console.log('📱 User agent:', navigator.userAgent);
@@ -292,6 +295,35 @@ class PortfolioApp {
     document.body.appendChild(errorMessage);
     
     console.error('Initialization error details:', error);
+  }
+
+  // Add detailed Safari compatibility logging
+  logBrowserInfo() {
+    const userAgent = navigator.userAgent;
+    const platform = navigator.platform;
+    const isSafari = /Safari/.test(userAgent) && !/Chrome/.test(userAgent);
+    const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+    const isiPhone = /iPhone/.test(userAgent);
+    
+    console.log('🔍 Browser Detection:', {
+      userAgent,
+      platform,
+      isSafari,
+      isIOS,
+      isiPhone,
+      hasModuleSupport: 'import' in HTMLScriptElement.prototype,
+      hasES6: typeof Symbol !== 'undefined'
+    });
+    
+    // Check for specific iOS/Safari features
+    if (isIOS) {
+      console.log('📱 iOS Device detected');
+      console.log('📱 Viewport:', {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        devicePixelRatio: window.devicePixelRatio
+      });
+    }
   }
 
   // Public API for external control

@@ -34,6 +34,8 @@ html {
 *::before,
 *::after {
   box-sizing: inherit;
+  /* Ensure no element can cause horizontal scroll */
+  max-width: 100%;
 }
 
 body {
@@ -281,4 +283,30 @@ body.loading-complete .main-content {
 .error-retry-btn:hover {
   background: var(--color-accent-yellow);
   color: var(--color-primary);
+}
+
+/* Mobile overflow prevention */
+@media (max-width: 768px) {
+  /* Ensure all main sections respect viewport width */
+  .hero-section,
+  .gallery-section,
+  .about-section,
+  .contact-section,
+  .footer,
+  .header {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  
+  /* Ensure images don't cause overflow */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Ensure pre-formatted text doesn't cause overflow */
+  pre, code {
+    max-width: 100%;
+    overflow-x: auto;
+  }
 }
