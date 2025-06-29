@@ -210,53 +210,6 @@ export class UnifiedMascot {
     });
     
     console.log('🎭 Event bindings completed');
-    
-    // Initialize mobile adaptations for iPhone sizes
-    this.initMobileAdaptations();
-  }
-  
-  initMobileAdaptations() {
-    // Only apply special mobile behavior on very small screens (iPhone sizes)
-    if (window.innerWidth <= 440) {
-      console.log('📱 Initializing iPhone-specific mascot adaptations');
-      
-      // Create intersection observer to detect when we're past the hero section
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          const heroSection = entry.target;
-          
-          if (entry.isIntersecting) {
-            // Hero is visible - show mascot normally
-            document.body.classList.remove('mascot-minimal');
-            console.log('📱 Hero visible - mascot normal mode');
-          } else {
-            // Past hero section - make mascot more subtle
-            document.body.classList.add('mascot-minimal');
-            console.log('📱 Past hero - mascot minimal mode');
-          }
-        });
-      }, { 
-        threshold: 0.3,
-        rootMargin: '-50px 0px' // Trigger slightly before/after
-      });
-      
-      // Observe hero section
-      const heroSection = document.querySelector('.hero-section');
-      if (heroSection) {
-        observer.observe(heroSection);
-      }
-      
-      // Also handle window resize to disable on larger screens
-      const handleResize = () => {
-        if (window.innerWidth > 440) {
-          document.body.classList.remove('mascot-minimal');
-          observer.disconnect();
-          console.log('📱 Screen size increased - disabled mobile adaptations');
-        }
-      };
-      
-      window.addEventListener('resize', this.throttle(handleResize, 250));
-    }
   }
 
   // UNIFIED STATE MANAGEMENT - Controls BOTH character AND environment
