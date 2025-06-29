@@ -135,8 +135,8 @@
 
 /* Gallery item blur effect for non-hero items */
 .gallery-item.gallery-item-blurred {
-  -webkit-filter: blur(0.5px) !important;
-  filter: blur(0.5px) !important;
+  -webkit-filter: blur(1px) !important;
+  filter: blur(1px) !important;
   transition: -webkit-filter 0.3s ease-out, filter 0.3s ease-out, opacity 0.3s ease-out !important;
   opacity: 0.7 !important;
 }
