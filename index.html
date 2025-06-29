@@ -252,6 +252,64 @@
     <!-- Scripts -->
     <script type="module" src="js/main.js"></script>
     
+    <!-- Fallback for browsers that don't support ES6 modules -->
+    <script nomodule>
+        console.warn('⚠️ ES6 modules not supported. Showing fallback.');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loading screen
+            const loadingScreen = document.getElementById('loading-screen');
+            if (loadingScreen) {
+                loadingScreen.style.display = 'none';
+            }
+            
+            // Show error message
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'error-message';
+            errorMessage.innerHTML = `
+                <div class="error-content">
+                    <h2>Browser Compatibility Issue</h2>
+                    <p>This portfolio requires a modern browser. Please update your browser or try a different one.</p>
+                    <button onclick="window.location.reload()" class="error-retry-btn">
+                        Retry
+                    </button>
+                </div>
+            `;
+            
+            // Add basic error styling
+            errorMessage.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: white;
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            `;
+            
+            errorMessage.querySelector('.error-content').style.cssText = `
+                text-align: center;
+                padding: 2rem;
+                max-width: 400px;
+            `;
+            
+            errorMessage.querySelector('.error-retry-btn').style.cssText = `
+                background: #333;
+                color: white;
+                border: none;
+                padding: 1rem 2rem;
+                border-radius: 8px;
+                cursor: pointer;
+                margin-top: 1rem;
+                font-size: 1rem;
+            `;
+            
+            document.body.appendChild(errorMessage);
+        });
+    </script>
 
     
     <!-- Service Worker for PWA (only in production) -->

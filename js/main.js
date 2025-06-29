@@ -10,6 +10,51 @@ import NavigationController from './modules/navigation.js';
 import ProjectContentManager from './modules/project-content.js';
 import HeroParallaxController from './modules/hero-parallax.js';
 
+// Global error handler for unhandled module errors
+window.addEventListener('error', (event) => {
+  console.error('❌ Global error caught:', event.error);
+  if (event.error && event.error.message && event.error.message.includes('module')) {
+    showModuleLoadError(event.error);
+  }
+});
+
+// Global error handler for unhandled promise rejections (ES6 modules)
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('❌ Unhandled promise rejection:', event.reason);
+  if (event.reason && event.reason.message && event.reason.message.includes('module')) {
+    showModuleLoadError(event.reason);
+  }
+});
+
+function showModuleLoadError(error) {
+  // Prevent multiple error messages
+  if (document.querySelector('.error-message')) {
+    return;
+  }
+  
+  // Hide loading screen
+  const loadingScreen = document.getElementById('loading-screen');
+  if (loadingScreen) {
+    loadingScreen.style.display = 'none';
+  }
+  
+  // Show error message
+  const errorMessage = document.createElement('div');
+  errorMessage.className = 'error-message';
+  errorMessage.innerHTML = `
+    <div class="error-content">
+      <h2>Oops! Something went wrong 🦔</h2>
+      <p>We're having trouble loading the portfolio. Please try refreshing the page.</p>
+      <button onclick="window.location.reload()" class="error-retry-btn">
+        Retry
+      </button>
+    </div>
+  `;
+  document.body.appendChild(errorMessage);
+  
+  console.error('Module load error details:', error);
+}
+
 class PortfolioApp {
   constructor() {
     this.mascot = null;
@@ -78,11 +123,24 @@ class PortfolioApp {
     console.log('🚀 Initializing Portfolio App...');
     
     try {
-      // INITIALIZE MODULES BEFORE LOADING STARTS
+      // Add more detailed error logging for Safari debugging
+      console.log('📱 User agent:', navigator.userAgent);
+      console.log('📱 Platform:', navigator.platform);
+      
+      // INITIALIZE MODULES BEFORE LOADING STARTS - with individual error handling
+      console.log('🧭 Initializing Navigation...');
       this.navigation = new NavigationController();
+      
+      console.log('🖼️ Initializing Gallery...');
       this.gallery = new GalleryController();
+      
+      console.log('🐧 Initializing Mascot...');
       this.mascot = new UnifiedMascot();
+      
+      console.log('📄 Initializing Project Content...');
       this.projectContent = new ProjectContentManager();
+      
+      console.log('🌄 Initializing Hero Parallax...');
       this.heroParallax = new HeroParallaxController();
       
       // Make project content manager globally accessible immediately
@@ -128,6 +186,13 @@ class PortfolioApp {
       
     } catch (error) {
       console.error('❌ Failed to initialize app:', error);
+      console.error('❌ Error stack:', error.stack);
+      console.error('❌ Error details:', {
+        name: error.name,
+        message: error.message,
+        fileName: error.fileName,
+        lineNumber: error.lineNumber
+      });
       this.handleInitializationError(error);
     }
   }

@@ -290,6 +290,42 @@
   100% { transform: rotate(360deg); }
 }
 
+/* Gallery Error State */
+.gallery-error {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-tertiary);
+}
+
+.gallery-error h3 {
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.gallery-error p {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.gallery-error .error-retry-btn {
+  background: var(--color-primary);
+  color: var(--color-background);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: var(--font-primary);
+  transition: background-color 0.2s ease;
+}
+
+.gallery-error .error-retry-btn:hover {
+  background: var(--color-accent-yellow);
+  color: var(--color-primary);
+}
+
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
   /* Simplified mobile hover effects - no context dimming */

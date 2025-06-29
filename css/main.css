@@ -25,6 +25,9 @@
 html {
   scroll-behavior: smooth;
   box-sizing: border-box;
+  /* Prevent horizontal scrolling at root level */
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 *,
@@ -40,6 +43,9 @@ body {
   color: var(--color-primary);
   background-color: var(--color-background);
   overflow-x: hidden;
+  /* Additional safety for mobile */
+  max-width: 100vw;
+  position: relative;
 }
 
 /* Loading and Content Animation States */
@@ -225,4 +231,54 @@ body.loading .main-content {
 body.loading-complete .main-content {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* Error Message Styles */
+.error-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-background);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+}
+
+.error-content {
+  text-align: center;
+  padding: 2rem;
+  max-width: 400px;
+}
+
+.error-content h2 {
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.error-content p {
+  color: var(--color-tertiary);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.error-retry-btn {
+  background: var(--color-primary);
+  color: var(--color-background);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: var(--font-primary);
+  transition: background-color 0.2s ease;
+}
+
+.error-retry-btn:hover {
+  background: var(--color-accent-yellow);
+  color: var(--color-primary);
 }

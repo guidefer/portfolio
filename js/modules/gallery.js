@@ -50,6 +50,13 @@ class GalleryController {
       return;
     }
     
+    // Check if portfolio data is available
+    if (!portfolioData || !Array.isArray(portfolioData) || portfolioData.length === 0) {
+      console.error('❌ Portfolio data not available or empty');
+      this.showDataError();
+      return;
+    }
+    
     console.log('📊 Portfolio data loaded:', portfolioData.length, 'items');
     
     this.setupIntersectionObserver();
@@ -57,6 +64,20 @@ class GalleryController {
     this.loadInitialItems();
     
     console.log('✅ Gallery initialized successfully');
+  }
+
+  showDataError() {
+    if (this.grid) {
+      this.grid.innerHTML = `
+        <div class="gallery-error">
+          <h3>Oops! Something went wrong 🦔</h3>
+          <p>We're having trouble loading the portfolio. Please try refreshing the page.</p>
+          <button onclick="window.location.reload()" class="error-retry-btn">
+            Retry
+          </button>
+        </div>
+      `;
+    }
   }
 
   setupIntersectionObserver() {
@@ -112,6 +133,11 @@ class GalleryController {
     this.isLoading = true;
     
     try {
+      // Extra check for Safari compatibility
+      if (!portfolioData || portfolioData.length === 0) {
+        throw new Error('Portfolio data is empty or not loaded');
+      }
+      
       // Remove loading placeholder
       const loadingPlaceholder = this.grid.querySelector('.gallery-loading');
       if (loadingPlaceholder) {
@@ -120,6 +146,8 @@ class GalleryController {
       
       // Load first batch of items
       const itemsToLoad = portfolioData.slice(0, this.initialLoadCount);
+      console.log('📥 Loading', itemsToLoad.length, 'initial items');
+      
       await this.renderItems(itemsToLoad);
       
       this.currentItems = this.initialLoadCount;
@@ -135,9 +163,11 @@ class GalleryController {
         this.setupContextDimming();
       }, 100);
       
+      console.log('✅ Initial gallery items loaded successfully');
+      
     } catch (error) {
-      console.error('Failed to load initial gallery items:', error);
-      this.showError();
+      console.error('❌ Failed to load initial gallery items:', error);
+      this.showDataError();
     } finally {
       this.isLoading = false;
     }
