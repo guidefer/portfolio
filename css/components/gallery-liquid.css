@@ -19,6 +19,13 @@
   color: var(--color-primary);
 }
 
+/* Responsive Typography */
+@media (min-width: 768px) {
+  .gallery-title {
+    font-size: var(--text-4xl);
+  }
+}
+
 /* Gallery Grid */
 .gallery-grid {
   display: grid;

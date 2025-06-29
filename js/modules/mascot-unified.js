@@ -32,7 +32,7 @@ export class UnifiedMascot {
     // Section mapping for contextual animations
     this.sectionAnimationMap = {
       'hero': 'excited',
-      'work': 'creating', 
+      'projects': 'creating', 
       'about': 'coffee',
       'contact': 'dancing'
     };

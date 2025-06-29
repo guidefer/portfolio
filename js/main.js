@@ -8,6 +8,7 @@ import GalleryController from './modules/gallery.js';
 import NavigationController from './modules/navigation.js';
 // import LoadingController from './modules/loading.js'; // TEMPORARILY DISABLED
 import ProjectContentManager from './modules/project-content.js';
+import HeroParallaxController from './modules/hero-parallax.js';
 
 class PortfolioApp {
   constructor() {
@@ -16,6 +17,7 @@ class PortfolioApp {
     this.navigation = null;
     // this.loading = null; // TEMPORARILY DISABLED
     this.projectContent = null;
+    this.heroParallax = null;
     this.isInitialized = false;
     
     this.setupFocusManagement();
@@ -81,6 +83,7 @@ class PortfolioApp {
       this.gallery = new GalleryController();
       this.mascot = new UnifiedMascot();
       this.projectContent = new ProjectContentManager();
+      this.heroParallax = new HeroParallaxController();
       
       // Make project content manager globally accessible immediately
       window.projectContentManager = this.projectContent;
@@ -262,6 +265,7 @@ class PortfolioApp {
     this.navigation?.destroy();
     this.loading?.destroy();
     this.projectContent?.destroy();
+    this.heroParallax?.destroy();
     
     console.log('🧹 Portfolio App destroyed');
   }

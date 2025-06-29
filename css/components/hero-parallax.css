@@ -1,0 +1,205 @@
+/* ===== HERO PARALLAX EFFECTS ===== */
+
+.hero-parallax-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allow clicks to pass through to content */
+  z-index: 2; /* Above background, below content (content is z-index: 10) */
+  overflow: visible; /* Allow elements to extend beyond container */
+}
+
+.parallax-element {
+  position: absolute;
+  pointer-events: none;
+  -webkit-user-select: none; /* Safari support */
+  -moz-user-select: none; /* Firefox support */
+  -ms-user-select: none; /* IE support */
+  user-select: none;
+  will-change: transform; /* Optimize for animations */
+}
+
+.parallax-element img {
+  display: block;
+  max-width: none; /* Allow images to be their natural size */
+  height: auto;
+  opacity: 0.7; /* Slightly more visible */
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15)); /* Stronger shadow for depth */
+  transition: opacity 0.3s ease; /* Smooth opacity changes */
+}
+
+/* Specific element positioning and sizing */
+.parallax-owl {
+  top: 55%;
+  left: 50%;
+  transform-origin: center center;
+  z-index: 3; /* In front of clouds */
+  /* Center the element properly - reduced size */
+  margin-left: -325px; /* Half of width (550px / 2) */
+  margin-top: -140px; /* Approximate half height for better centering */
+}
+
+.parallax-owl img {
+  width: 650px; /* Reduced from 800px - more proportional */
+  height: auto;
+  opacity: 0.8; /* Strong presence for the main character */
+}
+
+.parallax-cloud-1 {
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  z-index: 1;
+  /* Center the element properly - reduced size */
+  margin-left: -125px; /* Half of width (250px / 2) */
+  margin-top: -75px; /* Approximate half height */
+}
+
+.parallax-cloud-1 img {
+  width: 250px; /* Reduced from 400px */
+  height: auto;
+  opacity: 0.4; /* More subtle for background elements */
+}
+
+.parallax-cloud-2 {
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  z-index: 2;
+  /* Center the element properly - reduced size */
+  margin-left: -175px; /* Half of width (350px / 2) */
+  margin-top: -105px; /* Approximate half height */
+}
+
+.parallax-cloud-2 img {
+  width: 350px; /* Reduced from 500px */
+  height: auto;
+  opacity: 0.5; /* Medium visibility */
+}
+
+.parallax-cloud-3 {
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  z-index: 1;
+  /* Center the element properly - reduced size */
+  margin-left: -125px; /* Half of width (250px / 2) */
+  margin-top: -75px; /* Approximate half height */
+}
+
+.parallax-cloud-3 img {
+  width: 250px; /* Reduced from 350px */
+  height: auto;
+  opacity: 0.3; /* Most subtle for bottom placement */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-parallax-container {
+    /* Reduce complexity on mobile for performance */
+    transform: scale(0.7);
+    transform-origin: center center;
+  }
+  
+  .parallax-owl {
+    margin-left: -220px; /* Adjusted for smaller size (440px / 2) */
+    margin-top: -110px;
+  }
+  
+  .parallax-owl img {
+    width: 440px; /* Scaled for mobile */
+  }
+  
+  .parallax-cloud-1 {
+    margin-left: -100px; /* Adjusted for smaller size (200px / 2) */
+    margin-top: -60px;
+  }
+  
+  .parallax-cloud-1 img {
+    width: 200px;
+  }
+  
+  .parallax-cloud-2 {
+    margin-left: -140px; /* Adjusted for smaller size (280px / 2) */
+    margin-top: -84px;
+  }
+  
+  .parallax-cloud-2 img {
+    width: 280px;
+  }
+  
+  .parallax-cloud-3 {
+    margin-left: -100px; /* Adjusted for smaller size (200px / 2) */
+    margin-top: -60px;
+  }
+  
+  .parallax-cloud-3 img {
+    width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-parallax-container {
+    transform: scale(0.5);
+  }
+  
+  .parallax-owl {
+    margin-left: -175px; /* Adjusted for smaller size (350px / 2) */
+    margin-top: -87px;
+  }
+  
+  .parallax-owl img {
+    width: 350px; /* Smaller for very small screens */
+  }
+  
+  .parallax-cloud-1 {
+    margin-left: -75px; /* Adjusted for smaller size (150px / 2) */
+    margin-top: -45px;
+  }
+  
+  .parallax-cloud-1 img {
+    width: 150px;
+  }
+  
+  .parallax-cloud-2 {
+    margin-left: -100px; /* Adjusted for smaller size (200px / 2) */
+    margin-top: -60px;
+  }
+  
+  .parallax-cloud-2 img {
+    width: 200px;
+  }
+  
+  .parallax-cloud-3 {
+    margin-left: -75px; /* Adjusted for smaller size (150px / 2) */
+    margin-top: -45px;
+  }
+  
+  .parallax-cloud-3 img {
+    width: 150px;
+  }
+}
+
+/* Hover effects for subtle interactivity */
+.hero-section:hover .parallax-element img {
+  opacity: 1; /* Full opacity on hover */
+}
+
+/* Ensure hero content stays above parallax elements */
+.hero-content {
+  position: relative;
+  z-index: 10; /* Above all parallax elements */
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .parallax-element {
+    transform: none !important;
+  }
+  
+  .parallax-element img {
+    opacity: 0.3; /* Even more subtle when motion is reduced */
+  }
+}

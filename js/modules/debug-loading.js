@@ -108,7 +108,7 @@ window.debugLoading = {
       window.debugLoading.inspectPetals();
       
       // Test just the navigation loading
-      loading.startNavigation('#work');
+      loading.startNavigation('#projects');
     }
   }
 };
