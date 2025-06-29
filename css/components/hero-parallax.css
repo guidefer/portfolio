@@ -99,7 +99,7 @@
 @media (max-width: 768px) {
   .hero-parallax-container {
     /* Reduce complexity on mobile for performance */
-    transform: scale(0.7);
+    transform: scale(1);
     transform-origin: center center;
   }
   
@@ -142,7 +142,7 @@
 
 @media (max-width: 480px) {
   .hero-parallax-container {
-    transform: scale(0.5);
+    transform: scale(1);
   }
   
   .parallax-owl {
@@ -179,6 +179,49 @@
   
   .parallax-cloud-3 img {
     width: 150px;
+  }
+}
+
+/* iPhone specific sizes (393px-440px) */
+@media (max-width: 440px) {
+  .hero-parallax-container {
+    transform: scale(1);
+    top: 15%; /* Move entire container up slightly */
+  }
+  
+  .parallax-owl {
+    top: 35%; /* Move owl higher up to stay above name */
+    margin-left: -140px; /* Adjusted for smaller size (280px / 2) */
+    margin-top: -70px; /* Higher positioning */
+  }
+  
+  .parallax-owl img {
+    width: 280px; /* Smaller size for iPhone */
+    opacity: 0.7; /* Slightly more transparent */
+  }
+  
+  .parallax-cloud-1 {
+    margin-left: -60px; /* Adjusted for smaller size (120px / 2) */
+    margin-top: -35px;
+  }
+  
+  .parallax-cloud-1 img {
+    width: 120px;
+    opacity: 0.2; /* Very subtle */
+  }
+  
+  .parallax-cloud-2 {
+    margin-left: -75px; /* Adjusted for smaller size (150px / 2) */
+    margin-top: -45px;
+  }
+  
+  .parallax-cloud-2 img {
+    width: 150px;
+    opacity: 0.3; /* More subtle */
+  }
+  
+  .parallax-cloud-3 {
+    display: none; /* Hide bottom cloud on iPhone */
   }
 }
 

@@ -132,67 +132,6 @@
   }
 }
 
-/* Smaller adjustment for very narrow screens (iPhone Pro/Max) */
-@media (max-width: 440px) {
-  .character-mascot {
-    bottom: 10px;
-    right: 10px;
-  }
-  
-  /* Further adjust coffee elements for very small screens */
-  .env-coffee {
-    top: -3px;
-    left: 13px;
-    width: 28px;
-    height: 36px;
-  }
-  
-  .coffee-cup {
-    width: 8px;
-    height: 7px;
-    bottom: 3px;
-    left: 5px;
-  }
-  
-  .coffee-cup::before {
-    width: 2px;
-    height: 3px;
-    left: -2px;
-    top: 1px;
-  }
-  
-  /* Scale other environmental elements for very small screens */
-  .env-excited {
-    top: -17px;
-    left: -7px;
-    width: 55px;
-    height: 35px;
-  }
-  
-  .confetti {
-    width: 2px;
-    height: 2px;
-  }
-  
-  .env-dancing {
-    top: -24px;
-    left: -10px;
-    width: 63px;
-    height: 42px;
-  }
-  
-  .music-note {
-    font-size: 11px;
-  }
-  
-  .env-thinking {
-    top: -28px;
-    left: -14px;
-    width: 70px;
-    height: 50px;
-  }
-}
-
 /* Mascot Container */
 .mascot-container {
   position: relative;
@@ -368,15 +307,74 @@
   .mascot-environment {
     width: 48px;
     height: 48px;
-    bottom: 15px;
+    bottom: 32px;
     right: 15px;
   }
 }
 
 @media (max-width: 440px) {
   .mascot-environment {
-    bottom: 10px;
+    bottom: 72px; /* Lift entire environmental container higher */
+    right: 33px;
+    width: 40px; /* Smaller container for iPhone */
+    height: 40px;
+  }
+  
+  /* Scale down mascot itself on iPhone */
+  .mascot-container {
+    bottom: 25px; /* Match environmental positioning */
     right: 10px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .mascot-sprite {
+    width: 40px !important;
+    height: 40px !important;
+  }
+    
+  /* Prevent mascot from overlapping text content on scroll */
+  .about-section.visible ~ .mascot-container,
+  .contact-section.visible ~ .mascot-container {
+    opacity: 0.3;
+    transform: scale(0.8);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  .about-section.visible ~ .mascot-environment,
+  .contact-section.visible ~ .mascot-environment {
+    opacity: 0.2;
+    transform: scale(0.8);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+}
+
+/* iPhone scroll-based minimal mode */
+@media (max-width: 440px) {
+  /* When past hero section, make mascot and environment more subtle */
+  .mascot-minimal .mascot-container {
+    opacity: 0.4;
+    transform: scale(0.8);
+    bottom: 20px;
+    transition: opacity 0.4s ease, transform 0.4s ease, bottom 0.4s ease;
+  }
+  
+  .mascot-minimal .mascot-environment {
+    opacity: 0.3;
+    transform: scale(0.8);
+    bottom: 20px;
+    transition: opacity 0.4s ease, transform 0.4s ease, bottom 0.4s ease;
+  }
+  
+  /* Hide environmental animations when in minimal mode to avoid text overlap */
+  .mascot-minimal .env-coffee,
+  .mascot-minimal .thought-bubble,
+  .mascot-minimal .env-sleeping,
+  .mascot-minimal .env-creating,
+  .mascot-minimal .env-dancing,
+  .mascot-minimal .env-thinking {
+    opacity: 0;
+    pointer-events: none;
   }
 }
 
@@ -1507,64 +1505,3 @@
   50% { opacity: 0; }
 }
 
-/* ===== RESPONSIVE ENVIRONMENTAL ELEMENTS ===== */
-
-/* Scale environmental elements for mobile (640px and below) */
-@media (max-width: 640px) {
-  .env-coffee {
-    top: -4px; /* Adjusted for 48px container */
-    left: 14px; /* Adjusted for 48px container (18px * 0.75) */
-    width: 30px; /* Adjusted for 48px container (40px * 0.75) */
-    height: 38px; /* Adjusted for 48px container (50px * 0.75) */
-  }
-  
-  .coffee-cup {
-    width: 9px; /* Adjusted for 48px container (12px * 0.75) */
-    height: 8px; /* Adjusted for 48px container (10px * 0.75) */
-    bottom: 4px; /* Adjusted for 48px container (5px * 0.75) */
-    left: 6px; /* Adjusted for 48px container (8px * 0.75) */
-  }
-  
-  .coffee-cup::before {
-    width: 2px; /* Adjusted for 48px container (3px * 0.75) */
-    height: 4px; /* Adjusted for 48px container (5px * 0.75) */
-    left: -3px; /* Adjusted for 48px container (-4px * 0.75) */
-    top: 2px; /* Adjusted for 48px container */
-  }
-  
-  .steam {
-    width: 2px; /* Adjusted for 48px container (3px * 0.75) */
-    height: 8px; /* Adjusted for 48px container (10px * 0.75) */
-  }
-  
-  /* Scale other environmental elements for mobile */
-  .env-excited {
-    top: -19px; /* Adjusted for 48px container (-25px * 0.75) */
-    left: -8px; /* Adjusted for 48px container (-10px * 0.75) */
-    width: 60px; /* Adjusted for 48px container (80px * 0.75) */
-    height: 38px; /* Adjusted for 48px container (50px * 0.75) */
-  }
-  
-  .confetti {
-    width: 2px; /* Adjusted for 48px container (3px * 0.75) */
-    height: 2px; /* Adjusted for 48px container (3px * 0.75) */
-  }
-  
-  .env-dancing {
-    top: -26px; /* Adjusted for 48px container (-35px * 0.75) */
-    left: -11px; /* Adjusted for 48px container (-15px * 0.75) */
-    width: 68px; /* Adjusted for 48px container (90px * 0.75) */
-    height: 45px; /* Adjusted for 48px container (60px * 0.75) */
-  }
-  
-  .music-note {
-    font-size: 12px; /* Adjusted for 48px container (16px * 0.75) */
-  }
-  
-  .env-thinking {
-    top: -30px; /* Adjusted for 48px container (-40px * 0.75) */
-    left: -15px; /* Adjusted for 48px container (-20px * 0.75) */
-    width: 75px; /* Adjusted for 48px container (100px * 0.75) */
-    height: 53px; /* Adjusted for 48px container (70px * 0.75) */
-  }
-}
