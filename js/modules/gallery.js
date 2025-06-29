@@ -649,20 +649,28 @@ class GalleryController {
   }
 
   cascadeContextDimming(heroItem, allItems) {
-    console.log('🚀 Starting simplified blur effect');
+    console.log('🚀 Starting smooth blur effect');
     
     // Set animation state
     this.animationState.isAnimating = true;
     this.animationState.currentHero = heroItem;
     
-    // Animate hero immediately
-    this.animateHeroItem(heroItem);
-    
-    // Apply blur to all non-hero items immediately (no cascade)
+    // Force a clean state first
     allItems.forEach(item => {
-      if (item !== heroItem) {
-        this.blurNonHeroItem(item);
-      }
+      item.classList.remove('gallery-item-hero', 'gallery-item-blurred');
+    });
+    
+    // Use a single requestAnimationFrame to ensure all changes happen together
+    requestAnimationFrame(() => {
+      // Animate hero
+      this.animateHeroItem(heroItem);
+      
+      // Blur all non-hero items
+      allItems.forEach(item => {
+        if (item !== heroItem) {
+          this.blurNonHeroItem(item);
+        }
+      });
     });
     
     console.log('✅ Hero scaled and non-hero items blurred');
@@ -670,29 +678,29 @@ class GalleryController {
 
   blurNonHeroItem(item) {
     console.log('🌫️ Adding blur to non-hero item:', item.getAttribute('data-project-id'));
+    // Apply blur class directly - all timing handled by CSS
     item.classList.add('gallery-item-blurred');
-    // Force a reflow to ensure the class is applied
-    item.offsetHeight;
   }
 
   animateHeroItem(heroItem) {
     console.log('💫 Adding hero class for smooth CSS transition');
-    
-    // Use CSS class for smooth animation
+    // Apply hero class directly - all timing handled by CSS
     heroItem.classList.add('gallery-item-hero');
   }
 
   // Remove the old animateNonHeroItem method - replaced with simple blur
 
   resetContextDimming(allItems) {
-    console.log('🔄 Resetting simplified blur effect');
+    console.log('🔄 Resetting smooth blur effect');
     
     // Cancel any ongoing animations first
     this.cancelAllAnimations(allItems);
     
-    // Reset all items immediately (no cascade)
-    allItems.forEach(item => {
-      this.resetItemToNormal(item);
+    // Reset all items in a single frame
+    requestAnimationFrame(() => {
+      allItems.forEach(item => {
+        this.resetItemToNormal(item);
+      });
     });
     
     // Clear state
@@ -703,11 +711,9 @@ class GalleryController {
   }
 
   resetItemToNormal(item) {
-    console.log('📈 Removing animation classes for clean reset');
-    
-    // Remove both animation classes
-    item.classList.remove('gallery-item-hero');
-    item.classList.remove('gallery-item-blurred');
+    console.log('📈 Removing animation classes for smooth reset');
+    // Remove both classes directly - all timing handled by CSS
+    item.classList.remove('gallery-item-hero', 'gallery-item-blurred');
   }
 
   updateObserver() {
