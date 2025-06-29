@@ -63,6 +63,11 @@ body {
   z-index: 9999;
 }
 
+/* TEMPORARY: Hide loading screen completely */
+.loading-screen {
+  display: none !important;
+}
+
 /* Main Layout */
 .main-content {
   padding-top: var(--header-height);

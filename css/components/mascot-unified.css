@@ -1507,8 +1507,11 @@
   50% { opacity: 0; }
 }
 
-/* Scale environmental elements for mobile */
-.env-coffee {
+/* ===== RESPONSIVE ENVIRONMENTAL ELEMENTS ===== */
+
+/* Scale environmental elements for mobile (640px and below) */
+@media (max-width: 640px) {
+  .env-coffee {
     top: -4px; /* Adjusted for 48px container */
     left: 14px; /* Adjusted for 48px container (18px * 0.75) */
     width: 30px; /* Adjusted for 48px container (40px * 0.75) */
@@ -1564,3 +1567,4 @@
     width: 75px; /* Adjusted for 48px container (100px * 0.75) */
     height: 53px; /* Adjusted for 48px container (70px * 0.75) */
   }
+}

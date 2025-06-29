@@ -25,10 +25,9 @@ class LoadingController {
     this.hasSeenThisSession = sessionStorage.getItem('loading-seen') === 'true';
     
     this.loadingMessages = [
-      "Beauty is worth a brief wait...",
+      "Creativity is worth a brief wait...",
       "Let the blossoms fall into place...",
-      "Every petal is being placed thoughtfully...",
-      "Preparing your creative experience...",
+      "Crafting the art of anticipation...",
       "Welcome!"
     ];
     

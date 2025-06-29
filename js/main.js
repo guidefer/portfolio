@@ -6,7 +6,7 @@
 import UnifiedMascot from './modules/mascot-unified.js';
 import GalleryController from './modules/gallery.js';
 import NavigationController from './modules/navigation.js';
-import LoadingController from './modules/loading.js';
+// import LoadingController from './modules/loading.js'; // TEMPORARILY DISABLED
 import ProjectContentManager from './modules/project-content.js';
 
 class PortfolioApp {
@@ -14,7 +14,7 @@ class PortfolioApp {
     this.mascot = null;
     this.gallery = null;
     this.navigation = null;
-    this.loading = null;
+    // this.loading = null; // TEMPORARILY DISABLED
     this.projectContent = null;
     this.isInitialized = false;
     
@@ -85,8 +85,8 @@ class PortfolioApp {
       // Make project content manager globally accessible immediately
       window.projectContentManager = this.projectContent;
       
-      // INITIALIZE LOADING CONTROLLER
-      this.loading = new LoadingController();
+      // INITIALIZE LOADING CONTROLLER - TEMPORARILY DISABLED
+      // this.loading = new LoadingController();
       
       // CONNECT PROJECT CONTENT MANAGER TO GALLERY FOR SPA NAVIGATION
       this.gallery.setProjectContentManager(this.projectContent);
@@ -95,13 +95,30 @@ class PortfolioApp {
       // Setup cross-module communication
       this.setupModuleCommunication();
       
-      // Start loading sequence - this will run completely and trigger loading:complete when done
-      await this.loading.start();
+      // Start loading sequence - TEMPORARILY DISABLED
+      // await this.loading.start();
       
-      // After initial loading, hide petals for better performance during browsing
+      // After initial loading, hide petals for better performance during browsing - TEMPORARILY DISABLED
+      // setTimeout(() => {
+      //   this.loading.hideForBrowsing();
+      // }, 3000);
+      
+      // IMMEDIATE SETUP WITHOUT LOADING SCREEN
+      document.body.classList.remove('loading');
+      document.body.classList.add('loading-complete');
+      
+      // Hide loading screen immediately
+      const loadingScreen = document.getElementById('loading-screen');
+      if (loadingScreen) {
+        loadingScreen.style.display = 'none';
+      }
+      
+      // Initialize mascot directly
       setTimeout(() => {
-        this.loading.hideForBrowsing();
-      }, 3000);
+        if (this.mascot) {
+          this.mascot.container?.classList.add('entrance-complete');
+        }
+      }, 500);
       
       this.isInitialized = true;
       console.log('✅ Portfolio App fully initialized');
@@ -160,29 +177,29 @@ class PortfolioApp {
       this.mascot?.onInteraction('navigation');
     });
     
-    // Loading events
-    document.addEventListener('loading:start', () => {
-      // Mascot will be initialized after loading completes
-      console.log('🌸 Loading started');
-    });
+    // Loading events - TEMPORARILY DISABLED
+    // document.addEventListener('loading:start', () => {
+    //   // Mascot will be initialized after loading completes
+    //   console.log('🌸 Loading started');
+    // });
     
-    // Progress completion event - triggered when progress bar reaches 100%
-    document.addEventListener('progress:complete', () => {
-      console.log('🎯 Progress complete - modules already initialized');
-    });
+    // Progress completion event - triggered when progress bar reaches 100% - TEMPORARILY DISABLED
+    // document.addEventListener('progress:complete', () => {
+    //   console.log('🎯 Progress complete - modules already initialized');
+    // });
 
-    document.addEventListener('loading:complete', () => {
-      console.log('🌸 Loading screen fade complete');
-      
-      // Force remove focus from all gallery items after loading completes
-      this.forceFocusRemoval();
-      
-      // Trigger mascot celebration
-      this.mascot?.setState('excited');
-      setTimeout(() => {
-        this.mascot?.setState('idle');
-      }, 3000);
-    });
+    // document.addEventListener('loading:complete', () => {
+    //   console.log('🌸 Loading screen fade complete');
+    //   
+    //   // Force remove focus from all gallery items after loading completes
+    //   this.forceFocusRemoval();
+    //   
+    //   // Trigger mascot celebration
+    //   this.mascot?.setState('excited');
+    //   setTimeout(() => {
+    //     this.mascot?.setState('idle');
+    //   }, 3000);
+    // });
   }
 
   handleInitializationError(error) {
