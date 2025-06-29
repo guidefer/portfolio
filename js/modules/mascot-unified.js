@@ -26,7 +26,8 @@ export class UnifiedMascot {
     // Configuration
     this.config = {
       contextualCooldown: 1000,
-      sleepyDelay: 120000 // 2 minutes
+      sleepyDelay: 120000, // 2 minutes
+      mouseMoveThrottle: 100 // throttle mouse movement to 100ms
     };
     
     // Section mapping for contextual animations
@@ -142,6 +143,24 @@ export class UnifiedMascot {
   }
   
   bindEvents() {
+    // Store bound event handlers for cleanup
+    this.boundHandleMouseMove = this.throttle((e) => {
+      this.mousePosition = { x: e.clientX, y: e.clientY };
+      this.checkMouseProximity();
+    }, this.config.mouseMoveThrottle);
+    
+    this.boundHandleGalleryHover = (event) => {
+      this.handleGalleryInteraction(event.detail?.item);
+    };
+    
+    this.boundHandleScroll = this.throttle(() => {
+      this.handleScrollBehavior();
+    }, 100);
+    
+    this.boundHandleSectionChange = (event) => {
+      this.handleSectionChange(event.detail);
+    };
+    
     // Entrance animation completion listener
     if (this.characterElement) {
       this.characterElement.addEventListener('animationend', (event) => {
@@ -155,12 +174,16 @@ export class UnifiedMascot {
     }
     
     // Mouse movement tracking for proximity detection
-    let mouseMoveThrottled = this.throttle((e) => {
-      this.mousePosition = { x: e.clientX, y: e.clientY };
-      this.checkMouseProximity();
-    }, this.config.mouseMoveThrottle);
+    document.addEventListener('mousemove', this.boundHandleMouseMove);
     
-    document.addEventListener('mousemove', mouseMoveThrottled);
+    // Gallery hover events
+    window.addEventListener('gallery:item-hover', this.boundHandleGalleryHover);
+    
+    // Scroll events
+    window.addEventListener('scroll', this.boundHandleScroll);
+    
+    // Section change events
+    window.addEventListener('section:change', this.boundHandleSectionChange);
     
     // Section-based events and navigation - bind immediately or when DOM is ready
     if (document.readyState === 'loading') {
@@ -811,6 +834,111 @@ export class UnifiedMascot {
         }, delay - (currentTime - lastExecTime));
       }
     };
+  }
+  
+  // === CLEANUP AND DESTRUCTION ===
+  // === MISSING EVENT HANDLERS ===
+  
+  handleGalleryInteraction(itemId) {
+    console.log('🎭 Gallery interaction detected:', itemId);
+    // Trigger excited state for gallery interactions
+    this.setState('excited');
+    
+    // Reset to idle after a brief moment
+    setTimeout(() => {
+      if (this.currentState === 'excited') {
+        this.setState('idle');
+      }
+    }, 2000);
+  }
+  
+  handleScrollBehavior() {
+    // Handle scroll-based behavior for mobile minimal mode
+    if (window.innerWidth <= 440) {
+      const heroSection = document.querySelector('.hero-section');
+      const mascotContainer = document.querySelector('.character-mascot');
+      
+      if (heroSection && mascotContainer) {
+        const heroRect = heroSection.getBoundingClientRect();
+        const isHeroVisible = heroRect.bottom > 0;
+        
+        if (!isHeroVisible) {
+          document.body.classList.add('mascot-minimal');
+        } else {
+          document.body.classList.remove('mascot-minimal');
+        }
+      }
+    }
+  }
+  
+  handleSectionChange(sectionData) {
+    console.log('🎭 Section change detected:', sectionData);
+    
+    if (sectionData && sectionData.section) {
+      const sectionName = sectionData.section;
+      const animation = this.sectionAnimationMap[sectionName];
+      
+      if (animation) {
+        console.log(`🎭 Triggering contextual animation for ${sectionName}: ${animation}`);
+        this.setState(animation);
+        
+        // Return to idle after contextual animation period
+        setTimeout(() => {
+          if (this.currentState === animation) {
+            this.setState('idle');
+          }
+        }, 3000);
+      }
+    }
+  }
+  
+  // === CLEANUP AND DESTRUCTION ===
+  
+  destroy() {
+    console.log('🧹 Destroying Unified Mascot System...');
+    
+    // Clear all timeouts and intervals
+    if (this.autoCycleInterval) {
+      clearInterval(this.autoCycleInterval);
+      this.autoCycleInterval = null;
+    }
+    
+    if (this.sleepTimeout) {
+      clearTimeout(this.sleepTimeout);
+      this.sleepTimeout = null;
+    }
+    
+    if (this.contextualTimeout) {
+      clearTimeout(this.contextualTimeout);
+      this.contextualTimeout = null;
+    }
+    
+    // Remove event listeners
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('mousemove', this.boundHandleMouseMove);
+      window.removeEventListener('gallery:item-hover', this.boundHandleGalleryHover);
+      window.removeEventListener('scroll', this.boundHandleScroll);
+      window.removeEventListener('section:change', this.boundHandleSectionChange);
+    }
+    
+    // Remove DOM elements
+    if (this.characterElement && this.characterElement.parentNode) {
+      this.characterElement.parentNode.removeChild(this.characterElement);
+    }
+    
+    if (this.environmentElement && this.environmentElement.parentNode) {
+      this.environmentElement.parentNode.removeChild(this.environmentElement);
+    }
+    
+    // Reset properties
+    this.characterElement = null;
+    this.environmentElement = null;
+    this.isInitialized = false;
+    this.currentState = 'idle';
+    this.contextualAnimationActive = false;
+    this.contextualQueue = null;
+    
+    console.log('✅ Unified Mascot System destroyed');
   }
   
   // === EVENT BINDING ===

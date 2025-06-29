@@ -254,14 +254,20 @@
     
 
     
-    <!-- Service Worker for PWA (optional) -->
+    <!-- Service Worker for PWA (only in production) -->
     <script>
-        if ('serviceWorker' in navigator) {
+        if ('serviceWorker' in navigator && location.protocol === 'https:') {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => console.log('SW registered'))
-                    .catch(registrationError => console.log('SW registration failed'));
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('✅ Service Worker registered successfully:', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('❌ Service Worker registration failed:', registrationError);
+                    });
             });
+        } else if ('serviceWorker' in navigator) {
+            console.log('🔧 Service Worker registration skipped in development (HTTP)');
         }
     </script>
 </body>
