@@ -87,15 +87,25 @@ class GalleryController {
       });
     }
     
-    // Handle hover events for mascot interaction only
-    this.grid.addEventListener('mouseenter', (e) => {
-      const galleryItem = e.target.closest('.gallery-item');
-      if (galleryItem) {
-        this.handleItemHover(galleryItem);
-      }
-    }, true);
+    // Handle window resize to re-setup context dimming
+    window.addEventListener('resize', () => {
+      this.debounceResize(() => {
+        console.log('🔄 Window resized, re-setting up context dimming');
+        this.setupContextDimming();
+      });
+    });
+    
+    // Note: Gallery hover events are handled in setupContextDimming()
+    // to avoid conflicts with the blur effects
     
     console.log('✅ Gallery events bound successfully');
+  }
+
+  debounceResize(func, delay = 300) {
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+    }
+    this.resizeTimeout = setTimeout(func, delay);
   }
 
   async loadInitialItems() {
@@ -470,13 +480,26 @@ class GalleryController {
   }
 
   setupContextDimming() {
-    // Skip cascade dimming on mobile devices
-    if (window.innerWidth <= 768) {
-      console.log('📱 Mobile detected - skipping context dimming');
+    // Only skip cascade dimming on small mobile devices without hover capability
+    const isMobile = window.innerWidth <= 480;
+    const hasHover = window.matchMedia('(hover: hover)').matches;
+    const hasPointer = window.matchMedia('(pointer: fine)').matches;
+    
+    if (isMobile || (!hasHover && !hasPointer)) {
+      console.log('📱 Mobile/touch device detected - skipping context dimming', {
+        isMobile,
+        hasHover,
+        hasPointer,
+        width: window.innerWidth
+      });
       return;
     }
 
-    console.log('🎭 Setting up cascade context dimming...');
+    console.log('🎭 Setting up cascade context dimming...', {
+      width: window.innerWidth,
+      hasHover,
+      hasPointer
+    });
 
     // JavaScript-driven cascade context dimming for smooth animations
     const galleryItems = this.grid.querySelectorAll('.gallery-item');
@@ -492,10 +515,14 @@ class GalleryController {
     // Setup cascade dimming with staggered timing
     galleryItems.forEach((item, index) => {
       item.addEventListener('mouseenter', (e) => {
+        console.log(`🎯 Mouse enter on gallery item ${index}`);
         this.handleHoverStart(item, galleryItems);
+        // Also trigger mascot interaction
+        this.handleItemHover(item);
       });
       
       item.addEventListener('mouseleave', (e) => {
+        console.log(`👋 Mouse leave on gallery item ${index}`);
         this.handleHoverEnd(item, galleryItems);
       });
     });
@@ -505,6 +532,8 @@ class GalleryController {
 
   handleHoverStart(heroItem, allItems) {
     const now = Date.now();
+    
+    console.log('🎯 handleHoverStart triggered', { heroItem: heroItem.getAttribute('data-project-id') });
     
     // Reduced debounce since we simplified the animation
     if (now - this.animationState.lastHoverTime < 50) {
@@ -610,8 +639,10 @@ class GalleryController {
   }
 
   blurNonHeroItem(item) {
-    console.log('🌫️ Adding blur to non-hero item');
+    console.log('🌫️ Adding blur to non-hero item:', item.getAttribute('data-project-id'));
     item.classList.add('gallery-item-blurred');
+    // Force a reflow to ensure the class is applied
+    item.offsetHeight;
   }
 
   animateHeroItem(heroItem) {

@@ -133,9 +133,12 @@
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), border-radius 0.4s ease-out, box-shadow 0.4s ease-out !important;
 }
 
-.gallery-item-blurred {
+/* Gallery item blur effect for non-hero items */
+.gallery-item.gallery-item-blurred {
+  -webkit-filter: blur(0.5px) !important;
   filter: blur(0.5px) !important;
-  transition: filter 0.3s ease-out !important;
+  transition: -webkit-filter 0.3s ease-out, filter 0.3s ease-out, opacity 0.3s ease-out !important;
+  opacity: 0.7 !important;
 }
 
 .gallery-item-hero .gallery-item-img {
