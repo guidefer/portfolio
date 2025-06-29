@@ -1,8 +1,9 @@
 # Portfolio Version History
 
-## Current Version: v1.4.0
+## Current Version: v1.5.0
 
 ### Version History:
+- v1.5.0 - Loading screen deactivation + coffee mug positioning fix
 - v1.4.0 - Mobile GF signature alignment fix + version tracking system
 - v1.3.0 - Footer iPhone Safari viewport extensions
 - v1.2.0 - Mobile mascot positioning and loading screen fixes
