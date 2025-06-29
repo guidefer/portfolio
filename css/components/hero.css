@@ -209,20 +209,24 @@
   bottom: var(--space-xl);
   left: 50%;
   transform: translateX(-50%);
-  width: 2px;
-  height: 30px;
-  background: linear-gradient(to bottom, var(--color-tertiary), transparent);
-  animation: scrollIndicator 2s ease-in-out infinite;
+  width: 128px;
+  height: 128px;
+  background-image: url('../../assets/images/graphics/Pointer.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.7;
+  animation: pointerBounce 2s ease-in-out infinite;
 }
 
-@keyframes scrollIndicator {
+@keyframes pointerBounce {
   0%, 100% {
-    opacity: 0.3;
+    opacity: 0.7;
     transform: translateX(-50%) translateY(0);
   }
   50% {
     opacity: 1;
-    transform: translateX(-50%) translateY(10px);
+    transform: translateX(-50%) translateY(8px);
   }
 }
 

@@ -25,6 +25,8 @@
   font-size: var(--text-sm);
   color: rgba(255, 255, 255, 0.8);
   margin: 0;
+  max-width: none; /* Override reset.css max-width constraint */
+  text-align: center; /* Ensure centering */
 }
 
 .footer-version {
@@ -33,6 +35,10 @@
   margin: 8px 0 0 0;
   font-family: monospace;
   letter-spacing: 0.5px;
+  text-align: center; /* Explicitly center the version number */
+  display: block; /* Ensure it takes full width for proper centering */
+  max-width: none; /* Override reset.css max-width constraint */
+  width: 100%; /* Ensure full width for centering */
 }
 
 /* Responsive adjustments */
