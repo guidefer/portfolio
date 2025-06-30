@@ -407,7 +407,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform var(--transition-slower) var(--ease-in-out);
 }
 
 .process-image-container:hover .process-image {
@@ -775,7 +775,7 @@ body.project-active .character-mascot {
   cursor: pointer;
   aspect-ratio: 4/3;
   position: relative;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--transition-slow) var(--ease-in-out);
 }
 
 .project-mini-gallery-section .gallery-item-wrapper {

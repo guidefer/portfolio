@@ -160,7 +160,6 @@ select:focus-visible {
   }
   
   /* Hide decorative elements */
-  .loading-screen,
   .pixel-mascot,
   .hero-section::before,
   .hero-section::after {

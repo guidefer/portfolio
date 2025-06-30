@@ -5,12 +5,86 @@
   background-color: var(--color-background);
   opacity: 1;
   visibility: visible;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Floating Islands */
+.floating-islands {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.floating-island {
+  position: absolute;
+  will-change: transform;
+}
+
+.floating-island-left {
+  left: 10%;
+  top: 20%;
+  width: 120px;
+  height: auto;
+  transform: translate3d(0, 0px, 0);
+  animation: floatLeft 6s ease-in-out infinite;
+}
+
+.floating-island-right {
+  right: 15%;
+  top: 55%;
+  width: 80px;
+  height: auto;
+  transform: translate3d(0, 0px, 0);
+  animation: floatRight 8s ease-in-out infinite;
+}
+
+/* Hide islands completely on screens 640px and below */
+@media (max-width: 1024px) {
+  .floating-island-left,
+  .floating-island-right {
+    display: none;
+  }
+}
+
+/* Floating animations with different timings for variety */
+@keyframes floatLeft {
+  0%, 100% {
+    transform: translate3d(0, 0px, 0) rotate(-1deg);
+  }
+  50% {
+    transform: translate3d(0, -15px, 0) rotate(1deg);
+  }
+}
+
+@keyframes floatRight {
+  0%, 100% {
+    transform: translate3d(0, 0px, 0) rotate(1deg);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0) rotate(-1deg);
+  }
+}
+
+/* Staggered animation delay for natural motion */
+.floating-island-left {
+  animation-delay: -2s;
+}
+
+.floating-island-right {
+  animation-delay: -1s;
 }
 
 .about-container {
   max-width: var(--container-max-width);
   margin: 0 auto;
   padding: 0 var(--space-md);
+  position: relative;
+  z-index: 2;
 }
 
 .about-content {
@@ -67,18 +141,6 @@
   list-style: none;
 }
 
-@media (min-width: 640px) {
-  .skills-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 768px) {
-  .skills-list {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 .skills-list li {
   padding: var(--space-md);
   background-color: var(--color-secondary);
@@ -94,8 +156,14 @@
   color: var(--color-primary);
 }
 
-/* Responsive Typography */
-@media (min-width: 768px) {
+/* Responsive Design */
+@media (min-width: 640px) {
+  .skills-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
   .about-container {
     padding: 0 var(--space-lg);
   }
@@ -107,11 +175,48 @@
   .about-text p {
     font-size: var(--text-xl);
   }
+  
+  .skills-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* Floating Islands - Desktop */
+  .floating-island-left {
+    width: 140px;
+    left: -3%;
+  }
+  
+  .floating-island-right {
+    width: 100px;
+    right: 2%;
+  }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .about-container {
     padding: 0 var(--space-xl);
+  }
+  
+  .floating-island-left {
+    width: 180px;
+    left: 5%;
+  }
+  
+  .floating-island-right {
+    width: 140px;
+    right: 5%;
+  }
+}
+
+@media (min-width: 1600px) {
+  .floating-island-left {
+    width: 220px;
+    left: 10%;
+  }
+  
+  .floating-island-right {
+    width: 180px;
+    right: 10%;
   }
 }
 
@@ -138,6 +243,11 @@
   
   .skills-list li:hover {
     transform: none;
+  }
+  
+  .floating-island {
+    animation: none;
+    transform: translate3d(0, 0, 0) rotate(0deg) !important;
   }
 }
 

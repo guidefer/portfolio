@@ -104,18 +104,8 @@
 
 /* JavaScript-Controlled Liquid Morphing Effects */
 @media (hover: hover) and (pointer: fine) {
-  /* Base gallery item - consistent transitions */
-  .gallery-item {
-    /* Override base transition with same unified approach */
-    transition: 
-      transform 0.4s ease-out,
-      opacity 0.4s ease-out,
-      filter 0.4s ease-out,
-      -webkit-filter 0.4s ease-out,
-      border-radius 0.4s ease-out,
-      box-shadow 0.4s ease-out;
-  }
-
+  /* Note: Base gallery item already has unified transitions defined above */
+  
   /* Only keep overlay effects in CSS */
   .gallery-item:hover .gallery-item-overlay {
     opacity: 1;
@@ -147,14 +137,7 @@
   -webkit-filter: blur(1px);
   filter: blur(1px);
   opacity: 0.7;
-  /* Use same transition timing as base element for consistency */
-  transition: 
-    transform 0.4s ease-out,
-    opacity 0.4s ease-out,
-    -webkit-filter 0.4s ease-out,
-    filter 0.4s ease-out,
-    border-radius 0.4s ease-out,
-    box-shadow 0.4s ease-out;
+  /* Note: Inherits base transition from .gallery-item class */
 }
 
 .gallery-item-hero .gallery-item-img {
@@ -205,7 +188,7 @@
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: all var(--transition-slow) var(--ease-in-out);
   padding: var(--space-lg);
   z-index: 3;
 }
@@ -218,7 +201,7 @@
   text-align: center;
   color: white;
   transform: translateY(20px);
-  transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) 0.1s;
+  transition: transform var(--transition-slow) var(--ease-in-out) 0.1s;
 }
 
 .gallery-item:hover .gallery-item-content {
@@ -253,7 +236,7 @@
   font-size: var(--text-base);
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: all var(--transition-base) var(--ease-in-out);
   position: relative;
   overflow: hidden;
 }

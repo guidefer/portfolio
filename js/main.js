@@ -6,7 +6,6 @@
 import UnifiedMascot from './modules/mascot-unified.js';
 import GalleryController from './modules/gallery.js';
 import NavigationController from './modules/navigation.js';
-// import LoadingController from './modules/loading.js'; // TEMPORARILY DISABLED
 import ProjectContentManager from './modules/project-content.js';
 import HeroParallaxController from './modules/hero-parallax.js';
 
@@ -60,7 +59,6 @@ class PortfolioApp {
     this.mascot = null;
     this.gallery = null;
     this.navigation = null;
-    // this.loading = null; // TEMPORARILY DISABLED
     this.projectContent = null;
     this.heroParallax = null;
     this.isInitialized = false;
@@ -149,9 +147,6 @@ class PortfolioApp {
       // Make project content manager globally accessible immediately
       window.projectContentManager = this.projectContent;
       
-      // INITIALIZE LOADING CONTROLLER - TEMPORARILY DISABLED
-      // this.loading = new LoadingController();
-      
       // CONNECT PROJECT CONTENT MANAGER TO GALLERY FOR SPA NAVIGATION
       this.gallery.setProjectContentManager(this.projectContent);
       this.projectContent.setNavigationController(this.navigation);
@@ -159,25 +154,7 @@ class PortfolioApp {
       // Setup cross-module communication
       this.setupModuleCommunication();
       
-      // Start loading sequence - TEMPORARILY DISABLED
-      // await this.loading.start();
-      
-      // After initial loading, hide petals for better performance during browsing - TEMPORARILY DISABLED
-      // setTimeout(() => {
-      //   this.loading.hideForBrowsing();
-      // }, 3000);
-      
-      // IMMEDIATE SETUP WITHOUT LOADING SCREEN
-      document.body.classList.remove('loading');
-      document.body.classList.add('loading-complete');
-      
-      // Hide loading screen immediately
-      const loadingScreen = document.getElementById('loading-screen');
-      if (loadingScreen) {
-        loadingScreen.style.display = 'none';
-      }
-      
-      // Initialize mascot directly
+      // Initialize mascot directly with entrance complete
       setTimeout(() => {
         if (this.mascot) {
           this.mascot.container?.classList.add('entrance-complete');
