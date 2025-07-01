@@ -1,7 +1,7 @@
 /**
  * Main Application Entry Point
  * Guilherme Ferreira Portfolio Website
- * @version 2.0.0 - Consistent Button Hover System + Navigation Animation Improvements
+ * @version 2.1.0 - Custom SVG Social Icons + Smooth Scroll Navigation
  */
 
 import { LoadingController } from './modules/loading.js';

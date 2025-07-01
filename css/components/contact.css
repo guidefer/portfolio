@@ -99,6 +99,20 @@
   font-size: var(--text-lg);
 }
 
+/* SVG Icon Styling */
+.contact-icon-svg {
+  width: 36px;
+  height: 36px;
+  /* No color override - let SVG show its natural gradient appearance */
+  transition: filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Turn SVG white on hover while keeping internal cutout details - same as nav buttons */
+.contact-link:hover .contact-icon-svg,
+.contact-link:focus .contact-icon-svg {
+  filter: brightness(0) invert(1);
+}
+
 /* Animation */
 .contact-content {
   opacity: 1;

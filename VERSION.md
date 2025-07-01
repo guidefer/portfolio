@@ -1,8 +1,9 @@
 # Portfolio Version History
 
-## Current Version: v2.0.0
+## Current Version: v2.1.0
 
 ### Version History:
+- v2.1.0 - Custom SVG social icons integration + smooth scroll navigation functionality
 - v2.0.0 - Consistent button hover system with gradient backgrounds + navigation animation improvements
 - v1.9.0 - Complete loading system removal + comprehensive CSS cleanup and optimization
 - v1.8.0 - Floating islands + contact base background + aggressive CSS deduplication  
