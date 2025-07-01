@@ -1,8 +1,10 @@
 # Portfolio Version History
 
-## Current Version: v2.1.0
+## Current Version: v2.2.0
 
 ### Version History:
+- v2.2.0 - Mobile navigation stacking context fix: moved menu outside header to resolve rendering issues
+- v2.1.1 - Mobile navigation critical fix: JS/CSS class alignment (.active → .open) + enhanced mobile UX
 - v2.1.0 - Custom SVG social icons integration + smooth scroll navigation functionality
 - v2.0.0 - Consistent button hover system with gradient backgrounds + navigation animation improvements
 - v1.9.0 - Complete loading system removal + comprehensive CSS cleanup and optimization

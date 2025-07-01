@@ -1,7 +1,7 @@
 /**
  * Main Application Entry Point
  * Guilherme Ferreira Portfolio Website
- * @version 2.1.0 - Custom SVG Social Icons + Smooth Scroll Navigation
+ * @version 2.2.0 - Mobile Navigation Stacking Context Fix
  */
 
 import { LoadingController } from './modules/loading.js';

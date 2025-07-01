@@ -32,11 +32,21 @@ export class NavigationController {
     try {
       // Find navigation elements
       this.navigationElement = document.querySelector('.nav-mobile-container');
+      this.mobileOverlay = document.querySelector('.nav-mobile-overlay');
       this.hamburgerButton = document.querySelector('.nav-hamburger');
       this.navLinks = Array.from(document.querySelectorAll('.nav-link, .nav-mobile-link'));
 
-      if (!this.navigationElement) {
-        console.warn('Navigation element not found');
+      console.log('🔍 Navigation Debug:', {
+        navigationElement: this.navigationElement,
+        mobileOverlay: this.mobileOverlay,
+        hamburgerButton: this.hamburgerButton,
+        navLinksCount: this.navLinks.length,
+        mobileMenu: document.querySelector('.nav-mobile-menu'),
+        backdrop: document.querySelector('.nav-backdrop')
+      });
+
+      if (!this.navigationElement || !this.mobileOverlay) {
+        console.warn('Navigation elements not found');
         return;
       }
 
@@ -61,6 +71,21 @@ export class NavigationController {
       this.hamburgerButton.addEventListener('click', this.handleHamburgerClick);
     }
 
+    // Backdrop click to close menu
+    const backdrop = document.querySelector('.nav-backdrop');
+    if (backdrop) {
+      backdrop.addEventListener('click', () => {
+        this.closeMenu();
+      });
+    }
+
+    // ESC key to close menu
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.isMenuOpen) {
+        this.closeMenu();
+      }
+    });
+
     // Scroll tracking for active states - use document.body since that's what works
     console.log('🔗 Adding scroll event listener to document.body...');
     document.body.addEventListener('scroll', this.handleWindowScroll, { passive: true });
@@ -70,7 +95,7 @@ export class NavigationController {
 
     // Close menu on outside click
     document.addEventListener('click', (e) => {
-      if (this.isMenuOpen && !this.navigationElement.contains(e.target)) {
+      if (this.isMenuOpen && this.mobileOverlay && !this.mobileOverlay.contains(e.target) && !this.navigationElement.contains(e.target)) {
         this.closeMenu();
       }
     });
@@ -198,9 +223,10 @@ export class NavigationController {
   }
 
   openMenu() {
-    if (!this.navigationElement) return;
+    if (!this.mobileOverlay) return;
     
-    this.navigationElement.classList.add('active');
+    console.log('🍔 Opening mobile menu');
+    this.mobileOverlay.classList.add('open');
     this.isMenuOpen = true;
     
     // Prevent body scroll on mobile
@@ -208,9 +234,10 @@ export class NavigationController {
   }
 
   closeMenu() {
-    if (!this.navigationElement) return;
+    if (!this.mobileOverlay) return;
     
-    this.navigationElement.classList.remove('active');
+    console.log('🍔 Closing mobile menu');
+    this.mobileOverlay.classList.remove('open');
     this.isMenuOpen = false;
     
     // Restore body scroll

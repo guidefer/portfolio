@@ -242,7 +242,30 @@
    ========================================================================== */
 
 .nav-mobile-container {
-  display: none; /* Hidden by default, shown on mobile */
+  display: block; /* Shown by default (mobile-first), hidden on desktop */
+}
+
+/* Mobile Menu Overlay (positioned outside header to avoid stacking issues) */
+.nav-mobile-overlay {
+  display: block;
+}
+
+.nav-backdrop {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 70px);
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-slower) var(--ease-liquid);
+  z-index: 998;
+}
+
+.nav-mobile-overlay.open .nav-backdrop {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Hamburger Button */
@@ -291,24 +314,6 @@
   transform: translateY(-6px) rotate(-45deg);
 }
 
-/* Mobile Navigation Panel */
-.nav-backdrop {
-  position: fixed;
-  top: 70px;
-  left: 0;
-  width: 100%;
-  height: calc(100vh - 70px);
-  background: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  visibility: hidden;
-  transition: all var(--transition-slower) var(--ease-liquid);
-  z-index: 998;
-}
-
-.nav-mobile-container.open .nav-backdrop {
-  opacity: 1;
-  visibility: visible;
-}
 
 .nav-mobile-menu {
   position: fixed;
@@ -329,6 +334,10 @@
 }
 
 .nav-mobile-container.open .nav-mobile-menu {
+  transform: translateX(0);
+}
+
+.nav-mobile-overlay.open .nav-mobile-menu {
   transform: translateX(0);
 }
 
@@ -402,17 +411,6 @@
    RESPONSIVE BREAKPOINTS
    ========================================================================== */
 
-/* Mobile: Hide desktop nav, show mobile container */
-@media (max-width: 767px) {
-  .nav-desktop {
-    display: none;
-  }
-  
-  .nav-mobile-container {
-    display: block;
-  }
-}
-
 /* Desktop: Show desktop nav, hide mobile container */
 @media (min-width: 768px) {
   .nav-desktop {
@@ -420,6 +418,10 @@
   }
   
   .nav-mobile-container {
+    display: none;
+  }
+  
+  .nav-mobile-overlay {
     display: none;
   }
 }

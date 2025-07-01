@@ -124,11 +124,16 @@
                     <span class="hamburger-line"></span>
                     <span class="sr-only">Menu</span> <!-- Add screen reader text for accessibility compliance -->
                 </button>
-                
-                <div class="nav-backdrop"></div>
-                
-                <nav class="nav-mobile-menu">
-                    <a href="#projects" class="nav-mobile-link" data-section="projects">
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu (moved outside header to avoid stacking context issues) -->
+    <div class="nav-mobile-overlay">
+        <div class="nav-backdrop"></div>
+        
+        <nav class="nav-mobile-menu">
+            <a href="#projects" class="nav-mobile-link" data-section="projects">
                         <div class="nav-icon">
                             <svg viewBox="0 0 512 512" fill="none">
                                 <g transform="matrix(1,0,0,1,-2.35305,10)">
@@ -169,12 +174,11 @@
                             </g>
                         </svg>
                     </div>
-                    <span class="nav-text">Contact</span>
-                </a>
-            </nav>
+                    <span class="nav-text">Contact</span>                    </a>
+                </nav>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
 
 <!-- Main Content -->
     <main id="main-content" class="main-content" role="main">
