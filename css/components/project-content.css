@@ -1,6 +1,7 @@
 /**
  * Project Content Container - Single Page Application
  * Full-width hero image with content sections
+ * Cache Bust: 2025-01-01-17:15:00
  */
 
 .project-content-container {
@@ -132,6 +133,18 @@
 @keyframes spin {
   to {
     transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Mini gallery entrance animation */
+@keyframes miniGalleryFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -474,20 +487,6 @@
   flex-wrap: wrap;
 }
 
-/* Fixed width mini gallery items */
-.project-mini-gallery-section .gallery-item {
-  width: 280px;
-  max-width: 280px;
-  flex-shrink: 0;
-}
-
-/* Ensure mini gallery items are visible and inherit main gallery styles */
-.project-mini-gallery-section .gallery-item {
-  display: block;
-  opacity: 1;
-  visibility: visible;
-}
-
 /* ===== BACK SECTION ===== */
 .project-back-section {
   background: var(--color-secondary);
@@ -638,10 +637,6 @@
     gap: 0.8rem;
   }
   
-  .project-mini-gallery-section .gallery-item {
-    aspect-ratio: 16/10;
-  }
-  
   .project-back-section {
     padding: 2rem 0;
   }
@@ -685,11 +680,6 @@
   
   .project-mini-gallery-section {
     padding: 2rem 0;
-  }
-  
-  .project-mini-gallery-section .gallery-item {
-    width: 200px;
-    max-width: 200px;
   }
   
   .mini-gallery-grid {
@@ -746,12 +736,6 @@ body.project-active .character-mascot {
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /* ===== ACCESSIBILITY ===== */
 @media (prefers-reduced-motion: reduce) {
   .mini-gallery-item,
@@ -789,9 +773,10 @@ body.project-active .character-mascot {
   }
 }
 
-/* ===== MINI GALLERY VISUAL STYLES ===== */
-/* Ensure mini gallery items are fixed size and fully styled */
-.project-mini-gallery-section .gallery-item {
+/* ===== MINI GALLERY INDEPENDENT STYLES ===== */
+/* Completely independent from main gallery - no inheritance conflicts */
+
+.mini-gallery-item {
   width: 280px;
   max-width: 280px;
   flex-shrink: 0;
@@ -800,21 +785,31 @@ body.project-active .character-mascot {
   visibility: visible;
   background-color: var(--color-background);
   border-radius: 20px;
+  border: 1px solid transparent;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
   overflow: hidden;
   cursor: pointer;
   aspect-ratio: 4/3;
   position: relative;
-  transition: all var(--transition-slow) var(--ease-in-out);
+  animation: miniGalleryFadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+  /* Enhanced transition with specific timing for border-radius */
+  transition: 
+    border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    border-radius 0.4s ease-out,
+    box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.project-mini-gallery-section .gallery-item-wrapper {
+.mini-gallery-item-wrapper {
   display: block;
   width: 100%;
   height: 100%;
   position: relative;
 }
 
-.project-mini-gallery-section .gallery-image-container {
+.mini-gallery-image-container {
   display: block;
   width: 100%;
   height: 100%;
@@ -822,7 +817,7 @@ body.project-active .character-mascot {
   overflow: hidden;
 }
 
-.project-mini-gallery-section .gallery-image {
+.mini-gallery-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -830,7 +825,7 @@ body.project-active .character-mascot {
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.project-mini-gallery-section .gallery-item-overlay {
+.mini-gallery-item-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -845,63 +840,80 @@ body.project-active .character-mascot {
   transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.project-mini-gallery-section .gallery-item-content {
+.mini-gallery-item-content {
   color: white;
   text-align: center;
-  transform: translateY(20px);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+  transform: scale(0.9);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.project-mini-gallery-section .gallery-item-title {
+.mini-gallery-item-title {
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
   line-height: 1.2;
 }
 
-.project-mini-gallery-section .gallery-item-description {
+.mini-gallery-item-description {
   font-size: 0.9rem;
   opacity: 0.9;
   margin: 0;
 }
 
-/* Hover effects for mini gallery */
-.project-mini-gallery-section .gallery-item:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(235, 197, 51, 0.3), 0 8px 16px rgba(214, 100, 34, 0.2);
-  border-radius: 40px;
+/* DISABLED: CSS hover effects - JavaScript handles all transitions for smooth animation */
+/*
+.mini-gallery-item:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 
+    0 20px 40px rgba(235, 197, 51, 0.4), 
+    0 10px 20px rgba(214, 100, 34, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
 }
 
-.project-mini-gallery-section .gallery-item:hover .gallery-image {
-  transform: scale(1.1);
-}
-
-.project-mini-gallery-section .gallery-item:hover .gallery-item-overlay {
+.mini-gallery-item:hover .mini-gallery-item-overlay {
   opacity: 1;
 }
 
-.project-mini-gallery-section .gallery-item:hover .gallery-item-content {
-  transform: translateY(0);
+.mini-gallery-item:hover .mini-gallery-image {
+  transform: scale(1.08);
 }
 
-/* Blur effect for non-hovered items */
-.project-mini-gallery-section .gallery-item.gallery-blur {
+.mini-gallery-item:hover .mini-gallery-item-content {
+  transform: scale(1);
+}
+*/
+
+/* JavaScript-controlled hover states - smooth transitions for all properties */
+.mini-gallery-item.mini-gallery-hero {
+  transform: scale(1.05);
+  border-radius: 28px; /* Smaller change for smoother transition */
+  border-color: rgba(255, 255, 255, 0.6);
+  z-index: 10;
+  position: relative;
+  box-shadow: 
+    0 20px 40px rgba(235, 197, 51, 0.4), 
+    0 10px 20px rgba(214, 100, 34, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mini-gallery-item.mini-gallery-hero .mini-gallery-image {
+  transform: scale(1.08);
+}
+
+.mini-gallery-item.mini-gallery-hero .mini-gallery-item-overlay {
+  opacity: 1;
+}
+
+.mini-gallery-item.mini-gallery-hero .mini-gallery-item-content {
+  transform: scale(1);
+}
+
+.mini-gallery-item.mini-gallery-blur {
   filter: blur(2px);
-  opacity: 0.7;
-  transform: scale(0.98);
-}
-
-/* Selection animation */
-.project-mini-gallery-section .gallery-item.selecting {
+  opacity: 0.6;
   transform: scale(0.95);
-  opacity: 0.8;
-  filter: brightness(1.2);
-}
-
-.project-mini-gallery-section .gallery-item.context-dimmed {
-  opacity: 0.3;
-  filter: grayscale(0.5);
-  transform: scale(0.96);
 }
 
 /* ===== BODY SCROLL CONTROL ===== */
@@ -915,3 +927,8 @@ body.project-active {
 body {
   overflow-x: hidden;
 }
+
+/* Staggered animation delays for mini gallery items */
+.mini-gallery-item:nth-child(1) { animation-delay: 0.1s; }
+.mini-gallery-item:nth-child(2) { animation-delay: 0.2s; }
+.mini-gallery-item:nth-child(3) { animation-delay: 0.3s; }

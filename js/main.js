@@ -157,6 +157,9 @@ class PortfolioApp {
       // Setup cross-module communication
       this.setupModuleCommunication();
       
+      // Setup smooth scroll functionality
+      this.setupSmoothScroll();
+      
       // Initialize mascot directly with entrance complete
       setTimeout(() => {
         if (this.mascot) {
@@ -233,6 +236,44 @@ class PortfolioApp {
       this.mascot?.onInteraction('navigation');
     });
     */
+  }
+
+  setupSmoothScroll() {
+    // Handle smooth scrolling for anchor links
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a[href^="#"]');
+      if (!link) return;
+      
+      const href = link.getAttribute('href');
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+      
+      if (targetElement) {
+        e.preventDefault();
+        
+        // Smooth scroll to target
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest'
+        });
+        
+        // Update URL without jumping
+        if (history.pushState) {
+          history.pushState(null, null, href);
+        }
+        
+        // Log the scroll action
+        console.log(`🔗 Smooth scroll to: ${targetId}`);
+        
+        // Trigger custom event for potential mascot reactions
+        document.dispatchEvent(new CustomEvent('scroll:anchor', {
+          detail: { target: targetId, element: targetElement }
+        }));
+      }
+    });
+    
+    console.log('✨ Smooth scroll functionality initialized');
   }
 
   handleInitializationError(error) {

@@ -310,23 +310,23 @@ class ProjectContentManager {
    */
   generateMiniGalleryItem(projectData) {
     return `
-      <div class="gallery-item mini-gallery-item" 
+      <div class="mini-gallery-item" 
            data-project-id="${projectData.id}"
            role="button"
            tabindex="0"
            aria-label="View ${projectData.title} project">
-        <div class="gallery-item-wrapper">
-          <div class="gallery-image-container">
+        <div class="mini-gallery-item-wrapper">
+          <div class="mini-gallery-image-container">
             <img src="${projectData.thumbnail.src}" 
                  alt="${projectData.title}"
-                 class="gallery-image"
+                 class="mini-gallery-image"
                  loading="lazy">
           </div>
           
-          <div class="gallery-item-overlay">
-            <div class="gallery-item-content">
-              <h3 class="gallery-item-title">${projectData.title}</h3>
-              <p class="gallery-item-description">${projectData.category} • ${projectData.year}</p>
+          <div class="mini-gallery-item-overlay">
+            <div class="mini-gallery-item-content">
+              <h3 class="mini-gallery-item-title">${projectData.title}</h3>
+              <p class="mini-gallery-item-description">${projectData.category} • ${projectData.year}</p>
             </div>
           </div>
         </div>
@@ -356,13 +356,13 @@ class ProjectContentManager {
         }
       });
       
-      // Use the same hover effects as main gallery
+      // Enhanced hover effects like main gallery
       item.addEventListener('mouseenter', () => {
-        this.addGalleryHoverEffect(item);
+        this.addMiniGalleryHoverEffect(item);
       });
       
       item.addEventListener('mouseleave', () => {
-        this.removeGalleryHoverEffect(item);
+        this.removeMiniGalleryHoverEffect(item);
       });
     });
     
@@ -375,16 +375,16 @@ class ProjectContentManager {
   async handleMiniGalleryClick(projectId, item) {
     console.log('🖱️ Mini gallery item clicked:', projectId);
     
-    // Add selection animation
-    item.classList.add('selecting');
+    // DISABLED: Add selection animation
+    // item.classList.add('selecting');
     
-    // Dim other items
-    const allMiniItems = this.contentBody.querySelectorAll('.mini-gallery-item');
-    allMiniItems.forEach(otherItem => {
-      if (otherItem !== item) {
-        otherItem.classList.add('context-dimmed');
-      }
-    });
+    // DISABLED: Dim other items
+    // const allMiniItems = this.contentBody.querySelectorAll('.mini-gallery-item');
+    // allMiniItems.forEach(otherItem => {
+    //   if (otherItem !== item) {
+    //     otherItem.classList.add('context-dimmed');
+    //   }
+    // });
     
     // Wait for animation, then navigate to the new project
     setTimeout(async () => {
@@ -393,56 +393,32 @@ class ProjectContentManager {
   }
 
   /**
-   * Add gallery hover effect (same as main gallery)
+   * Add enhanced mini gallery hover effect
    */
-  addGalleryHoverEffect(item) {
-    const overlay = item.querySelector('.gallery-item-overlay');
-    const image = item.querySelector('.gallery-image');
+  addMiniGalleryHoverEffect(item) {
+    // Add hero class for enhanced styling
+    item.classList.add('mini-gallery-hero');
     
-    // Apply the same transforms as main gallery
-    item.style.transform = 'translateY(-8px) scale(1.02)';
-    item.style.boxShadow = '0 20px 40px rgba(235, 197, 51, 0.3), 0 8px 16px rgba(214, 100, 34, 0.2)';
-    
-    if (overlay) {
-      overlay.style.opacity = '1';
-    }
-    
-    if (image) {
-      image.style.transform = 'scale(1.1)';
-    }
-    
-    // Blur non-hovered items
+    // Blur non-hovered items for focus effect
     const allMiniItems = this.contentBody.querySelectorAll('.mini-gallery-item');
     allMiniItems.forEach(otherItem => {
       if (otherItem !== item) {
-        otherItem.classList.add('gallery-blur');
+        otherItem.classList.add('mini-gallery-blur');
       }
     });
   }
 
   /**
-   * Remove gallery hover effect (same as main gallery)
+   * Remove enhanced mini gallery hover effect
    */
-  removeGalleryHoverEffect(item) {
-    const overlay = item.querySelector('.gallery-item-overlay');
-    const image = item.querySelector('.gallery-image');
-    
-    // Reset transforms
-    item.style.transform = '';
-    item.style.boxShadow = '';
-    
-    if (overlay) {
-      overlay.style.opacity = '';
-    }
-    
-    if (image) {
-      image.style.transform = '';
-    }
+  removeMiniGalleryHoverEffect(item) {
+    // Remove hero class
+    item.classList.remove('mini-gallery-hero');
     
     // Remove blur from all items
     const allMiniItems = this.contentBody.querySelectorAll('.mini-gallery-item');
     allMiniItems.forEach(otherItem => {
-      otherItem.classList.remove('gallery-blur');
+      otherItem.classList.remove('mini-gallery-blur');
     });
   }
 
