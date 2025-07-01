@@ -65,7 +65,7 @@ class ProjectContentManager {
     this.currentProjectId = projectId;
     
     // Focus management - focus the container for keyboard accessibility
-    this.container.focus();
+    // this.container.focus(); // TEMPORARILY DISABLED FOR DEVELOPMENT
     
     // Dispatch event
     this.dispatchEvent('project:show', { projectId });

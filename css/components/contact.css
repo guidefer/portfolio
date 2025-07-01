@@ -115,6 +115,15 @@
   }
 }
 
+@media (min-width: 1280px) {
+  .contact-section {
+    /* Switch to repeating pattern on large screens to prevent excessive height */
+    background-repeat: repeat-x;
+    background-size: auto 260px; /* Fixed height for the repeating pattern */
+    background-position: center bottom;
+  }
+}
+
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .contact-content,

@@ -1,20 +1,20 @@
-/* Header and Navigation Styles */
+/* Header Styles - Liquid Navigation System */
+
+/* ==========================================================================
+   HEADER CONTAINER
+   ========================================================================== */
 
 .header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #ffffff;
-  border-bottom: 1px solid #C8C8BC;
-  z-index: 1000;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.header.scrolled {
   background-color: rgba(255, 255, 255, 0.95);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-secondary);
+  z-index: 1000;
+  transition: transform 0.2s ease;
 }
 
 .header.header-hidden {
@@ -25,268 +25,408 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
-  max-width: 1280px;
+  padding: var(--space-sm) var(--space-lg);
+  max-width: var(--container-max-width);
   margin: 0 auto;
   height: 70px;
 }
 
-@media (min-width: 768px) {
-  .nav-container {
-    padding: var(--space-md) var(--space-lg);
-  }
-}
+/* ==========================================================================
+   LOGO
+   ========================================================================== */
 
-@media (min-width: 1024px) {
-  .nav-container {
-    padding: var(--space-md) var(--space-xl);
-  }
-}
-
-/* Logo */
 .nav-logo {
-  display: flex;
-  align-items: center;
-  font-family: Georgia, serif;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #333333;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-primary);
   text-decoration: none;
-  transition: color 0.2s ease;
-  outline: none;
+  transition: color var(--transition-base);
+  z-index: 1001;
 }
 
-.nav-logo:hover,
-.nav-logo:focus {
-  color: #EBC533;
-  outline: none;
+.nav-logo:hover {
+  color: var(--color-accent-yellow);
 }
 
 .logo-text {
   display: block;
 }
 
-/* Mobile Menu Toggle */
-.nav-toggle {
+/* ==========================================================================
+   ICON GRADIENT AND SHARED ICON STYLES
+   ========================================================================== */
+
+/* Icon Gradient Definition */
+.icon-gradient-def {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Shared Icon Styles */
+.nav-icon {
+  width: 36px;
+  height: 36px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: var(--space-sm);
-  transition: transform var(--transition-base) var(--ease-in-out);
-}
-
-.nav-toggle:hover {
-  transform: scale(1.1);
-}
-
-.nav-toggle:focus {
-  outline: 2px solid var(--color-accent-yellow);
-  outline-offset: 2px;
-}
-
-.nav-toggle-line {
-  width: 20px;
-  height: 2px;
-  background-color: var(--color-primary);
-  margin: 2px 0;
-  transition: all var(--transition-slow) var(--ease-in-out);
-  transform-origin: center;
-}
-
-/* Mobile menu open state - Enhanced burger animation */
-.header.nav-open .nav-toggle-line:nth-child(1) {
-  transform: translateY(6px) rotate(45deg);
-}
-
-.header.nav-open .nav-toggle-line:nth-child(2) {
-  opacity: 0;
-  transform: scale(0);
-}
-
-.header.nav-open .nav-toggle-line:nth-child(3) {
-  transform: translateY(-6px) rotate(-45deg);
-}
-
-/* Navigation Menu - Enhanced slide animation */
-.nav-menu {
-  position: fixed;
-  top: var(--header-height);
-  left: 0;
-  width: 100%;
-  height: calc(100vh - var(--header-height));
-  background-color: var(--color-background);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: var(--space-3xl) var(--space-md);
-  transform: translateX(100%);
-  transition: transform var(--transition-slower) var(--ease-in-out);
-  overflow-y: auto;
-  /* Remove shadow when closed */
-  box-shadow: none;
-}
-
-.nav-menu.nav-menu-open {
-  transform: translateX(0);
-  transition: transform 0.8s cubic-bezier(0.0, 0.0, 0.2, 1);
-  /* Add backdrop shadow only when menu is open */
-  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
-}
-
-.nav-menu li {
-  margin-bottom: var(--space-lg);
-}
-
-.nav-link {
-  display: block;
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: #333333;
-  text-decoration: none;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  transition: all var(--transition-base) var(--ease-in-out);
+  flex-shrink: 0;
   position: relative;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  outline: none;
-  border: none;
-  /* Add subtle underline animation preparation */
+  transition: all var(--transition-slower) var(--ease-liquid);
+}
+
+.nav-icon svg {
+  width: 100%;
+  height: 100%;
+  transition: all var(--transition-base) var(--ease-in-out);
+}
+
+/* SVG Icon Fill Patterns */
+.nav-icon svg path {
+  fill: url(#iconGradient);
+  transition: fill var(--transition-base) var(--ease-in-out);
+}
+
+.nav-icon svg circle,
+.nav-icon svg rect,
+.nav-icon svg path:not(:first-child) {
+  fill: var(--color-background); /* White cutouts for About icon */
+}
+
+/* ==========================================================================
+   DESKTOP NAVIGATION
+   ========================================================================== */
+
+.nav-desktop {
+  display: none;
+  gap: var(--space-md);
+}
+
+/* Desktop Navigation Links */
+.nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm);
+  border-radius: 12px;
+  background: white;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
   overflow: hidden;
+  transition: padding var(--transition-slower) var(--ease-liquid),
+              border-radius var(--transition-slower) var(--ease-liquid) 0.2s, /* Delayed liquid morph */
+              transform var(--transition-slower) var(--ease-liquid) 0.1s; /* Subtle scale */
 }
 
 .nav-link::before {
   content: '';
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--color-accent-yellow), var(--color-accent-orange));
-  transition: width var(--transition-slow) var(--ease-in-out);
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-accent);
+  opacity: 0;
+  transition: opacity var(--transition-slower) var(--ease-liquid);
+  border-radius: inherit;
+  z-index: 1;
 }
 
+.nav-link .nav-icon {
+  z-index: 2;
+  transform: translateX(0);
+  transition: transform var(--transition-slower) var(--ease-liquid) 0.1s; /* Slight delay */
+}
+
+/* Desktop Text - Hidden by Default */
+.nav-link .nav-text {
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-left: var(--space-sm);
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all var(--transition-slower) var(--ease-liquid) 0.15s, /* Text slides in after background */
+              width var(--transition-slower) var(--ease-liquid) 0.1s; /* Width expands earlier */
+  z-index: 2;
+  position: relative;
+  color: var(--color-primary);
+  white-space: nowrap;
+  width: 0; /* Hidden initially - desktop only */
+  overflow: hidden;
+}
+
+/* Desktop Hover States */
 .nav-link:hover {
-  color: #EBC533;
-  background-color: rgba(235, 197, 51, 0.1);
-  transform: translateX(8px);
+  padding-left: var(--space-lg);
+  padding-right: var(--space-lg);
+  border-radius: 50px; /* Liquid morph to pill shape */
+  transform: scale(1.02); /* Subtle grow effect for liquid feel */
 }
 
 .nav-link:hover::before {
-  width: 100%;
+  opacity: 1; /* Show gradient background */
+  transition: opacity var(--transition-slower) var(--ease-liquid); /* No delay for background */
 }
 
-.nav-link:focus {
-  color: #EBC533;
-  background-color: rgba(235, 197, 51, 0.1);
-  outline: none;
-  box-shadow: none;
-  transform: translateX(8px);
+.nav-link:hover .nav-icon {
+  transform: translateX(-4px);
 }
 
-.nav-link:focus::before {
-  width: 100%;
+.nav-link:hover .nav-icon svg path,
+.nav-link:hover .nav-icon svg circle,
+.nav-link:hover .nav-icon svg rect {
+  fill: var(--color-background) !important;
 }
 
-/* Fix for mobile hover state bug */
-@media (hover: hover) and (pointer: fine) {
-  .nav-link:hover {
-    color: #EBC533;
-    background-color: rgba(235, 197, 51, 0.1);
-    transform: translateX(8px);
-  }
-
-  .nav-link:hover::before {
-    width: 100%;
-  }
+.nav-link:hover .nav-text {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--color-background);
+  width: auto; /* Show text */
 }
 
-/* Disable hover on touch devices */
-@media (hover: none) {
-  .nav-link:hover {
-    color: inherit;
-    background-color: transparent;
-    transform: none;
-  }
-
-  .nav-link:hover::before {
-    width: 0;
-  }
-}
-
+/* Desktop Active States (same as hover) */
+.nav-link.active,
 .nav-link.nav-link-active {
-  color: var(--color-accent-yellow);
+  padding-left: var(--space-lg);
+  padding-right: var(--space-lg);
+  border-radius: 50px;
 }
 
-.nav-link.nav-link-active::after {
+.nav-link.active::before,
+.nav-link.nav-link-active::before {
+  opacity: 1;
+}
+
+.nav-link.active .nav-icon,
+.nav-link.nav-link-active .nav-icon {
+  transform: translateX(-4px);
+}
+
+.nav-link.active .nav-icon svg path,
+.nav-link.active .nav-icon svg circle,
+.nav-link.active .nav-icon svg rect,
+.nav-link.nav-link-active .nav-icon svg path,
+.nav-link.nav-link-active .nav-icon svg circle,
+.nav-link.nav-link-active .nav-icon svg rect {
+  fill: var(--color-background) !important;
+}
+
+.nav-link.active .nav-text,
+.nav-link.nav-link-active .nav-text {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--color-background);
+  width: auto;
+}
+.nav-link.nav-link-active .nav-icon svg path,
+.nav-link.nav-link-active .nav-icon svg circle,
+.nav-link.nav-link-active .nav-icon svg rect {
+  fill: var(--color-background) !important;
+}
+
+.nav-link.active .nav-text,
+.nav-link.nav-link-active .nav-text {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--color-background);
+  width: auto;
+}
+
+/* ==========================================================================
+   MOBILE NAVIGATION
+   ========================================================================== */
+
+.nav-mobile-container {
+  display: none; /* Hidden by default, shown on mobile */
+}
+
+/* Hamburger Button */
+.nav-hamburger {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-sm);
+  transition: none; /* No transitions on button itself */
+  z-index: 1001;
+}
+
+.nav-hamburger:focus {
+  outline: 2px solid var(--color-accent-yellow);
+  outline-offset: 2px;
+}
+
+.hamburger-line {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--color-primary);
+  margin: 2px 0;
+  transition: all var(--transition-base) var(--ease-in-out);
+  transform-origin: center;
+}
+
+/* Hamburger to X Animation */
+.nav-mobile-container.open .hamburger-line:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.nav-mobile-container.open .hamburger-line:nth-child(2) {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.nav-mobile-container.open .hamburger-line:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Mobile Navigation Panel */
+.nav-backdrop {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 70px);
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-slower) var(--ease-liquid);
+  z-index: 998;
+}
+
+.nav-mobile-container.open .nav-backdrop {
+  opacity: 1;
+  visibility: visible;
+}
+
+.nav-mobile-menu {
+  position: fixed;
+  top: 70px;
+  right: 0;
+  width: 320px;
+  max-width: 90vw;
+  height: calc(100vh - 70px);
+  background: var(--color-background);
+  padding: var(--space-2xl) var(--space-lg);
+  transform: translateX(100%);
+  transition: transform var(--transition-slower) var(--ease-liquid);
+  overflow-y: auto;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.nav-mobile-container.open .nav-mobile-menu {
+  transform: translateX(0);
+}
+
+/* Mobile Links */
+.nav-mobile-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: var(--space-lg) var(--space-md);
+  border-radius: 12px;
+  background: white;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all var(--transition-slower) var(--ease-liquid);
+}
+
+.nav-mobile-link::before {
   content: '';
   position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 2px;
-  background-color: var(--color-accent-yellow);
-  border-radius: 1px;
+  background: var(--gradient-accent);
+  opacity: 0;
+  transition: opacity var(--transition-slower) var(--ease-liquid);
+  border-radius: inherit;
+  z-index: 1;
 }
 
-/* Desktop Navigation */
-@media (min-width: 768px) {
-  .nav-toggle {
+.nav-mobile-link .nav-icon {
+  z-index: 2;
+}
+
+.nav-mobile-link .nav-text {
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: var(--color-accent-orange); /* Orange text by default */
+  transition: all var(--transition-slower) var(--ease-liquid);
+  z-index: 2;
+  margin-left: var(--space-md);
+}
+
+/* Mobile Hover/Active States */
+.nav-mobile-link:hover,
+.nav-mobile-link.active {
+  border-radius: 50px; /* Liquid morph */
+}
+
+.nav-mobile-link:hover::before,
+.nav-mobile-link.active::before {
+  opacity: 1; /* Show gradient background */
+}
+
+.nav-mobile-link:hover .nav-text,
+.nav-mobile-link.active .nav-text {
+  color: var(--color-background) !important; /* White text */
+}
+
+.nav-mobile-link:hover .nav-icon svg path,
+.nav-mobile-link:hover .nav-icon svg circle,
+.nav-mobile-link:hover .nav-icon svg rect,
+.nav-mobile-link.active .nav-icon svg path,
+.nav-mobile-link.active .nav-icon svg circle,
+.nav-mobile-link.active .nav-icon svg rect {
+  fill: var(--color-background) !important;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* Mobile: Hide desktop nav, show mobile container */
+@media (max-width: 767px) {
+  .nav-desktop {
     display: none;
   }
   
-  .nav-menu {
-    position: static;
-    width: auto;
-    height: auto;
-    background: none;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0;
-    transform: none;
-    overflow: visible;
-    display: flex !important;
-  }
-  
-  .nav-menu li {
-    margin-bottom: 0;
-    margin-left: 1.5rem;
-    list-style: none;
-  }
-  
-  .nav-link {
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
-    color: #333333;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    outline: none;
-    border: none;
-  }
-  
-  .nav-link:hover {
-    color: #EBC533;
-    background-color: rgba(235, 197, 51, 0.1);
-  }
-  
-  .nav-link:focus {
-    color: #EBC533;
-    background-color: rgba(235, 197, 51, 0.1);
-    outline: none;
-    box-shadow: none;
-  }
-  
-  .nav-link.nav-link-active::after {
-    bottom: -2px;
+  .nav-mobile-container {
+    display: block;
   }
 }
+
+/* Desktop: Show desktop nav, hide mobile container */
+@media (min-width: 768px) {
+  .nav-desktop {
+    display: flex;
+  }
+  
+  .nav-mobile-container {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY UTILITIES
+   ========================================================================== */
 
 /* Prevent body scroll when mobile menu is open */
 body.nav-menu-open {
@@ -311,37 +451,6 @@ body.nav-menu-open {
   top: 6px;
 }
 
-/* Enhanced mobile menu animations */
-@media (max-width: 767px) {
-  .nav-menu li {
-    opacity: 0;
-    transform: translateX(20px);
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-  }
-  
-  .nav-menu.nav-menu-open li {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  
-  /* Enhanced stagger animation for menu items */
-  .nav-menu.nav-menu-open li:nth-child(1) { 
-    transition-delay: 0.1s; 
-  }
-  .nav-menu.nav-menu-open li:nth-child(2) { 
-    transition-delay: 0.2s; 
-  }
-  .nav-menu.nav-menu-open li:nth-child(3) { 
-    transition-delay: 0.3s; 
-  }
-  .nav-menu.nav-menu-open li:nth-child(4) { 
-    transition-delay: 0.4s; 
-  }
-  .nav-menu.nav-menu-open li:nth-child(5) { 
-    transition-delay: 0.5s; 
-  }
-}
-
 /* High contrast mode adjustments */
 @media (prefers-contrast: high) {
   .header {
@@ -349,7 +458,9 @@ body.nav-menu-open {
   }
   
   .nav-link:hover,
-  .nav-link:focus {
+  .nav-link:focus,
+  .nav-mobile-link:hover,
+  .nav-mobile-link:focus {
     background-color: var(--color-accent-yellow);
     color: var(--color-primary);
   }
@@ -358,13 +469,11 @@ body.nav-menu-open {
 /* Reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .header,
-  .nav-menu,
-  .nav-toggle-line,
-  .nav-link {
-    transition: none;
-  }
-  
-  .nav-menu li {
+  .nav-mobile-menu,
+  .nav-backdrop,
+  .hamburger-line,
+  .nav-link,
+  .nav-mobile-link {
     transition: none;
   }
 }

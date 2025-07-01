@@ -12,11 +12,11 @@
 @import url('./components/about.css');
 @import url('./components/contact.css');
 @import url('./components/footer.css');
-@import url('./components/mascot-unified.css');
+/* @import url('./components/mascot-unified.css'); */ /* TEMPORARILY DISABLED FOR DEVELOPMENT */
 @import url('./components/project-content.css');
 
 /* Utility Classes */
-@import url('./utilities/accessibility.css');
+/* @import url('./utilities/accessibility.css'); */ /* TEMPORARILY DISABLED FOR DEVELOPMENT */
 @import url('./utilities/animations.css');
 @import url('./utilities/liquid-morphing.css');
 
@@ -27,6 +27,21 @@ html {
   /* Prevent horizontal scrolling at root level */
   overflow-x: hidden;
   max-width: 100vw;
+  /* Account for fixed header when scrolling to sections */
+  scroll-padding-top: 70px; /* Match header height */
+}
+
+/* Override reset.css target margin to use our header height */
+:target {
+  scroll-margin-block: 70px 0; /* Top margin for header, no bottom margin */
+}
+
+/* Ensure sections align perfectly with navigation */
+#home,
+#projects,
+#about,
+#contact {
+  scroll-margin-top: 70px; /* Precise header height alignment */
 }
 
 *,
@@ -193,6 +208,19 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+/* Screen Reader Only - Basic accessibility for console warnings */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Error Message Styles */

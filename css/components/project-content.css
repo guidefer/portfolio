@@ -17,9 +17,9 @@
   visibility: hidden;
   transform: translateY(20px);
   transition: all 0.4s ease;
-  /* Prevent multiple scrollbars */
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-tertiary) transparent;
+  /* Prevent multiple scrollbars - Firefox properties commented out for Chrome compatibility */
+  /* scrollbar-width: thin; */
+  /* scrollbar-color: var(--color-tertiary) transparent; */
 }
 
 .project-content-container::-webkit-scrollbar {

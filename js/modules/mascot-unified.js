@@ -1,6 +1,8 @@
 /* UNIFIED MASCOT SYSTEM - Complete Character + Environmental Control */
 /* Merged from mascot.js + mascot-environment.js for perfect synchronization */
 
+import { LoadingController } from './loading.js';
+
 export class UnifiedMascot {
   constructor() {
     // Core properties
@@ -198,7 +200,8 @@ export class UnifiedMascot {
       this.bindNavigationEvents();
     }
     
-    // Page focus/blur handling
+    // Page focus/blur handling - TEMPORARILY DISABLED FOR DEVELOPMENT
+    /*
     window.addEventListener('focus', () => {
       console.log('🎭 Page focus detected - waking up from sleepy state');
       this.onPageFocus();
@@ -208,6 +211,7 @@ export class UnifiedMascot {
       console.log('🎭 Page blur detected - will enter sleepy state if idle');
       this.onPageBlur();
     });
+    */
     
     console.log('🎭 Event bindings completed');
   }
@@ -220,7 +224,7 @@ export class UnifiedMascot {
     }
     
     // Don't allow state changes during loading (except initial idle setup)
-    if (document.body.classList.contains('loading') && newState !== 'idle') {
+    if (LoadingController?.isLoading && LoadingController.isLoading() && newState !== 'idle') {
       console.log(`🎭 setState blocked during loading: ${newState}`);
       return;
     }

@@ -1,11 +1,13 @@
 /**
  * Main Application Entry Point
  * Guilherme Ferreira Portfolio Website
+ * @version 2.1.0 - Navigation System Refactor Complete
  */
 
-import UnifiedMascot from './modules/mascot-unified.js';
+import { LoadingController } from './modules/loading.js';
+// import UnifiedMascot from './modules/mascot-unified.js'; // TEMPORARILY DISABLED FOR DEVELOPMENT
 import GalleryController from './modules/gallery.js';
-import NavigationController from './modules/navigation.js';
+import { NavigationController } from './modules/navigation-clean.js';
 import ProjectContentManager from './modules/project-content.js';
 import HeroParallaxController from './modules/hero-parallax.js';
 
@@ -31,11 +33,8 @@ function showModuleLoadError(error) {
     return;
   }
   
-  // Hide loading screen
-  const loadingScreen = document.getElementById('loading-screen');
-  if (loadingScreen) {
-    loadingScreen.style.display = 'none';
-  }
+  // Ensure fast loading state is removed
+  LoadingController.hide();
   
   // Show error message
   const errorMessage = document.createElement('div');
@@ -63,11 +62,14 @@ class PortfolioApp {
     this.heroParallax = null;
     this.isInitialized = false;
     
-    this.setupFocusManagement();
+    // this.setupFocusManagement(); // TEMPORARILY DISABLED FOR DEVELOPMENT
     this.init();
   }
 
   setupFocusManagement() {
+    // TEMPORARILY DISABLED FOR DEVELOPMENT
+    return;
+    
     // Detect keyboard usage for accessibility
     let isUsingKeyboard = false;
     
@@ -120,23 +122,24 @@ class PortfolioApp {
   async init() {
     console.log('🚀 Initializing Portfolio App...');
     
+    // Ensure fast loading - remove any loading states immediately
+    LoadingController.init();
+    
     // Log browser compatibility info for debugging
     this.logBrowserInfo();
     
     try {
-      // Add more detailed error logging for Safari debugging
-      console.log('📱 User agent:', navigator.userAgent);
-      console.log('📱 Platform:', navigator.platform);
-      
-      // INITIALIZE MODULES BEFORE LOADING STARTS - with individual error handling
+      // INITIALIZE MODULES IMMEDIATELY for fast experience
       console.log('🧭 Initializing Navigation...');
       this.navigation = new NavigationController();
+      this.navigation.init();
       
       console.log('🖼️ Initializing Gallery...');
       this.gallery = new GalleryController();
       
-      console.log('🐧 Initializing Mascot...');
-      this.mascot = new UnifiedMascot();
+      // console.log('🐧 Initializing Mascot...'); // TEMPORARILY DISABLED FOR DEVELOPMENT
+      // this.mascot = new UnifiedMascot(); // TEMPORARILY DISABLED FOR DEVELOPMENT
+      this.mascot = null; // Set to null to prevent errors
       
       console.log('📄 Initializing Project Content...');
       this.projectContent = new ProjectContentManager();
@@ -194,6 +197,8 @@ class PortfolioApp {
   }
 
   setupModuleCommunication() {
+    // MASCOT EVENTS TEMPORARILY DISABLED FOR DEVELOPMENT
+    /*
     // Gallery events trigger mascot reactions
     document.addEventListener('gallery:item-hover', () => {
       this.mascot?.onInteraction('gallery-hover');
@@ -206,7 +211,10 @@ class PortfolioApp {
     document.addEventListener('gallery:load-more', () => {
       this.mascot?.onInteraction('gallery-load');
     });
+    */
     
+    // PROJECT CONTENT AND NAVIGATION EVENTS TEMPORARILY DISABLED FOR DEVELOPMENT
+    /*
     // Project content events
     document.addEventListener('project:show', () => {
       this.mascot?.onInteraction('project-view');
@@ -224,38 +232,12 @@ class PortfolioApp {
     document.addEventListener('navigation:link-click', () => {
       this.mascot?.onInteraction('navigation');
     });
-    
-    // Loading events - TEMPORARILY DISABLED
-    // document.addEventListener('loading:start', () => {
-    //   // Mascot will be initialized after loading completes
-    //   console.log('🌸 Loading started');
-    // });
-    
-    // Progress completion event - triggered when progress bar reaches 100% - TEMPORARILY DISABLED
-    // document.addEventListener('progress:complete', () => {
-    //   console.log('🎯 Progress complete - modules already initialized');
-    // });
-
-    // document.addEventListener('loading:complete', () => {
-    //   console.log('🌸 Loading screen fade complete');
-    //   
-    //   // Force remove focus from all gallery items after loading completes
-    //   this.forceFocusRemoval();
-    //   
-    //   // Trigger mascot celebration
-    //   this.mascot?.setState('excited');
-    //   setTimeout(() => {
-    //     this.mascot?.setState('idle');
-    //   }, 3000);
-    // });
+    */
   }
 
   handleInitializationError(error) {
-    // Remove loading screen
-    const loadingScreen = document.getElementById('loading-screen');
-    if (loadingScreen) {
-      loadingScreen.style.display = 'none';
-    }
+    // Ensure fast loading state is removed
+    LoadingController.hide();
     
     // Show error message
     const errorMessage = document.createElement('div');
@@ -305,7 +287,7 @@ class PortfolioApp {
 
   // Public API for external control
   getMascot() {
-    return this.mascot;
+    return null; // TEMPORARILY DISABLED FOR DEVELOPMENT
   }
   
   getGallery() {
@@ -324,20 +306,18 @@ class PortfolioApp {
   debug() {
     return {
       app: this,
-      mascot: this.mascot,
+      mascot: null, // TEMPORARILY DISABLED FOR DEVELOPMENT
       gallery: this.gallery,
       navigation: this.navigation,
-      loading: this.loading,
       initialized: this.isInitialized
     };
   }
   
   // Cleanup method
   destroy() {
-    this.mascot?.destroy();
+    // this.mascot?.destroy(); // TEMPORARILY DISABLED FOR DEVELOPMENT
     this.gallery?.destroy();
     this.navigation?.destroy();
-    this.loading?.destroy();
     this.projectContent?.destroy();
     this.heroParallax?.destroy();
     
@@ -362,35 +342,11 @@ window.goBackToGallery = function() {
 // Make debug available globally in development
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
   window.debug = () => window.portfolioApp?.debug();
-  
-  // Load debug helper for enhanced loading
-  import('./modules/debug-loading.js').then(module => {
-    console.log('🔧 Debug helper loaded');
-  }).catch(err => {
-    console.warn('Debug helper failed to load:', err);
-  });
 }
 
 // Handle page unload
 window.addEventListener('beforeunload', () => {
   window.portfolioApp?.destroy();
 });
-
-// Fallback: Ensure content is always visible after a maximum time (DISABLED - using progress bar trigger)
-// setTimeout(() => {
-//   document.body.classList.remove('loading');
-//   document.body.classList.add('loading-complete');
-//   console.log('🔄 Loading fallback: Content made visible');
-// }, 5000); // 5 second fallback
-
-// Also ensure content is visible on page load (DISABLED - using progress bar trigger)
-// document.addEventListener('DOMContentLoaded', () => {
-//   // Add loading-complete class after a brief delay if loading hasn't started
-//   setTimeout(() => {
-//     if (!document.body.classList.contains('loading')) {
-//       document.body.classList.add('loading-complete');
-//     }
-//   }, 100);
-// });
 
 export default PortfolioApp;

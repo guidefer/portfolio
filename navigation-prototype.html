@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Prototype - Liquid Design</title>
+    <style>
+        /* ==========================================================================
+           CSS VARIABLES & DESIGN SYSTEM
+           ========================================================================== */
+        
+        :root {
+            /* Color Palette */
+            --color-background: #ffffff;
+            --color-primary: #333333;
+            --color-secondary: #C8C8BC;
+            --color-tertiary: #808080;
+            --color-accent-yellow: #EBC533;
+            --color-accent-orange: #D66422;
+            
+            /* Spacing Scale */
+            --space-xs: 0.25rem;   /* 4px */
+            --space-sm: 0.5rem;    /* 8px */
+            --space-md: 1rem;      /* 16px */
+            --space-lg: 1.5rem;    /* 24px */
+            --space-xl: 2rem;      /* 32px */
+            --space-2xl: 3rem;     /* 48px */
+            
+            /* Transitions & Easing */
+            --transition-base: 0.3s;
+            --transition-slow: 0.6s;
+            --transition-slower: 0.8s;
+            --ease-in-out: cubic-bezier(0.4, 0.0, 0.2, 1);
+            --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --ease-liquid: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            
+            /* Breakpoints */
+            --bp-md: 768px;
+            --bp-lg: 1024px;
+            
+            /* Common Gradients */
+            --gradient-accent: linear-gradient(135deg, var(--color-accent-yellow), var(--color-accent-orange));
+        }
+
+        /* ==========================================================================
+           RESET & BASE STYLES
+           ========================================================================== */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--color-background);
+            color: var(--color-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ==========================================================================
+           UTILITY CLASSES & SHARED COMPONENTS
+           ========================================================================== */
+        
+        /* Icon Gradient Definition */
+        .icon-gradient-def {
+            position: absolute;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+
+        /* Shared Icon Styles */
+        .nav-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            transition: all var(--transition-slower) var(--ease-liquid);
+        }
+
+        .nav-icon svg {
+            width: 100%;
+            height: 100%;
+            transition: all var(--transition-base) var(--ease-in-out);
+        }
+
+        /* SVG Icon Fill Patterns */
+        .nav-icon svg path {
+            fill: url(#iconGradient);
+            transition: fill var(--transition-base) var(--ease-in-out);
+        }
+
+        .nav-icon svg circle,
+        .nav-icon svg rect,
+        .nav-icon svg path:not(:first-child) {
+            fill: var(--color-background); /* White cutouts for About icon */
+        }
+
+        /* ==========================================================================
+           NAVIGATION HEADER
+           ========================================================================== */
+        
+        .nav-prototype {
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-sm) var(--space-lg);
+            background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-secondary);
+            z-index: 1000;
+        }
+
+        /* Logo */
+        .nav-logo {
+            font-family: Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: color var(--transition-base);
+        }
+
+        .nav-logo:hover {
+            color: var(--color-accent-yellow);
+        }
+
+        /* ==========================================================================
+           DESKTOP NAVIGATION
+           ========================================================================== */
+        
+        .nav-desktop {
+            display: none;
+            gap: var(--space-md);
+        }
+
+        @media (min-width: 768px) {
+            .nav-desktop {
+                display: flex;
+            }
+            
+            .nav-mobile-container {
+                display: none;
+            }
+        }
+
+        /* Desktop Navigation Links */
+        .nav-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-sm);
+            border-radius: 12px;
+            background: white;
+            white-space: nowrap;
+            text-decoration: none;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all var(--transition-slower) var(--ease-liquid);
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-accent);
+            opacity: 0;
+            transition: opacity var(--transition-slower) var(--ease-liquid);
+            border-radius: inherit;
+            z-index: 1;
+        }
+
+        .nav-link .nav-icon {
+            z-index: 2;
+            transform: translateX(0);
+        }
+
+        /* Desktop Text - Hidden by Default */
+        .nav-link .nav-text {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-left: var(--space-sm);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all var(--transition-slower) var(--ease-liquid);
+            z-index: 2;
+            position: relative;
+            color: var(--color-primary);
+            white-space: nowrap;
+            width: 0; /* Hidden initially - desktop only */
+            overflow: hidden;
+        }
+
+        /* Desktop Hover States */
+        .nav-link:hover {
+            padding-left: var(--space-lg);
+            padding-right: var(--space-lg);
+            border-radius: 50px; /* Liquid morph to pill shape */
+        }
+
+        .nav-link:hover::before {
+            opacity: 1; /* Show gradient background */
+        }
+
+        .nav-link:hover .nav-icon {
+            transform: translateX(-4px);
+        }
+
+        .nav-link:hover .nav-icon svg path,
+        .nav-link:hover .nav-icon svg circle,
+        .nav-link:hover .nav-icon svg rect {
+            fill: var(--color-background) !important;
+        }
+
+        .nav-link:hover .nav-text {
+            opacity: 1;
+            transform: translateX(0);
+            color: var(--color-background);
+            width: auto; /* Show text */
+        }
+
+        /* Desktop Active States (same as hover) */
+        .nav-link.active {
+            padding-left: var(--space-lg);
+            padding-right: var(--space-lg);
+            border-radius: 50px;
+        }
+
+        .nav-link.active::before {
+            opacity: 1;
+        }
+
+        .nav-link.active .nav-icon {
+            transform: translateX(-4px);
+        }
+
+        .nav-link.active .nav-icon svg path,
+        .nav-link.active .nav-icon svg circle,
+        .nav-link.active .nav-icon svg rect {
+            fill: var(--color-background) !important;
+        }
+
+        .nav-link.active .nav-text {
+            opacity: 1;
+            transform: translateX(0);
+            color: var(--color-background);
+            width: auto;
+        }
+
+        /* ==========================================================================
+           MOBILE NAVIGATION
+           ========================================================================== */
+        
+        .nav-mobile-container {
+            display: block;
+        }
+
+        /* Hamburger Button */
+        .nav-hamburger {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 48px;
+            height: 48px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: var(--space-sm);
+            transition: none; /* No transitions on button itself */
+        }
+
+        .hamburger-line {
+            width: 24px;
+            height: 2px;
+            background: var(--color-primary);
+            margin: 2px 0;
+            transition: all var(--transition-base) var(--ease-in-out);
+            transform-origin: center;
+        }
+
+        /* Hamburger to X Animation */
+        .nav-mobile-container.open .hamburger-line:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        .nav-mobile-container.open .hamburger-line:nth-child(2) {
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .nav-mobile-container.open .hamburger-line:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        /* Mobile Menu Panel */
+        .nav-mobile-menu {
+            position: fixed;
+            top: 73px;
+            right: 0;
+            width: 280px;
+            height: calc(100vh - 73px);
+            background: var(--color-background);
+            transform: translateX(100%);
+            transition: transform var(--transition-slower) var(--ease-liquid);
+            padding: var(--space-xl) var(--space-lg);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+        }
+
+        .nav-mobile-container.open .nav-mobile-menu {
+            transform: translateX(0);
+        }
+
+        /* Mobile Backdrop */
+        .nav-backdrop {
+            position: fixed;
+            top: 73px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 73px);
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-base);
+            z-index: 998;
+        }
+
+        .nav-mobile-container.open .nav-backdrop {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Mobile Navigation Links */
+        .nav-mobile-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: var(--space-md);
+            margin-bottom: var(--space-sm);
+            border-radius: 12px;
+            color: var(--color-primary);
+            background: white;
+            text-decoration: none;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all var(--transition-slower) var(--ease-liquid);
+        }
+
+        .nav-mobile-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-accent);
+            opacity: 0;
+            transition: opacity var(--transition-slower) var(--ease-liquid);
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 0; /* Behind everything */
+        }
+
+        .nav-mobile-link .nav-icon {
+            margin-right: var(--space-md);
+            z-index: 2;
+        }
+
+        /* Mobile Text - Always Visible */
+        .nav-mobile-link .nav-text {
+            /* Override desktop hidden styles */
+            opacity: 1 !important;
+            transform: translateX(0) !important;
+            width: auto !important;
+            overflow: visible !important;
+            
+            /* Mobile-specific styles */
+            z-index: 2;
+            position: relative;
+            font-weight: 500;
+            color: var(--color-accent-orange) !important;
+            transition: color var(--transition-slower) var(--ease-liquid);
+            font-size: 1rem;
+            line-height: 1.2;
+            margin-left: 0;
+        }
+
+        /* Mobile Hover/Active States */
+        .nav-mobile-link:hover,
+        .nav-mobile-link.active {
+            border-radius: 50px; /* Liquid morph */
+        }
+
+        .nav-mobile-link:hover::before,
+        .nav-mobile-link.active::before {
+            opacity: 1; /* Show gradient background */
+        }
+
+        .nav-mobile-link:hover .nav-text,
+        .nav-mobile-link.active .nav-text {
+            color: var(--color-background) !important; /* White text */
+        }
+
+        .nav-mobile-link:hover .nav-icon svg path,
+        .nav-mobile-link:hover .nav-icon svg circle,
+        .nav-mobile-link:hover .nav-icon svg rect,
+        .nav-mobile-link.active .nav-icon svg path,
+        .nav-mobile-link.active .nav-icon svg circle,
+        .nav-mobile-link.active .nav-icon svg rect {
+            fill: var(--color-background) !important;
+        }
+
+        /* ==========================================================================
+           DEMO CONTENT STYLES (Remove for production)
+           ========================================================================== */
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-xl);
+        }
+
+        .demo-section {
+            margin-bottom: var(--space-2xl);
+            padding: var(--space-xl);
+            border: 1px solid var(--color-secondary);
+            border-radius: 12px;
+            background: #fafafa;
+        }
+
+        .demo-title {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-lg);
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .demo-subtitle {
+            font-size: 0.9rem;
+            color: var(--color-tertiary);
+            margin-bottom: var(--space-lg);
+        }
+
+        .content-sections {
+            margin-top: var(--space-2xl);
+        }
+
+        .content-section {
+            min-height: 80vh;
+            padding: var(--space-2xl) 0;
+            border-bottom: 1px solid var(--color-secondary);
+        }
+
+        .content-section h2 {
+            font-size: 2rem;
+            margin-bottom: var(--space-lg);
+            color: var(--color-primary);
+        }
+
+        .content-section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--color-tertiary);
+            max-width: 65ch;
+        }
+
+        .instructions {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 1px solid #0ea5e9;
+            padding: var(--space-lg);
+            border-radius: 8px;
+            margin-bottom: var(--space-xl);
+        }
+
+        .instructions h3 {
+            color: #0369a1;
+            margin-bottom: var(--space-sm);
+        }
+
+        .instructions ul {
+            color: #0369a1;
+            padding-left: var(--space-lg);
+        }
+
+        .instructions li {
+            margin-bottom: var(--space-xs);
+        }
+    </style>
+</head>
+<body>
+    <!-- Gradient definition for icons -->
+    <svg class="icon-gradient-def">
+        <defs>
+            <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#EBC533;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#D66422;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+    </svg>
+    
+    <!-- Navigation Prototype -->
+    <header class="nav-prototype">
+        <a href="#" class="nav-logo">GF</a>
+        
+        <!-- Desktop Navigation -->
+        <nav class="nav-desktop">
+            <a href="#projects" class="nav-link" data-section="projects">
+                <div class="nav-icon">
+                    <!-- Projects Icon -->
+                    <svg viewBox="0 0 512 512" fill="none">
+                        <g transform="matrix(1,0,0,1,-2.35305,10)">
+                            <g transform="matrix(0.677271,0,0,0.682695,157.594,13.8396)">
+                                <path d="M54.096,143.51C64.062,85.274 96.884,53.936 161.024,46.863C224.89,39.821 293.518,39.862 364.461,46.863C432.396,53.568 464.894,89.912 474.082,155.613C479.32,193.073 479.846,231.705 473.286,271.506C463.94,328.211 436.195,360.291 387.794,372.934C390.505,340.845 389.179,309.483 384.895,278.85C379.294,238.798 365.702,208.073 344.043,185.96C321.967,163.422 291.158,149.139 248.947,144.973C181.286,138.296 115.669,137.794 54.096,143.51Z"/>
+                            </g>
+                            <g transform="matrix(0.677271,0,0,0.682695,77.3798,100.721)">
+                                <path d="M53.98,144.195C63.805,85.519 96.633,53.963 161.024,46.863C224.89,39.821 293.518,39.862 364.461,46.863C432.396,53.568 464.894,89.912 474.082,155.613C479.32,193.073 479.846,231.705 473.286,271.506C464.408,325.371 438.928,357.017 394.91,370.887C397.396,339.511 396.036,308.831 391.844,278.85C386.243,238.798 372.651,208.073 350.992,185.96C328.915,163.422 298.106,149.139 255.896,144.973C185.641,138.04 117.589,137.764 53.98,144.195Z"/>
+                            </g>
+                            <g transform="matrix(0.677271,0,0,0.682695,1.87194,187.602)">
+                                <path d="M474.082,155.613C479.32,193.073 479.846,231.705 473.286,271.506C462.462,337.18 426.957,369.824 363.268,377.494C294.377,385.791 226.826,386.559 161.024,377.494C102.991,369.5 57.094,327.584 52.199,271.112C48.831,232.264 47.94,194.997 52.419,155.387C59.868,89.514 92.653,54.402 161.024,46.863C224.89,39.821 293.518,39.862 364.461,46.863C432.396,53.568 464.894,89.912 474.082,155.613Z"/>
+                            </g>
+                            <g transform="matrix(0.677271,0,0,0.682695,1.87194,187.602)">
+                                <path d="M474.082,155.613C479.32,193.073 479.846,231.705 473.286,271.506C462.462,337.18 426.957,369.824 363.268,377.494C294.377,385.791 226.826,386.559 161.024,377.494C102.991,369.5 57.094,327.584 52.199,271.112C48.831,232.264 47.94,194.997 52.419,155.387C59.868,89.514 92.653,54.402 161.024,46.863C224.89,39.821 293.518,39.862 364.461,46.863C432.396,53.568 464.894,89.912 474.082,155.613Z"/>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+                <span class="nav-text">Projects</span>
+            </a>
+            
+            <a href="#about" class="nav-link" data-section="about">
+                <div class="nav-icon">
+                    <!-- About Icon -->
+                    <svg viewBox="0 0 512 512" fill="none">
+                        <g transform="matrix(1.02982,0,0,1.19016,-15.6009,2.73053)">
+                            <path d="M474.082,155.613C479.32,193.073 479.846,231.705 473.286,271.506C462.462,337.18 426.957,369.824 363.268,377.494C294.377,385.791 226.826,386.559 161.024,377.494C102.991,369.5 57.094,327.584 52.199,271.112C48.831,232.264 47.94,194.997 52.419,155.387C59.868,89.514 92.653,54.402 161.024,46.863C224.89,39.821 293.518,39.862 364.461,46.863C432.396,53.568 464.894,89.912 474.082,155.613ZM114.893,291.469C115.499,291.497 116.099,291.496 116.691,291.468L225.644,291.409C226.786,291.516 227.959,291.519 229.147,291.407C238.027,290.572 244.453,283.656 243.488,275.972C243.488,275.972 235.224,215.962 171.286,215.962C103.785,215.962 99.611,276.726 99.611,276.726C99.126,284.443 105.974,291.049 114.893,291.469ZM171.286,124.838C145.349,124.838 124.292,143.059 124.292,165.502C124.292,187.945 145.349,206.165 171.286,206.165C197.223,206.165 218.281,187.945 218.281,165.502C218.281,143.059 197.223,124.838 171.286,124.838ZM284.709,186.201L418.423,186.201C427.356,186.201 434.607,179.927 434.607,172.198C434.607,164.469 427.356,158.194 418.423,158.194L284.709,158.194C275.777,158.194 268.525,164.469 268.525,172.198C268.525,179.927 275.777,186.201 284.709,186.201ZM284.709,261.96L418.423,261.96C427.356,261.96 434.607,255.685 434.607,247.956C434.607,240.228 427.356,233.953 418.423,233.953L284.709,233.953C275.777,233.953 268.525,240.228 268.525,247.956C268.525,255.685 275.777,261.96 284.709,261.96Z" fill-rule="evenodd"/>
+                        </g>
+                    </svg>
+                </div>
+                <span class="nav-text">About</span>
+            </a>
+            
+            <a href="#contact" class="nav-link" data-section="contact">
+                <div class="nav-icon">
+                    <!-- Contact Icon -->
+                    <svg viewBox="0 0 512 512" fill="none">
+                        <g transform="matrix(1.03063,0,0,1.03889,-15.8146,6.312)">
+                            <path d="M172.58,377.494L161.024,377.494C101.84,377.494 57.094,327.584 52.199,271.112C48.831,232.264 47.94,194.997 52.419,155.387C59.868,89.514 92.653,54.402 161.024,46.863C224.89,39.821 293.518,39.862 364.461,46.863C432.396,53.568 464.894,89.912 474.082,155.613C479.32,193.073 479.846,231.705 473.286,271.506C462.462,337.18 426.429,376.705 363.268,377.494L344.499,377.494C308.354,378.262 287.223,387.695 287.223,415.785C287.223,428.645 276.698,439.086 263.735,439.086C250.772,439.086 240.248,428.645 240.248,415.785C240.248,385.824 217.702,377.494 172.58,377.494ZM371.91,176.571C371.91,168.007 364.901,161.054 356.268,161.054L171.202,161.054C162.569,161.054 155.561,168.007 155.561,176.571C155.561,185.135 162.569,192.089 171.202,192.089L356.268,192.089C364.901,192.089 371.91,185.135 371.91,176.571ZM372.575,242.52C372.575,233.956 365.566,227.003 356.933,227.003L171.867,227.003C163.234,227.003 156.225,233.956 156.225,242.52C156.225,251.084 163.234,258.038 171.867,258.038L356.933,258.038C365.566,258.038 372.575,251.084 372.575,242.52Z"/>
+                        </g>
+                    </svg>
+                </div>
+                <span class="nav-text">Contact</span>
+            </a>
+        </nav>
+        
+        <!-- Mobile Navigation -->
+        <div class="nav-mobile-container">
+            <button class="nav-hamburger" aria-label="Toggle menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            
+            <div class="nav-backdrop"></div>
+            
+            <nav class="nav-mobile-menu">
+                <a href="#projects" class="nav-mobile-link" data-section="projects">
+                    <div class="nav-icon">
+                        <svg viewBox="0 0 512 512" fill="none">
+                            <g transform="matrix(1,0,0,1,-2.35305,10)">
+                                <g transform="matrix(0.677271,0,0,0.682695,157.594,13.8396)">
+                                    <path d="M54.096,143.51C64.062,85.274 96.884,53.936 161.024,46.863C224.89,39.821 293.518,39.862 364.461,46.863C432.396,53.568 464.894,89.912 474.082,155.613C479.32,193.073 479.846,231.705 473.286,271.506C463.94,328.211 436.195,360.291 387.794,372.934C390.505,340.845 389.179,309.483 384.895,278.85C379.294,238.798 365.702,208.073 344.043,185.96C321.967,163.422 291.158,149.139 248.947,144.973C181.286,138.296 115.669,137.794 54.096,143.51Z"/>
+                                </g>
+                                <g transform="matrix(0.677271,0,0,0.682695,77.3798,100.721)">
+                                    <path d="M53.98,144.195C63.805,85.519 96.633,53.963 161.024,46.863C224.89,39.821 293.518,39.862 364.461,46.863C432.396,53.568 464.894,89.912 474.082,155.613C479.32,193.073 479.846,231.705 473.286,271.506C464.408,325.371 438.928,357.017 394.91,370.887C397.396,339.511 396.036,308.831 391.844,278.85C386.243,238.798 372.651,208.073 350.992,185.96C328.915,163.422 298.106,149.139 255.896,144.973C185.641,138.04 117.589,137.764 53.98,144.195Z"/>
+                                </g>
+                                <g transform="matrix(0.677271,0,0,0.682695,1.87194,187.602)">
+                                    <path d="M474.082,155.613C479.32,193.073 479.846,231.705 473.286,271.506C462.462,337.18 426.957,369.824 363.268,377.494C294.377,385.791 226.826,386.559 161.024,377.494C102.991,369.5 57.094,327.584 52.199,271.112C48.831,232.264 47.94,194.997 52.419,155.387C59.868,89.514 92.653,54.402 161.024,46.863C224.89,39.821 293.518,39.862 364.461,46.863C432.396,53.568 464.894,89.912 474.082,155.613Z"/>
+                                </g>
+                                <g transform="matrix(0.677271,0,0,0.682695,1.87194,187.602)">
+                                    <path d="M474.082,155.613C479.32,193.073 479.846,231.705 473.286,271.506C462.462,337.18 426.957,369.824 363.268,377.494C294.377,385.791 226.826,386.559 161.024,377.494C102.991,369.5 57.094,327.584 52.199,271.112C48.831,232.264 47.94,194.997 52.419,155.387C59.868,89.514 92.653,54.402 161.024,46.863C224.89,39.821 293.518,39.862 364.461,46.863C432.396,53.568 464.894,89.912 474.082,155.613Z"/>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="nav-text">Projects</span>
+                </a>
+                
+                <a href="#about" class="nav-mobile-link" data-section="about">
+                    <div class="nav-icon">
+                        <svg viewBox="0 0 512 512" fill="none">
+                            <g transform="matrix(1.02982,0,0,1.19016,-15.6009,2.73053)">
+                                <path d="M474.082,155.613C479.32,193.073 479.846,231.705 473.286,271.506C462.462,337.18 426.957,369.824 363.268,377.494C294.377,385.791 226.826,386.559 161.024,377.494C102.991,369.5 57.094,327.584 52.199,271.112C48.831,232.264 47.94,194.997 52.419,155.387C59.868,89.514 92.653,54.402 161.024,46.863C224.89,39.821 293.518,39.862 364.461,46.863C432.396,53.568 464.894,89.912 474.082,155.613ZM114.893,291.469C115.499,291.497 116.099,291.496 116.691,291.468L225.644,291.409C226.786,291.516 227.959,291.519 229.147,291.407C238.027,290.572 244.453,283.656 243.488,275.972C243.488,275.972 235.224,215.962 171.286,215.962C103.785,215.962 99.611,276.726 99.611,276.726C99.126,284.443 105.974,291.049 114.893,291.469ZM171.286,124.838C145.349,124.838 124.292,143.059 124.292,165.502C124.292,187.945 145.349,206.165 171.286,206.165C197.223,206.165 218.281,187.945 218.281,165.502C218.281,143.059 197.223,124.838 171.286,124.838ZM284.709,186.201L418.423,186.201C427.356,186.201 434.607,179.927 434.607,172.198C434.607,164.469 427.356,158.194 418.423,158.194L284.709,158.194C275.777,158.194 268.525,164.469 268.525,172.198C268.525,179.927 275.777,186.201 284.709,186.201ZM284.709,261.96L418.423,261.96C427.356,261.96 434.607,255.685 434.607,247.956C434.607,240.228 427.356,233.953 418.423,233.953L284.709,233.953C275.777,233.953 268.525,240.228 268.525,247.956C268.525,255.685 275.777,261.96 284.709,261.96Z" fill-rule="evenodd"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="nav-text">About</span>
+                </a>
+                
+                <a href="#contact" class="nav-mobile-link" data-section="contact">
+                    <div class="nav-icon">
+                        <svg viewBox="0 0 512 512" fill="none">
+                            <g transform="matrix(1.03063,0,0,1.03889,-15.8146,6.312)">
+                                <path d="M172.58,377.494L161.024,377.494C101.84,377.494 57.094,327.584 52.199,271.112C48.831,232.264 47.94,194.997 52.419,155.387C59.868,89.514 92.653,54.402 161.024,46.863C224.89,39.821 293.518,39.862 364.461,46.863C432.396,53.568 464.894,89.912 474.082,155.613C479.32,193.073 479.846,231.705 473.286,271.506C462.462,337.18 426.429,376.705 363.268,377.494L344.499,377.494C308.354,378.262 287.223,387.695 287.223,415.785C287.223,428.645 276.698,439.086 263.735,439.086C250.772,439.086 240.248,428.645 240.248,415.785C240.248,385.824 217.702,377.494 172.58,377.494ZM371.91,176.571C371.91,168.007 364.901,161.054 356.268,161.054L171.202,161.054C162.569,161.054 155.561,168.007 155.561,176.571C155.561,185.135 162.569,192.089 171.202,192.089L356.268,192.089C364.901,192.089 371.91,185.135 371.91,176.571ZM372.575,242.52C372.575,233.956 365.566,227.003 356.933,227.003L171.867,227.003C163.234,227.003 156.225,233.956 156.225,242.52C156.225,251.084 163.234,258.038 171.867,258.038L356.933,258.038C365.566,258.038 372.575,251.084 372.575,242.52Z"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="nav-text">Contact</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Demo Content -->
+    <main class="demo-container">
+        <div class="instructions">
+            <h3>🎨 Navigation Prototype Instructions</h3>
+            <ul>
+                <li><strong>Desktop:</strong> Hover over icons to see liquid morph expansion with text slide-in</li>
+                <li><strong>Mobile:</strong> Tap hamburger to open menu with icon + text layout</li>
+                <li><strong>Active States:</strong> Click links to see active state styling</li>
+                <li><strong>Colors:</strong> Orange/yellow gradient with white text/icons on active</li>
+                <li><strong>Animations:</strong> Liquid morphing, elastic easing, smooth transitions</li>
+            </ul>
+        </div>
+
+        <section class="demo-section">
+            <h2 class="demo-title">🖥️ Desktop Navigation</h2>
+            <p class="demo-subtitle">Icon-only → Liquid morph expansion with text slide-in on hover</p>
+            <p>Resize your browser to desktop width (768px+) to see the desktop navigation in action. Icons start as circles and morph into pill shapes when hovered, with text sliding in from the right.</p>
+        </section>
+
+        <section class="demo-section">
+            <h2 class="demo-title">📱 Mobile Navigation</h2>
+            <p class="demo-subtitle">Hamburger menu → Icon + text layout with gradient backgrounds</p>
+            <p>On mobile devices (below 768px), the navigation uses a hamburger menu that slides in from the right with full icon + text layout and gradient hover states.</p>
+        </section>
+
+        <!-- Demo Content Sections -->
+        <div class="content-sections">
+            <section id="projects" class="content-section">
+                <h2>Projects</h2>
+                <p>This is the projects section. The navigation should highlight this section when you scroll here or click the projects link.</p>
+            </section>
+
+            <section id="about" class="content-section">
+                <h2>About</h2>
+                <p>This is the about section. Notice how the navigation active state changes as you scroll through different sections.</p>
+            </section>
+
+            <section id="contact" class="content-section">
+                <h2>Contact</h2>
+                <p>This is the contact section. The liquid morphing animations create a cohesive design language with your gallery and buttons.</p>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Navigation Prototype JavaScript
+        class NavigationPrototype {
+            constructor() {
+                this.mobileContainer = document.querySelector('.nav-mobile-container');
+                this.hamburger = document.querySelector('.nav-hamburger');
+                this.backdrop = document.querySelector('.nav-backdrop');
+                this.navLinks = document.querySelectorAll('.nav-link, .nav-mobile-link');
+                this.isMenuOpen = false;
+                
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.setupScrollSpy();
+            }
+
+            bindEvents() {
+                // Mobile menu toggle
+                this.hamburger?.addEventListener('click', () => {
+                    this.toggleMobileMenu();
+                });
+
+                // Close menu when clicking backdrop
+                this.backdrop?.addEventListener('click', () => {
+                    this.closeMobileMenu();
+                });
+
+                // Navigation link clicks
+                this.navLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        
+                        // Update active states
+                        this.setActiveLink(link);
+                        
+                        // Smooth scroll to section
+                        const sectionId = link.getAttribute('data-section');
+                        const section = document.getElementById(sectionId);
+                        if (section) {
+                            section.scrollIntoView({ 
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                        
+                        // Close mobile menu if open
+                        if (this.isMenuOpen) {
+                            this.closeMobileMenu();
+                        }
+                    });
+                });
+
+                // Close menu on escape key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.isMenuOpen) {
+                        this.closeMobileMenu();
+                    }
+                });
+            }
+
+            toggleMobileMenu() {
+                this.isMenuOpen = !this.isMenuOpen;
+                this.mobileContainer.classList.toggle('open', this.isMenuOpen);
+            }
+
+            closeMobileMenu() {
+                this.isMenuOpen = false;
+                this.mobileContainer.classList.remove('open');
+            }
+
+            setActiveLink(activeLink) {
+                // Remove active class from all links
+                this.navLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                // Add active class to clicked link
+                activeLink.classList.add('active');
+                
+                // Also activate corresponding link in other navigation (desktop/mobile)
+                const section = activeLink.getAttribute('data-section');
+                const correspondingLink = document.querySelector(
+                    `.nav-link[data-section="${section}"], .nav-mobile-link[data-section="${section}"]`
+                );
+                if (correspondingLink && correspondingLink !== activeLink) {
+                    correspondingLink.classList.add('active');
+                }
+            }
+
+            setupScrollSpy() {
+                const sections = document.querySelectorAll('section[id]');
+                const options = {
+                    rootMargin: '-20% 0px -80% 0px'
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const sectionId = entry.target.id;
+                            const activeLinks = document.querySelectorAll(
+                                `[data-section="${sectionId}"]`
+                            );
+                            
+                            // Remove active from all
+                            this.navLinks.forEach(link => {
+                                link.classList.remove('active');
+                            });
+                            
+                            // Add active to current section links
+                            activeLinks.forEach(link => {
+                                link.classList.add('active');
+                            });
+                        }
+                    });
+                }, options);
+
+                sections.forEach(section => {
+                    observer.observe(section);
+                });
+            }
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new NavigationPrototype();
+        });
+    </script>
+</body>
+</html>

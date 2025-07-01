@@ -83,15 +83,20 @@
   
   /* Transitions */
   --transition-fast: 0.15s ease;
-  --transition-base: 0.2s ease;
-  --transition-slow: 0.3s ease;
-  --transition-slower: 0.5s ease;
+  --transition-base: 0.3s ease;  /* Updated to match prototype */
+  --transition-slow: 0.6s ease;  /* Updated to match prototype */
+  --transition-slower: 0.8s;  /* Updated to match prototype - no easing here */
   
   /* Easing Functions */
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Added for prototype compatibility */
+  --ease-liquid: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smooth liquid-like motion */
+  
+  /* Common Gradients */
+  --gradient-accent: linear-gradient(135deg, var(--color-accent-yellow), var(--color-accent-orange));
   
   /* Animation Durations */
   --duration-fast: 150ms;

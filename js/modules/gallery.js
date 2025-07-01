@@ -271,7 +271,7 @@ class GalleryController {
     const cta = document.createElement('span');
     cta.className = 'gallery-item-cta';
     cta.textContent = 'View Project';
-    cta.setAttribute('aria-hidden', 'true');
+    // cta.setAttribute('aria-hidden', 'true'); // DISABLED FOR DEVELOPMENT
     
     // Assemble the item
     content.appendChild(category);
@@ -289,7 +289,7 @@ class GalleryController {
     // Add accessibility attributes
     item.setAttribute('role', 'button');
     item.setAttribute('tabindex', '0');
-    item.setAttribute('aria-label', `View ${data.title} project`);
+    // item.setAttribute('aria-label', `View ${data.title} project`); // DISABLED FOR DEVELOPMENT
     
     // Add keyboard support
     item.addEventListener('keydown', (e) => {
