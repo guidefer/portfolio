@@ -1,0 +1,12 @@
+<svg width="100%" height="100%" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background card -->
+  <rect x="52" y="47" width="408" height="330" rx="55" ry="55" fill="currentColor"/>
+  
+  <!-- Person silhouette (cutout) -->
+  <circle cx="171" cy="165" r="40" fill="white"/>
+  <path d="M99 276c0-40 32-60 72-60s72 20 72 60v15H99v-15z" fill="white"/>
+  
+  <!-- Text lines (cutouts) -->
+  <rect x="285" y="158" width="134" height="14" rx="7" fill="white"/>
+  <rect x="285" y="234" width="134" height="14" rx="7" fill="white"/>
+</svg>
