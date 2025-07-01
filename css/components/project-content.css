@@ -503,20 +503,49 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--color-accent-yellow) !important;
-  color: var(--color-primary) !important;
-  border: none !important;
+  background: var(--color-background) !important;
+  color: var(--button-text-normal) !important;
+  border: 1px solid var(--color-secondary) !important;
   padding: 1rem 2rem;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--button-transition);
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.back-to-gallery-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-accent);
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+.back-to-gallery-btn:hover::before {
+  opacity: 1;
 }
 
 .back-to-gallery-btn:hover {
-  background: var(--color-accent-orange) !important;
-  color: white !important;
+  border-color: transparent !important;
+}
+
+.back-to-gallery-btn:hover span {
+  color: var(--button-text-hover) !important;
+}
+
+.back-to-gallery-btn span {
+  position: relative;
+  z-index: 2;
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .back-to-gallery-btn:focus {

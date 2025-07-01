@@ -98,6 +98,11 @@
   /* Common Gradients */
   --gradient-accent: linear-gradient(135deg, var(--color-accent-yellow), var(--color-accent-orange));
   
+  /* Button System - Consistent hover states */
+  --button-text-normal: var(--color-primary);
+  --button-text-hover: #ffffff;
+  --button-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
   /* Animation Durations */
   --duration-fast: 150ms;
   --duration-base: 200ms;

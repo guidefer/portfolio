@@ -1,7 +1,7 @@
 /**
  * Main Application Entry Point
  * Guilherme Ferreira Portfolio Website
- * @version 2.1.0 - Navigation System Refactor Complete
+ * @version 2.0.0 - Consistent Button Hover System + Navigation Animation Improvements
  */
 
 import { LoadingController } from './modules/loading.js';

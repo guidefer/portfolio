@@ -245,7 +245,7 @@ class ProjectContentManager {
         
         <div class="project-back-section">
           <button class="related-project-link back-to-gallery-btn liquid-morph accent-shadow" onclick="window.goBackToGallery()">
-            ← Back to All Projects
+            <span>← Back to All Projects</span>
           </button>
         </div>
       </article>

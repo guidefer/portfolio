@@ -60,6 +60,9 @@
   /* Base shadow */
   box-shadow: 0 8px 25px rgba(0,0,0,0.15);
   
+  /* Base border - no border initially */
+  border: 1px solid transparent !important;
+  
   /* Initial transform */
   transform: translateY(30px);
   
@@ -70,7 +73,8 @@
     filter 0.4s ease-out,
     -webkit-filter 0.4s ease-out,
     border-radius 0.4s ease-out,
-    box-shadow 0.4s ease-out;
+    box-shadow 0.4s ease-out,
+    border-color 0.4s ease-out;
   
   /* Remove focus outline */
   outline: none;
@@ -378,4 +382,14 @@
     border-radius: 20px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
   }
+}
+
+/* Gallery Item Hover Effects - White Border (hover only) */
+.gallery-item:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Enhanced hover effects with stronger white border for hero state */
+.gallery-item.gallery-item-hero:hover {
+  border-color: rgba(255, 255, 255, 0.6);
 }

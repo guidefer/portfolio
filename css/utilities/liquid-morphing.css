@@ -92,8 +92,8 @@
 .liquid-morph.small:hover {
   border-radius: 30px !important;
   transform: translateY(-1px) scale(1.08) !important;
-  -webkit-box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12) !important;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12) !important;
+  -webkit-box-shadow: 0 6px 15px rgba(0, 0, 0, 0) !important;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0) !important;
 }
 
 /* Specific override for hero CTA button - Maximum specificity */

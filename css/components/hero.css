@@ -63,38 +63,43 @@
   justify-content: center;
   padding: var(--space-md) var(--space-xl);
   background-color: var(--color-accent-yellow);
-  color: var(--color-primary);
+  color: var(--button-text-normal);
   text-decoration: none;
   font-weight: 500;
   font-size: var(--text-base);
-  /* Only animate background and color, let liquid-morph handle the rest */
-  transition: 
-    background-color var(--transition-base), 
-    color var(--transition-base);
+  transition: var(--button-transition);
   position: relative;
   overflow: hidden;
   min-height: 48px; /* Touch target size */
+  white-space: nowrap; /* Prevent text wrapping */
 }
 
 .hero-cta::before {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left var(--transition-slow);
+  background: var(--gradient-accent);
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
 }
 
-.hero-cta:hover::before {
-  left: 100%;
+.hero-cta:hover::before,
+.hero-cta:focus::before {
+  opacity: 1;
 }
 
 .hero-cta:hover,
 .hero-cta:focus {
-  background-color: var(--color-accent-orange);
-  color: var(--color-background);
+  color: var(--button-text-hover);
+}
+
+.hero-cta span {
+  position: relative;
+  z-index: 2;
 }
 
 .hero-cta:active {
