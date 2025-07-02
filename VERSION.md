@@ -1,8 +1,9 @@
 # Portfolio Version History
 
-## Current Version: v2.2.0
+## Current Version: v2.2.1
 
 ### Version History:
+- v2.2.1 - Fixed "Back to All Projects" button navigation: now properly returns to gallery instead of contact section
 - v2.2.0 - Mobile navigation stacking context fix: moved menu outside header to resolve rendering issues
 - v2.1.1 - Mobile navigation critical fix: JS/CSS class alignment (.active → .open) + enhanced mobile UX
 - v2.1.0 - Custom SVG social icons integration + smooth scroll navigation functionality

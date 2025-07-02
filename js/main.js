@@ -1,7 +1,7 @@
 /**
  * Main Application Entry Point
  * Guilherme Ferreira Portfolio Website
- * @version 2.2.0 - Mobile Navigation Stacking Context Fix
+ * @version 2.2.1 - Back to Gallery Navigation Fix
  */
 
 import { LoadingController } from './modules/loading.js';
@@ -375,8 +375,20 @@ document.addEventListener('DOMContentLoaded', () => {
 window.goBackToGallery = function() {
   if (window.projectContentManager) {
     window.projectContentManager.hideProject();
+    
+    // Also trigger navigation to projects section for consistency
+    setTimeout(() => {
+      if (window.portfolioApp && window.portfolioApp.navigation) {
+        window.portfolioApp.navigation.scrollToSection('projects');
+      }
+    }, 100);
   } else {
-    console.warn('Project content manager not available');
+    console.warn('Project content manager not available, using fallback navigation');
+    // Fallback: scroll directly to projects section
+    const projectsSection = document.querySelector('#projects');
+    if (projectsSection) {
+      projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 };
 

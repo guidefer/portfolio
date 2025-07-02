@@ -91,9 +91,15 @@ class ProjectContentManager {
     }, 400);
     
     // Return focus to gallery
-    const gallerySection = document.querySelector('.gallery-section');
-    if (gallerySection) {
-      gallerySection.scrollIntoView({ behavior: 'smooth' });
+    const projectsSection = document.querySelector('#projects');
+    if (projectsSection) {
+      projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      console.warn('Projects section not found, trying fallback');
+      const gallerySection = document.querySelector('.gallery-section');
+      if (gallerySection) {
+        gallerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
     
     // Dispatch event
