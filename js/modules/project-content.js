@@ -11,6 +11,10 @@ class ProjectContentManager {
     this.currentProjectId = null;
     this.navigationController = null;
     
+    // Preloading system
+    this.preloadedContent = new Map(); // Cache for preloaded project content
+    this.isPreloading = false;
+    
     this.init();
   }
 
@@ -24,6 +28,10 @@ class ProjectContentManager {
     }
     
     this.setupEventListeners();
+    
+    // Start background preloading after initialization
+    this.startBackgroundPreloading();
+    
     console.log('📄 Project Content Manager initialized');
   }
 
@@ -117,27 +125,28 @@ class ProjectContentManager {
     try {
       console.log('📄 Loading project content for:', projectId);
       
-      // Get project data from portfolio config
-      const { portfolioData } = await import('../config/portfolio-data.js');
-      const projectData = portfolioData.find(project => project.id === projectId);
-      
-      if (!projectData) {
-        console.error('❌ Project not found:', projectId);
-        throw new Error(`Project not found: ${projectId}`);
+      // Check if content is already preloaded
+      if (this.preloadedContent.has(projectId)) {
+        console.log('⚡ Using preloaded content for:', projectId);
+        const cachedContent = this.preloadedContent.get(projectId);
+        this.contentBody.innerHTML = cachedContent;
+        
+        // Setup interactions for mini gallery
+        this.setupMiniGalleryInteractions();
+        
+        // Setup lazy loading for images
+        this.setupImageLazyLoading();
+        
+        // Smooth animated scroll to top
+        requestAnimationFrame(() => {
+          this.smoothScrollToTop();
+        });
+        
+        return;
       }
       
-      console.log('✅ Project data loaded:', projectData.title);
-      
-      // Get other projects for mini gallery
-      const otherProjects = await this.getRandomOtherProjects(projectId, 2);
-      
-      // Generate project content HTML
-      const contentHTML = this.generateProjectHTMLWithData(projectData, otherProjects);
-      
-      // Add small delay for better UX
-      await this.delay(300);
-      
-      // Insert content
+      // Generate content if not preloaded
+      const contentHTML = await this.generateProjectContent(projectId);
       this.contentBody.innerHTML = contentHTML;
       
       // Setup interactions for mini gallery
@@ -156,6 +165,83 @@ class ProjectContentManager {
       this.contentBody.innerHTML = this.generateErrorHTML(projectId);
     } finally {
       this.contentBody.classList.remove('loading');
+    }
+  }
+
+  /**
+   * Generate project content (extracted for reuse in preloading)
+   */
+  async generateProjectContent(projectId) {
+    // Get project data from portfolio config
+    const { portfolioData } = await import('../config/portfolio-data.js');
+    const projectData = portfolioData.find(project => project.id === projectId);
+    
+    if (!projectData) {
+      console.error('❌ Project not found:', projectId);
+      throw new Error(`Project not found: ${projectId}`);
+    }
+    
+    console.log('✅ Project data loaded:', projectData.title);
+    
+    // Get other projects for mini gallery
+    const otherProjects = await this.getRandomOtherProjects(projectId, 2);
+    
+    // Generate project content HTML
+    return this.generateProjectHTMLWithData(projectData, otherProjects);
+  }
+
+  /**
+   * Background preloading system
+   */
+  async startBackgroundPreloading() {
+    if (this.isPreloading) return;
+    
+    this.isPreloading = true;
+    console.log('🔄 Starting background preloading of project content...');
+    
+    try {
+      // Get all project IDs
+      const { portfolioData } = await import('../config/portfolio-data.js');
+      const projectIds = portfolioData.map(project => project.id);
+      
+      // Preload projects one by one with small delays to avoid blocking
+      for (const projectId of projectIds) {
+        if (!this.preloadedContent.has(projectId)) {
+          try {
+            const contentHTML = await this.generateProjectContent(projectId);
+            this.preloadedContent.set(projectId, contentHTML);
+            console.log(`⚡ Preloaded project: ${projectId}`);
+            
+            // Small delay between preloads to avoid blocking the main thread
+            await this.delay(100);
+          } catch (error) {
+            console.warn(`Failed to preload project ${projectId}:`, error);
+          }
+        }
+      }
+      
+      console.log('✅ Background preloading completed for', this.preloadedContent.size, 'projects');
+    } catch (error) {
+      console.error('Background preloading failed:', error);
+    } finally {
+      this.isPreloading = false;
+    }
+  }
+
+  /**
+   * Public method to preload specific project (for hover preloading)
+   */
+  async preloadProject(projectId) {
+    if (this.preloadedContent.has(projectId)) {
+      return; // Already preloaded
+    }
+    
+    try {
+      const contentHTML = await this.generateProjectContent(projectId);
+      this.preloadedContent.set(projectId, contentHTML);
+      console.log(`⚡ Preloaded project on demand: ${projectId}`);
+    } catch (error) {
+      console.warn(`Failed to preload project ${projectId}:`, error);
     }
   }
 

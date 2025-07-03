@@ -17,7 +17,7 @@
   
   /* Max width for responsive behavior */
   max-width: 400px; /* Prevent over-stretching on large screens */
-  width: calc(100vw - var(--space-3xl)); /* Responsive width with margins */
+  width: calc(100vw - var(--space-xl)); /* Responsive width with margins */
   
   /* Always centered at final position */
   transform: translateX(-50%);
@@ -62,7 +62,7 @@
   display: flex;
   justify-content: space-between; /* Logo left, nav items right */
   align-items: center;
-  padding: var(--space-xs) var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
   max-width: 100%;
   gap: var(--space-xl); /* Increased gap between logo and nav items */
   min-width: 320px; /* Increased minimum width for better layout */
@@ -83,7 +83,6 @@
   min-height: 44px;
   justify-content: center;
   flex-shrink: 0; /* Prevent logo from shrinking */
-  padding: 15px;
 }
 
 .bottom-nav-logo:hover {

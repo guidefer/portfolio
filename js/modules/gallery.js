@@ -307,6 +307,13 @@ class GalleryController {
       this.handleItemClick(item);
     }, true);
     
+    // Add hover preloading for better performance
+    item.addEventListener('mouseenter', () => {
+      if (this.projectContentManager && this.projectContentManager.preloadProject) {
+        this.projectContentManager.preloadProject(data.id);
+      }
+    });
+    
     return item;
   }
 
@@ -357,10 +364,8 @@ class GalleryController {
     
     this.dispatchEvent('gallery:item-click', { projectId });
     
-    // Navigate to project page after animation
-    setTimeout(() => {
-      this.navigateToProject(projectId);
-    }, 600); // Allow animation to play
+    // Navigate to project immediately - no animation delay needed
+    this.navigateToProject(projectId);
   }
 
   handleItemHover(item) {
