@@ -13,12 +13,19 @@
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--color-secondary);
-  z-index: 1000;
-  transition: transform 0.2s ease;
+  z-index: var(--z-header);
+  transition: transform 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .header.header-hidden {
   transform: translateY(-100%);
+}
+
+/* Hide entire header on mobile - will be animated via JavaScript */
+@media (max-width: 767px) {
+  .header.mobile-hidden {
+    transform: translateY(-100%);
+  }
 }
 
 .nav-container {
@@ -238,176 +245,6 @@
 }
 
 /* ==========================================================================
-   MOBILE NAVIGATION
-   ========================================================================== */
-
-.nav-mobile-container {
-  display: block; /* Shown by default (mobile-first), hidden on desktop */
-}
-
-/* Mobile Menu Overlay (positioned outside header to avoid stacking issues) */
-.nav-mobile-overlay {
-  display: block;
-}
-
-.nav-backdrop {
-  position: fixed;
-  top: 70px;
-  left: 0;
-  width: 100%;
-  height: calc(100vh - 70px);
-  background: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  visibility: hidden;
-  transition: all var(--transition-slower) var(--ease-liquid);
-  z-index: 998;
-}
-
-.nav-mobile-overlay.open .nav-backdrop {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Hamburger Button */
-.nav-hamburger {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 48px;
-  height: 48px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: var(--space-sm);
-  transition: none; /* No transitions on button itself */
-  z-index: 1001;
-}
-
-.nav-hamburger:focus {
-  outline: 2px solid var(--color-accent-yellow);
-  outline-offset: 2px;
-}
-
-.hamburger-line {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: var(--color-primary);
-  margin: 2px 0;
-  transition: all var(--transition-base) var(--ease-in-out);
-  transform-origin: center;
-}
-
-/* Hamburger to X Animation */
-.nav-mobile-container.open .hamburger-line:nth-child(1) {
-  transform: translateY(6px) rotate(45deg);
-}
-
-.nav-mobile-container.open .hamburger-line:nth-child(2) {
-  opacity: 0;
-  transform: scale(0);
-}
-
-.nav-mobile-container.open .hamburger-line:nth-child(3) {
-  transform: translateY(-6px) rotate(-45deg);
-}
-
-
-.nav-mobile-menu {
-  position: fixed;
-  top: 70px;
-  right: 0;
-  width: 320px;
-  max-width: 90vw;
-  height: calc(100vh - 70px);
-  background: var(--color-background);
-  padding: var(--space-2xl) var(--space-lg);
-  transform: translateX(100%);
-  transition: transform var(--transition-slower) var(--ease-liquid);
-  overflow-y: auto;
-  z-index: 999;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-}
-
-.nav-mobile-container.open .nav-mobile-menu {
-  transform: translateX(0);
-}
-
-.nav-mobile-overlay.open .nav-mobile-menu {
-  transform: translateX(0);
-}
-
-/* Mobile Links */
-.nav-mobile-link {
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: var(--space-lg) var(--space-md);
-  border-radius: 12px;
-  background: white;
-  text-decoration: none;
-  cursor: pointer;
-  overflow: hidden;
-  transition: all var(--transition-slower) var(--ease-liquid);
-}
-
-.nav-mobile-link::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--gradient-accent);
-  opacity: 0;
-  transition: opacity var(--transition-slower) var(--ease-liquid);
-  border-radius: inherit;
-  z-index: 1;
-}
-
-.nav-mobile-link .nav-icon {
-  z-index: 2;
-}
-
-.nav-mobile-link .nav-text {
-  font-weight: 500;
-  font-size: 1.1rem;
-  color: var(--color-accent-orange); /* Orange text by default */
-  transition: all var(--transition-slower) var(--ease-liquid);
-  z-index: 2;
-  margin-left: var(--space-md);
-}
-
-/* Mobile Hover/Active States */
-.nav-mobile-link:hover,
-.nav-mobile-link.active {
-  border-radius: 50px; /* Liquid morph */
-}
-
-.nav-mobile-link:hover::before,
-.nav-mobile-link.active::before {
-  opacity: 1; /* Show gradient background */
-}
-
-.nav-mobile-link:hover .nav-text,
-.nav-mobile-link.active .nav-text {
-  color: var(--color-background) !important; /* White text */
-}
-
-.nav-mobile-link:hover .nav-icon svg path,
-.nav-mobile-link:hover .nav-icon svg circle,
-.nav-mobile-link:hover .nav-icon svg rect,
-.nav-mobile-link.active .nav-icon svg path,
-.nav-mobile-link.active .nav-icon svg circle,
-.nav-mobile-link.active .nav-icon svg rect {
-  fill: var(--color-background) !important;
-}
-
-/* ==========================================================================
    RESPONSIVE BREAKPOINTS
    ========================================================================== */
 
@@ -416,24 +253,11 @@
   .nav-desktop {
     display: flex;
   }
-  
-  .nav-mobile-container {
-    display: none;
-  }
-  
-  .nav-mobile-overlay {
-    display: none;
-  }
 }
 
 /* ==========================================================================
    ACCESSIBILITY UTILITIES
    ========================================================================== */
-
-/* Prevent body scroll when mobile menu is open */
-body.nav-menu-open {
-  overflow: hidden;
-}
 
 /* Skip link for accessibility */
 .skip-link {

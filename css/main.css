@@ -6,6 +6,7 @@
 
 /* Component Styles */
 @import url('./components/header.css');
+@import url('./components/bottom-nav.css');
 @import url('./components/hero.css');
 @import url('./components/hero-parallax.css');
 @import url('./components/gallery-liquid.css');
@@ -44,6 +45,22 @@ html {
   scroll-margin-top: 70px; /* Precise header height alignment */
 }
 
+/* Mobile scroll offset adjustment - account for content shift when header is hidden */
+@media (max-width: 767px) {
+  /* When header is hidden, reduce scroll margin since content shifted up by 72px */
+  body.header-hidden #home,
+  body.header-hidden #projects,
+  body.header-hidden #about,
+  body.header-hidden #contact {
+    scroll-margin-top: -2px; /* Small negative margin to account for content shift */
+  }
+  
+  /* Also adjust global scroll padding */
+  body.header-hidden {
+    scroll-padding-top: -2px;
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -57,7 +74,7 @@ body {
   font-size: var(--text-base);
   line-height: 1.6;
   color: var(--color-primary);
-  background-color: var(--color-background);
+  background-color: var(--color-primary);
   overflow-x: hidden;
   /* Additional safety for mobile */
   max-width: 100vw;
@@ -70,6 +87,10 @@ body {
   min-height: 100vh;
   min-height: -webkit-fill-available; /* iOS Safari fix */
   min-height: 100dvh; /* Use dynamic viewport height for better mobile support */
+  
+  /* Content offset system for mobile header hiding */
+  transform: translateY(var(--header-offset));
+  transition: var(--content-transition);
 }
 
 /* Section Base Styles */
@@ -296,5 +317,58 @@ img {
   pre, code {
     max-width: 100%;
     overflow-x: auto;
+  }
+}
+
+/* Mobile Content Offset System */
+@media (max-width: 767px) {
+  /* When header is hidden on mobile, move content up by header height (70px) + padding adjustment (2px) */
+  :root {
+    --header-offset-mobile: -72px; /* Precise offset to reclaim header space */
+  }
+  
+  /* Apply content offset when header is hidden */
+  body.header-hidden .main-content {
+    transform: translateY(var(--header-offset-mobile));
+  }
+  
+  /* Ensure smooth transition back to normal when header returns */
+  body:not(.header-hidden) .main-content {
+    transform: translateY(0px);
+  }
+}
+
+/* Desktop - always keep content in normal position */
+@media (min-width: 768px) {
+  .main-content {
+    transform: translateY(0px) !important; /* Force normal position on desktop */
+  }
+}
+
+/* ==========================================================================
+   CONTENT OFFSET SAFETY GUARDS
+   ========================================================================== */
+
+/* Prevent content offset conflicts with reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .main-content {
+    transition: none !important;
+    transform: translateY(0px) !important; /* Disable offset animation */
+  }
+  
+  body.header-hidden .main-content {
+    transform: translateY(0px) !important; /* Keep content in place */
+  }
+}
+
+/* Ensure content offset doesn't affect print styles */
+@media print {
+  .main-content {
+    transform: none !important;
+    padding-top: 0 !important;
+  }
+  
+  body.header-hidden .main-content {
+    transform: none !important;
   }
 }

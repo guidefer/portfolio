@@ -1,0 +1,297 @@
+/* ==========================================================================
+   BOTTOM NAVIGATION - MOBILE ONLY
+   ========================================================================== */
+
+/* Bottom Navigation Container */
+.bottom-nav {
+  position: fixed;
+  bottom: var(--space-md); /* Floating with margin from edges */
+  left: var(--space-md);
+  right: var(--space-md);
+  background: rgba(255, 255, 255, 0.95);
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--color-secondary);
+  border-radius: 20px; /* Rounded floating container */
+  box-shadow: var(--shadow-xl); /* Floating shadow from variables */
+  z-index: var(--z-bottom-nav); /* Use CSS variable for z-index */
+  
+  /* Max width and centering for larger devices */
+  max-width: 480px; /* Prevent over-stretching on large screens */
+  margin: 0 auto; /* Center the navigation */
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%) translateY(calc(100% + var(--space-md)));
+  
+  /* Hidden by default - only shown on mobile */
+  display: none;
+  transition: transform 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.bottom-nav.active {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Slide down animation for viewport transitions */
+.bottom-nav.slide-down {
+  transform: translateX(-50%) translateY(calc(100% + var(--space-md)));
+}
+
+.bottom-nav-container {
+  display: flex;
+  justify-content: space-between; /* Logo left, nav items right */
+  align-items: center;
+  padding: var(--space-xs) var(--space-sm);
+  max-width: 100%;
+  gap: var(--space-xl); /* Increased gap between logo and nav items */
+  min-width: 320px; /* Increased minimum width for better layout */
+  min-height: 75px; /* Increased minimum height for more substantial feel */
+}
+
+/* Bottom Navigation Logo */
+.bottom-nav-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  font-family: Georgia, serif;
+  font-size: var(--text-lg);
+  font-weight: bold;
+  color: var(--color-primary);
+  transition: color var(--transition-slower) var(--ease-liquid);
+  min-width: 44px; /* Ensure proper touch target */
+  min-height: 44px;
+  justify-content: center;
+  flex-shrink: 0; /* Prevent logo from shrinking */
+  padding: 15px;
+}
+
+.bottom-nav-logo:hover {
+  color: var(--color-accent-orange);
+}
+
+.bottom-nav-logo .logo-text {
+  font-size: var(--text-lg);
+  line-height: 1;
+}
+
+/* Navigation items group */
+.bottom-nav-items {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg); /* Increased gap between navigation buttons for better distribution */
+  flex: 1; /* Allow nav items to use remaining space */
+  justify-content: space-around; /* Distribute items evenly within available space */
+  max-width: 280px; /* Prevent over-stretching on larger containers */
+  min-width: 200px; /* Ensure minimum width for proper spacing */
+}
+
+/* Bottom Navigation Items - Matching Desktop Nav Design Language */
+.bottom-nav-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  padding: var(--space-sm);
+  border-radius: 12px; /* Match desktop nav initial border-radius */
+  background: white;
+  overflow: hidden;
+  cursor: pointer;
+  min-width: 65px;
+  min-height: 65px; /* Ensure 44px+ touch target */
+  justify-content: center;
+  
+  /* Same transitions as desktop nav */
+  transition: padding var(--transition-slower) var(--ease-liquid),
+              border-radius var(--transition-slower) var(--ease-liquid) 0.2s,
+              transform var(--transition-slower) var(--ease-liquid) 0.1s;
+}
+
+/* Gradient background overlay (hidden by default, like desktop nav) */
+.bottom-nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-accent); /* Same gradient as desktop */
+  opacity: 0;
+  transition: opacity var(--transition-slower) var(--ease-liquid);
+  border-radius: inherit;
+  z-index: 1;
+}
+
+.bottom-nav-icon {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
+  z-index: 2;
+  position: relative;
+  transition: transform var(--transition-slower) var(--ease-liquid) 0.1s;
+}
+
+.bottom-nav-icon svg {
+  width: 100%;
+  height: 100%;
+  transition: fill var(--transition-slower) var(--ease-liquid);
+}
+
+/* Default state - Orange icons (matching desktop nav) */
+.bottom-nav-icon svg path,
+.bottom-nav-icon svg circle,
+.bottom-nav-icon svg rect {
+  fill: var(--color-accent-orange);
+  transition: fill var(--transition-slower) var(--ease-liquid);
+}
+
+.bottom-nav-label {
+  font-size: var(--text-xs); /* 12px */
+  color: var(--color-accent-orange); /* Orange text to match icons */
+  font-weight: 500;
+  z-index: 2;
+  position: relative;
+  transition: color var(--transition-slower) var(--ease-liquid) 0.15s;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Active State - Liquid Morph with White Content */
+.bottom-nav-item.active {
+  padding: var(--space-md); /* Expand padding like desktop */
+  min-width: 80px;
+  border-radius: 50px; /* Liquid morph to pill shape */
+  transform: scale(1.02); /* Subtle grow effect */
+}
+
+.bottom-nav-item.active::before {
+  opacity: 1; /* Show gradient background */
+}
+
+.bottom-nav-item.active .bottom-nav-icon {
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* White content over gradient - PRESERVE ICON CUTOUT DETAILS */
+.bottom-nav-item.active .bottom-nav-icon svg path,
+.bottom-nav-item.active .bottom-nav-icon svg circle,
+.bottom-nav-item.active .bottom-nav-icon svg rect {
+  fill: var(--color-background) !important; /* White icons */
+}
+
+.bottom-nav-item.active .bottom-nav-label {
+  color: var(--color-background); /* White text */
+}
+
+/* Hover State (for devices that support hover) */
+@media (hover: hover) {
+  .bottom-nav-item:hover {
+    transform: scale(1.02);
+  }
+  
+  .bottom-nav-item:hover .bottom-nav-icon {
+    transform: translateY(-1px);
+  }
+  
+  .bottom-nav-item:hover .bottom-nav-icon svg path,
+  .bottom-nav-item:hover .bottom-nav-icon svg circle,
+  .bottom-nav-item:hover .bottom-nav-icon svg rect {
+    fill: var(--color-accent-yellow); /* Yellow on hover */
+  }
+  
+  .bottom-nav-item:hover .bottom-nav-label {
+    color: var(--color-accent-yellow);
+  }
+}
+
+/* Responsive Behavior */
+@media (max-width: 767px) {
+  .bottom-nav {
+    display: block; /* Show on mobile */
+  }
+  
+  .bottom-nav-container {
+    gap: var(--space-lg); /* Tighter gap on very small screens */
+    min-width: 280px; /* Smaller minimum width */
+  }
+  
+  .bottom-nav-items {
+    gap: var(--space-sm); /* Adjust spacing for smaller screens */
+    min-width: 180px; /* Smaller minimum width */
+    max-width: 240px; /* Smaller maximum width */
+  }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .bottom-nav-container {
+    gap: var(--space-xs); /* Very tight gap on small screens */
+    padding: var(--space-xs) var(--space-sm); /* Reduced padding */
+    min-width: 260px; /* Even smaller minimum width */
+  }
+  
+  .bottom-nav-items {
+    gap: var(--space-sm); /* Tighter spacing */
+    min-width: 140px;
+    max-width: 180px;
+  }
+  
+  .bottom-nav-logo .logo-text {
+    font-size: var(--text-base); /* Smaller logo on very small screens */
+  }
+}
+
+@media (min-width: 768px) {
+  .bottom-nav {
+    display: none !important; /* Force hide on desktop */
+  }
+  
+  /* Allow slide-down animation to be visible even on desktop */
+  .bottom-nav.slide-down {
+    display: block !important; /* Temporarily show for animation */
+  }
+}
+
+/* Safe area support for iOS devices with home indicators */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .bottom-nav {
+    bottom: calc(var(--space-md) + env(safe-area-inset-bottom));
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & PERFORMANCE
+   ========================================================================== */
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .bottom-nav {
+    transition: none;
+  }
+  
+  .bottom-nav-item,
+  .bottom-nav-item::before,
+  .bottom-nav-icon,
+  .bottom-nav-icon svg,
+  .bottom-nav-label {
+    transition: none;
+  }
+}
+
+/* Focus indicators */
+.bottom-nav-item:focus {
+  outline: 2px solid var(--color-accent-yellow);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .bottom-nav {
+    border: 2px solid var(--color-primary);
+    background: var(--color-background);
+  }
+  
+  .bottom-nav-item {
+    border: 1px solid var(--color-primary);
+  }
+}

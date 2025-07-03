@@ -5,9 +5,10 @@
   color: var(--color-background);
   padding: var(--space-xl) 0;
   text-align: center;
+  /* Substantial bottom padding for bottom nav clearance and visual weight */
+  padding-bottom: calc(var(--space-5xl) + var(--space-2xl) + env(safe-area-inset-bottom, 0px)); /* 96px + safe area */
   
   /* iPhone Safari viewport fixes - extend behind URL bar */
-  padding-bottom: calc(var(--space-xl) + env(safe-area-inset-bottom, 0px));
   margin-bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
 }
 

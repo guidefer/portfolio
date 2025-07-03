@@ -8,6 +8,7 @@ import { LoadingController } from './modules/loading.js';
 // import UnifiedMascot from './modules/mascot-unified.js'; // TEMPORARILY DISABLED FOR DEVELOPMENT
 import GalleryController from './modules/gallery.js';
 import { NavigationController } from './modules/navigation-clean.js';
+import { BottomNavController } from './modules/bottom-nav.js';
 import ProjectContentManager from './modules/project-content.js';
 import HeroParallaxController from './modules/hero-parallax.js';
 
@@ -58,6 +59,7 @@ class PortfolioApp {
     this.mascot = null;
     this.gallery = null;
     this.navigation = null;
+    this.bottomNav = null;
     this.projectContent = null;
     this.heroParallax = null;
     this.isInitialized = false;
@@ -134,7 +136,10 @@ class PortfolioApp {
       this.navigation = new NavigationController();
       this.navigation.init();
       
-      console.log('🖼️ Initializing Gallery...');
+      console.log('� Initializing Bottom Navigation...');
+      this.bottomNav = new BottomNavController();
+      
+      console.log('�🖼️ Initializing Gallery...');
       this.gallery = new GalleryController();
       
       // console.log('🐧 Initializing Mascot...'); // TEMPORARILY DISABLED FOR DEVELOPMENT
@@ -200,6 +205,16 @@ class PortfolioApp {
   }
 
   setupModuleCommunication() {
+    // SYNC DESKTOP AND MOBILE NAVIGATION ACTIVE STATES
+    if (this.navigation && this.bottomNav) {
+      // When desktop navigation changes active state, update bottom nav
+      this.navigation.setActiveStateChangeCallback((sectionId) => {
+        this.bottomNav.updateActiveState(sectionId);
+      });
+      
+      console.log('🔗 Navigation sync established between desktop and mobile');
+    }
+    
     // MASCOT EVENTS TEMPORARILY DISABLED FOR DEVELOPMENT
     /*
     // Gallery events trigger mascot reactions

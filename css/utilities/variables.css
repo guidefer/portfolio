@@ -48,6 +48,7 @@
   /* Layout Variables */
   --container-max-width: 1280px;
   --content-max-width: 65ch;
+  --header-offset: 0px; /* Content offset when header is hidden - mobile only */
   --header-height: 60px;
   --footer-height: 80px;
   
@@ -81,6 +82,11 @@
   --z-toast: 500;
   --z-tooltip: 600;
   
+  /* Navigation specific z-index */
+  --z-header: 1000;
+  --z-bottom-nav: 1050;
+  --z-project-overlay: 1200;
+  
   /* Transitions */
   --transition-fast: 0.15s ease;
   --transition-base: 0.3s ease;  /* Updated to match prototype */
@@ -108,6 +114,9 @@
   --duration-base: 200ms;
   --duration-slow: 300ms;
   --duration-slower: 500ms;
+  
+  /* Content Animation - Matches header animation timing */
+  --content-transition: transform 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
   
   /* Breakpoints (for JavaScript use) */
   --bp-sm: 640px;

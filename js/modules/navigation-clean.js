@@ -1,18 +1,11 @@
 /**
- * Clean Navigation Module - Intersection Observer Impl    // Scroll tracking for active states - use document.body
-    document.body.addEventListener('scroll', this.handleWindowScroll, { passive: true });
-    
-    // Handle window resize
-    window.addEventListener('resize', this.handleResize, { passive: true });tion
+ * Clean Navigation Module - Intersection Observer Implementation
  * Handles navigation active states using Intersection Observer API
  */
 
 export class NavigationController {
   constructor() {
-    this.navigationElement = null;
     this.navLinks = [];
-    this.hamburgerButton = null;
-    this.isMenuOpen = false;
     this.lastScrollTop = 0;
     this.scrollThreshold = 10;
     
@@ -20,33 +13,28 @@ export class NavigationController {
     this.sectionObserver = null;
     this.intersectingSections = new Map();
     
+    // Callback for external sync (e.g., bottom navigation)
+    this.onActiveStateChange = null;
+    
+    // Manual navigation state - prevents observer conflicts
+    this.isManualNavigation = false;
+    this.manualNavigationTimeout = null;
+    
     // Bind methods to preserve context
     this.handleNavClick = this.handleNavClick.bind(this);
-    this.handleHamburgerClick = this.handleHamburgerClick.bind(this);
     this.handleWindowScroll = this.handleWindowScroll.bind(this);
     this.handleResize = this.handleResize.bind(this);
+    this.handleResize.bind(this);
     this.handleSectionIntersection = this.handleSectionIntersection.bind(this);
   }
 
   init() {
     try {
-      // Find navigation elements
-      this.navigationElement = document.querySelector('.nav-mobile-container');
-      this.mobileOverlay = document.querySelector('.nav-mobile-overlay');
-      this.hamburgerButton = document.querySelector('.nav-hamburger');
-      this.navLinks = Array.from(document.querySelectorAll('.nav-link, .nav-mobile-link'));
+      // Find navigation elements - only desktop nav links now
+      this.navLinks = Array.from(document.querySelectorAll('.nav-link'));
 
-      console.log('🔍 Navigation Debug:', {
-        navigationElement: this.navigationElement,
-        mobileOverlay: this.mobileOverlay,
-        hamburgerButton: this.hamburgerButton,
-        navLinksCount: this.navLinks.length,
-        mobileMenu: document.querySelector('.nav-mobile-menu'),
-        backdrop: document.querySelector('.nav-backdrop')
-      });
-
-      if (!this.navigationElement || !this.mobileOverlay) {
-        console.warn('Navigation elements not found');
+      if (this.navLinks.length === 0) {
+        console.warn('No navigation links found');
         return;
       }
 
@@ -66,39 +54,11 @@ export class NavigationController {
       link.addEventListener('click', this.handleNavClick);
     });
 
-    // Hamburger menu toggle
-    if (this.hamburgerButton) {
-      this.hamburgerButton.addEventListener('click', this.handleHamburgerClick);
-    }
-
-    // Backdrop click to close menu
-    const backdrop = document.querySelector('.nav-backdrop');
-    if (backdrop) {
-      backdrop.addEventListener('click', () => {
-        this.closeMenu();
-      });
-    }
-
-    // ESC key to close menu
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.isMenuOpen) {
-        this.closeMenu();
-      }
-    });
-
-    // Scroll tracking for active states - use document.body since that's what works
-    console.log('🔗 Adding scroll event listener to document.body...');
+    // Scroll tracking for active states
     document.body.addEventListener('scroll', this.handleWindowScroll, { passive: true });
     
     // Handle window resize
     window.addEventListener('resize', this.handleResize, { passive: true });
-
-    // Close menu on outside click
-    document.addEventListener('click', (e) => {
-      if (this.isMenuOpen && this.mobileOverlay && !this.mobileOverlay.contains(e.target) && !this.navigationElement.contains(e.target)) {
-        this.closeMenu();
-      }
-    });
   }
 
   setupSectionObserver() {
@@ -120,6 +80,11 @@ export class NavigationController {
   }
 
   handleSectionIntersection(entries) {
+    // Skip intersection updates during manual navigation
+    if (this.isManualNavigation) {
+      return;
+    }
+    
     entries.forEach(entry => {
       const sectionId = `#${entry.target.id}`;
       const intersectionRatio = entry.intersectionRatio;
@@ -187,8 +152,8 @@ export class NavigationController {
       return;
     }
 
-    // Close mobile menu if open
-    this.closeMenu();
+    // Set manual navigation flag to prevent observer conflicts
+    this.setManualNavigationMode(true);
 
     // Smooth scroll to target
     this.scrollToElement(targetElement);
@@ -211,39 +176,6 @@ export class NavigationController {
     }
   }
 
-  handleHamburgerClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (this.isMenuOpen) {
-      this.closeMenu();
-    } else {
-      this.openMenu();
-    }
-  }
-
-  openMenu() {
-    if (!this.mobileOverlay) return;
-    
-    console.log('🍔 Opening mobile menu');
-    this.mobileOverlay.classList.add('open');
-    this.isMenuOpen = true;
-    
-    // Prevent body scroll on mobile
-    document.body.style.overflow = 'hidden';
-  }
-
-  closeMenu() {
-    if (!this.mobileOverlay) return;
-    
-    console.log('🍔 Closing mobile menu');
-    this.mobileOverlay.classList.remove('open');
-    this.isMenuOpen = false;
-    
-    // Restore body scroll
-    document.body.style.overflow = '';
-  }
-
   handleWindowScroll() {
     const scrollTop = document.body.scrollTop;
     const scrollDiff = Math.abs(scrollTop - this.lastScrollTop);
@@ -256,10 +188,7 @@ export class NavigationController {
   }
 
   handleResize() {
-    // Close menu on desktop resize
-    if (window.innerWidth > 768 && this.isMenuOpen) {
-      this.closeMenu();
-    }
+    // Handle any resize-specific logic for desktop navigation
   }
 
   updateActiveState() {
@@ -279,12 +208,47 @@ export class NavigationController {
     if (activeLink) {
       activeLink.classList.add('active', 'nav-link-active');
     }
+    
+    // Notify external listeners (e.g., bottom navigation)
+    if (this.onActiveStateChange && activeLink) {
+      const sectionId = activeLink.getAttribute('href')?.substring(1); // Remove # from href
+      if (sectionId) {
+        this.onActiveStateChange(sectionId);
+      }
+    }
+  }
+
+  // Method to set external active state change callback
+  setActiveStateChangeCallback(callback) {
+    this.onActiveStateChange = callback;
+  }
+
+  // Manual navigation mode control - prevents intersection observer conflicts
+  setManualNavigationMode(enabled) {
+    this.isManualNavigation = enabled;
+    
+    // Clear any existing timeout
+    if (this.manualNavigationTimeout) {
+      clearTimeout(this.manualNavigationTimeout);
+    }
+    
+    if (enabled) {
+      // Re-enable intersection observer after scroll completes
+      // Smooth scroll typically takes 500-800ms, so we wait 1200ms to be safe
+      this.manualNavigationTimeout = setTimeout(() => {
+        this.isManualNavigation = false;
+        this.manualNavigationTimeout = null;
+      }, 1200);
+    }
   }
 
   // Public method to scroll to a section by ID
   scrollToSection(sectionId) {
     const targetElement = document.getElementById(sectionId);
     if (targetElement) {
+      // Set manual navigation mode for external calls too
+      this.setManualNavigationMode(true);
+      
       this.scrollToElement(targetElement);
       
       // Update active state for the corresponding link
@@ -305,10 +269,6 @@ export class NavigationController {
         link.removeEventListener('click', this.handleNavClick);
       });
 
-      if (this.hamburgerButton) {
-        this.hamburgerButton.removeEventListener('click', this.handleHamburgerClick);
-      }
-
       // Remove scroll listeners
       document.body.removeEventListener('scroll', this.handleWindowScroll);
       window.removeEventListener('resize', this.handleResize);
@@ -323,15 +283,17 @@ export class NavigationController {
       this.intersectingSections.clear();
 
       // Clear references
-      this.navigationElement = null;
       this.navLinks = [];
-      this.hamburgerButton = null;
-      this.isMenuOpen = false;
 
       // Clear any pending timeouts
       if (this.scrollTimeout) {
         clearTimeout(this.scrollTimeout);
         this.scrollTimeout = null;
+      }
+      
+      if (this.manualNavigationTimeout) {
+        clearTimeout(this.manualNavigationTimeout);
+        this.manualNavigationTimeout = null;
       }
 
       console.log('Navigation destroyed successfully');

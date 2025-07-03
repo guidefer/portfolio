@@ -44,6 +44,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   box-sizing: border-box;
+  
+  /* Hide scrollbars globally */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Hide scrollbars for WebKit browsers */
+body::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+/* Apply scrollbar hiding to all elements */
+*::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
 /* A elements that don't have a class get default styles */
