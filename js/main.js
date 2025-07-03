@@ -14,7 +14,6 @@ import HeroParallaxController from './modules/hero-parallax.js';
 
 // Global error handler for unhandled module errors
 window.addEventListener('error', (event) => {
-  console.error('❌ Global error caught:', event.error);
   if (event.error && event.error.message && event.error.message.includes('module')) {
     showModuleLoadError(event.error);
   }
@@ -22,7 +21,6 @@ window.addEventListener('error', (event) => {
 
 // Global error handler for unhandled promise rejections (ES6 modules)
 window.addEventListener('unhandledrejection', (event) => {
-  console.error('❌ Unhandled promise rejection:', event.reason);
   if (event.reason && event.reason.message && event.reason.message.includes('module')) {
     showModuleLoadError(event.reason);
   }
@@ -50,8 +48,6 @@ function showModuleLoadError(error) {
     </div>
   `;
   document.body.appendChild(errorMessage);
-  
-  console.error('Module load error details:', error);
 }
 
 class PortfolioApp {
@@ -64,14 +60,10 @@ class PortfolioApp {
     this.heroParallax = null;
     this.isInitialized = false;
     
-    // this.setupFocusManagement(); // TEMPORARILY DISABLED FOR DEVELOPMENT
     this.init();
   }
 
   setupFocusManagement() {
-    // TEMPORARILY DISABLED FOR DEVELOPMENT
-    return;
-    
     // Detect keyboard usage for accessibility
     let isUsingKeyboard = false;
     
@@ -122,8 +114,6 @@ class PortfolioApp {
   }
 
   async init() {
-    console.log('🚀 Initializing Portfolio App...');
-    
     // Ensure fast loading - remove any loading states immediately
     LoadingController.init();
     
@@ -132,24 +122,17 @@ class PortfolioApp {
     
     try {
       // INITIALIZE MODULES IMMEDIATELY for fast experience
-      console.log('🧭 Initializing Navigation...');
       this.navigation = new NavigationController();
       this.navigation.init();
       
-      console.log('� Initializing Bottom Navigation...');
       this.bottomNav = new BottomNavController();
       
-      console.log('�🖼️ Initializing Gallery...');
       this.gallery = new GalleryController();
       
-      // console.log('🐧 Initializing Mascot...'); // TEMPORARILY DISABLED FOR DEVELOPMENT
-      // this.mascot = new UnifiedMascot(); // TEMPORARILY DISABLED FOR DEVELOPMENT
       this.mascot = null; // Set to null to prevent errors
       
-      console.log('📄 Initializing Project Content...');
       this.projectContent = new ProjectContentManager();
       
-      console.log('🌄 Initializing Hero Parallax...');
       this.heroParallax = new HeroParallaxController();
       
       // Make project content manager globally accessible immediately
@@ -173,17 +156,8 @@ class PortfolioApp {
       }, 500);
       
       this.isInitialized = true;
-      console.log('✅ Portfolio App fully initialized');
       
     } catch (error) {
-      console.error('❌ Failed to initialize app:', error);
-      console.error('❌ Error stack:', error.stack);
-      console.error('❌ Error details:', {
-        name: error.name,
-        message: error.message,
-        fileName: error.fileName,
-        lineNumber: error.lineNumber
-      });
       this.handleInitializationError(error);
     }
   }
@@ -211,46 +185,7 @@ class PortfolioApp {
       this.navigation.setActiveStateChangeCallback((sectionId) => {
         this.bottomNav.updateActiveState(sectionId);
       });
-      
-      console.log('🔗 Navigation sync established between desktop and mobile');
     }
-    
-    // MASCOT EVENTS TEMPORARILY DISABLED FOR DEVELOPMENT
-    /*
-    // Gallery events trigger mascot reactions
-    document.addEventListener('gallery:item-hover', () => {
-      this.mascot?.onInteraction('gallery-hover');
-    });
-    
-    document.addEventListener('gallery:item-click', () => {
-      this.mascot?.onInteraction('gallery-click');
-    });
-    
-    document.addEventListener('gallery:load-more', () => {
-      this.mascot?.onInteraction('gallery-load');
-    });
-    */
-    
-    // PROJECT CONTENT AND NAVIGATION EVENTS TEMPORARILY DISABLED FOR DEVELOPMENT
-    /*
-    // Project content events
-    document.addEventListener('project:show', () => {
-      this.mascot?.onInteraction('project-view');
-    });
-    
-    document.addEventListener('project:hide', () => {
-      this.mascot?.onInteraction('project-close');
-    });
-    
-    // Navigation events trigger mascot reactions
-    document.addEventListener('navigation:menu-toggle', () => {
-      this.mascot?.onInteraction('menu-toggle');
-    });
-    
-    document.addEventListener('navigation:link-click', () => {
-      this.mascot?.onInteraction('navigation');
-    });
-    */
   }
 
   setupSmoothScroll() {
@@ -278,17 +213,12 @@ class PortfolioApp {
           history.pushState(null, null, href);
         }
         
-        // Log the scroll action
-        console.log(`🔗 Smooth scroll to: ${targetId}`);
-        
         // Trigger custom event for potential mascot reactions
         document.dispatchEvent(new CustomEvent('scroll:anchor', {
           detail: { target: targetId, element: targetElement }
         }));
       }
     });
-    
-    console.log('✨ Smooth scroll functionality initialized');
   }
 
   handleInitializationError(error) {
@@ -308,42 +238,23 @@ class PortfolioApp {
       </div>
     `;
     document.body.appendChild(errorMessage);
-    
-    console.error('Initialization error details:', error);
   }
 
-  // Add detailed Safari compatibility logging
+  // Remove detailed Safari compatibility logging  
   logBrowserInfo() {
-    const userAgent = navigator.userAgent;
-    const platform = navigator.platform;
-    const isSafari = /Safari/.test(userAgent) && !/Chrome/.test(userAgent);
-    const isIOS = /iPad|iPhone|iPod/.test(userAgent);
-    const isiPhone = /iPhone/.test(userAgent);
+    // Basic browser info for essential compatibility checks only
+    const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     
-    console.log('🔍 Browser Detection:', {
-      userAgent,
-      platform,
-      isSafari,
-      isIOS,
-      isiPhone,
-      hasModuleSupport: 'import' in HTMLScriptElement.prototype,
-      hasES6: typeof Symbol !== 'undefined'
-    });
-    
-    // Check for specific iOS/Safari features
-    if (isIOS) {
-      console.log('📱 iOS Device detected');
-      console.log('📱 Viewport:', {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        devicePixelRatio: window.devicePixelRatio
-      });
+    // Only log critical compatibility issues
+    if (isIOS && window.innerHeight < 500) {
+      // Minimal viewport warning for very small screens
     }
   }
 
   // Public API for external control
   getMascot() {
-    return null; // TEMPORARILY DISABLED FOR DEVELOPMENT
+    return null;
   }
   
   getGallery() {
@@ -358,11 +269,11 @@ class PortfolioApp {
     return this.loading;
   }
   
-  // Debug methods
+  // Debug methods - removed for production
   debug() {
     return {
       app: this,
-      mascot: null, // TEMPORARILY DISABLED FOR DEVELOPMENT
+      mascot: null,
       gallery: this.gallery,
       navigation: this.navigation,
       initialized: this.isInitialized
@@ -371,13 +282,10 @@ class PortfolioApp {
   
   // Cleanup method
   destroy() {
-    // this.mascot?.destroy(); // TEMPORARILY DISABLED FOR DEVELOPMENT
     this.gallery?.destroy();
     this.navigation?.destroy();
     this.projectContent?.destroy();
     this.heroParallax?.destroy();
-    
-    console.log('🧹 Portfolio App destroyed');
   }
 }
 
@@ -398,7 +306,6 @@ window.goBackToGallery = function() {
       }
     }, 100);
   } else {
-    console.warn('Project content manager not available, using fallback navigation');
     // Fallback: scroll directly to projects section
     const projectsSection = document.querySelector('#projects');
     if (projectsSection) {
@@ -407,10 +314,10 @@ window.goBackToGallery = function() {
   }
 };
 
-// Make debug available globally in development
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-  window.debug = () => window.portfolioApp?.debug();
-}
+// Make debug available globally in development (removed for production)
+// if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+//   window.debug = () => window.portfolioApp?.debug();
+// }
 
 // Handle page unload
 window.addEventListener('beforeunload', () => {

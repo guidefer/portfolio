@@ -13,8 +13,6 @@ export class LoadingController {
     if (loadingScreen) {
       loadingScreen.remove();
     }
-    
-    console.log('⚡ Fast loading initialized - no loading screen needed');
   }
   
   static hide() {

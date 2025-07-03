@@ -54,34 +54,25 @@ class HeroParallaxController {
   }
 
   init() {
-    console.log('🦉 Initializing hero parallax controller...');
-    
     this.heroSection = document.querySelector('.hero-section');
     
     if (!this.heroSection) {
-      console.warn('Hero section not found - skipping parallax initialization');
       return;
     }
-
-    console.log('🦉 Hero section found:', this.heroSection);
 
     this.createParallaxElements();
     this.setupEventListeners();
     this.startAnimation();
     
     this.isInitialized = true;
-    console.log('🦉 Hero parallax controller initialized successfully');
   }
 
   createParallaxElements() {
     const heroContainer = this.heroSection.querySelector('.hero-container');
     
     if (!heroContainer) {
-      console.warn('Hero container not found');
       return;
     }
-
-    console.log('🦉 Creating parallax container...');
 
     // Create parallax container
     const parallaxContainer = document.createElement('div');
@@ -92,8 +83,6 @@ class HeroParallaxController {
     // Instead, use role="presentation" for accessibility
     parallaxContainer.setAttribute('role', 'presentation');
     
-    console.log('🦉 Parallax container created, adding elements...');
-    
     // Create each parallax element
     this.createParallaxElement(parallaxContainer, 'owl', 'assets/images/graphics/Owl.png', 'Decorative owl illustration');
     this.createParallaxElement(parallaxContainer, 'cloud-1', 'assets/images/graphics/Cloud-1.png', 'Decorative cloud');
@@ -103,12 +92,9 @@ class HeroParallaxController {
     // Insert parallax container as first child of hero container
     heroContainer.insertBefore(parallaxContainer, heroContainer.firstChild);
     
-    console.log('🦉 Parallax container inserted into DOM with', this.parallaxElements.length, 'elements');
   }
 
   createParallaxElement(container, name, src, alt) {
-    console.log(`🖼️ Creating parallax element: ${name} with src: ${src}`);
-    
     const element = document.createElement('div');
     element.className = `parallax-element parallax-${name}`;
     
@@ -120,18 +106,11 @@ class HeroParallaxController {
     
     // Handle image load errors gracefully
     img.onerror = () => {
-      console.warn(`❌ Failed to load parallax image: ${src}`);
       element.style.display = 'none';
-    };
-    
-    img.onload = () => {
-      console.log(`✅ Loaded parallax image: ${src}`);
     };
     
     element.appendChild(img);
     container.appendChild(element);
-    
-    console.log(`📦 Added ${name} element to container`);
     
     // Store reference for animation
     this.parallaxElements.push({

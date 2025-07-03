@@ -39,12 +39,9 @@ class GalleryController {
    */
   setProjectContentManager(projectContentManager) {
     this.projectContentManager = projectContentManager;
-    console.log('🔗 Project content manager connected to gallery:', !!projectContentManager);
   }
 
   init() {
-    console.log('🖼️ Gallery initializing...');
-    
     this.container = document.querySelector('.gallery-section');
     this.grid = document.querySelector('.gallery-grid');
     this.loadMoreBtn = document.getElementById('load-more-btn');
@@ -56,18 +53,13 @@ class GalleryController {
     
     // Check if portfolio data is available
     if (!portfolioData || !Array.isArray(portfolioData) || portfolioData.length === 0) {
-      console.error('❌ Portfolio data not available or empty');
       this.showDataError();
       return;
     }
     
-    console.log('📊 Portfolio data loaded:', portfolioData.length, 'items');
-    
     this.setupIntersectionObserver();
     this.bindEvents();
     this.loadInitialItems();
-    
-    console.log('✅ Gallery initialized successfully');
   }
 
   showDataError() {
@@ -102,8 +94,6 @@ class GalleryController {
   }
 
   bindEvents() {
-    console.log('🔗 Binding gallery events...');
-    
     // Load more button click
     if (this.loadMoreBtn) {
       this.loadMoreBtn.addEventListener('click', () => {
@@ -115,7 +105,6 @@ class GalleryController {
     // Handle window resize to re-setup context dimming
     this.boundResizeHandler = () => {
       this.debounceResize(() => {
-        console.log('🔄 Window resized, re-setting up context dimming');
         this.setupContextDimming();
       });
     };
@@ -123,8 +112,6 @@ class GalleryController {
     
     // Note: Gallery hover events are handled in setupContextDimming()
     // to avoid conflicts with the blur effects
-    
-    console.log('✅ Gallery events bound successfully');
   }
 
   debounceResize(func, delay = 300) {
@@ -151,7 +138,6 @@ class GalleryController {
       
       // Load first batch of items
       const itemsToLoad = portfolioData.slice(0, this.initialLoadCount);
-      console.log('📥 Loading', itemsToLoad.length, 'initial items');
       
       await this.renderItems(itemsToLoad);
       
@@ -168,10 +154,7 @@ class GalleryController {
         this.setupContextDimming();
       }, 100);
       
-      console.log('✅ Initial gallery items loaded successfully');
-      
     } catch (error) {
-      console.error('❌ Failed to load initial gallery items:', error);
       this.showDataError();
     } finally {
       this.isLoading = false;
@@ -211,7 +194,7 @@ class GalleryController {
       });
       
     } catch (error) {
-      console.error('Failed to load more gallery items:', error);
+      // Handle error silently in production
     } finally {
       this.isLoading = false;
     }
@@ -276,7 +259,7 @@ class GalleryController {
     const cta = document.createElement('span');
     cta.className = 'gallery-item-cta';
     cta.textContent = 'View Project';
-    // cta.setAttribute('aria-hidden', 'true'); // DISABLED FOR DEVELOPMENT
+    cta.setAttribute('aria-hidden', 'true');
     
     // Assemble the item
     content.appendChild(category);
@@ -294,7 +277,7 @@ class GalleryController {
     // Add accessibility attributes
     item.setAttribute('role', 'button');
     item.setAttribute('tabindex', '0');
-    // item.setAttribute('aria-label', `View ${data.title} project`); // DISABLED FOR DEVELOPMENT
+    item.setAttribute('aria-label', `View ${data.title} project`);
     
     // Add keyboard support
     item.addEventListener('keydown', (e) => {
@@ -306,7 +289,6 @@ class GalleryController {
     
     // Add direct click handler to bypass any event conflicts
     item.addEventListener('click', (e) => {
-      console.log('🖱️ Direct click on gallery item:', data.id);
       e.preventDefault();
       e.stopPropagation();
       this.handleItemClick(item);
@@ -354,8 +336,6 @@ class GalleryController {
   handleItemClick(item) {
     const projectId = item.getAttribute('data-project-id');
     
-    console.log('🖱️ Gallery item clicked:', projectId);
-    
     // Add selection animation classes
     item.classList.add('selecting');
     
@@ -380,9 +360,6 @@ class GalleryController {
   }
 
   navigateToProject(projectId) {
-    console.log(`🚀 Navigating to project: ${projectId}`);
-    console.log('📊 Project content manager available:', !!this.projectContentManager);
-    
     // Add loading state to clicked item
     const item = document.querySelector(`[data-project-id="${projectId}"]`);
     if (item) {
@@ -391,11 +368,9 @@ class GalleryController {
     
     // Find project data to get link information
     const projectData = portfolioData.find(project => project.id === projectId);
-    console.log('📊 Project data found:', !!projectData, projectData?.link);
     
     // PRIORITY 1: Use project content manager for SPA navigation
     if (this.projectContentManager) {
-      console.log('🌸 Using SPA project content manager for:', projectId);
       this.projectContentManager.showProject(projectId, true);
       
       // Remove loading state after showing project
@@ -409,7 +384,6 @@ class GalleryController {
     
     // Navigate to project page
     if (projectData && projectData.link) {
-      console.log('📍 Navigating to project:', projectData.link);
       setTimeout(() => {
         window.location.href = projectData.link;
       }, 300);
@@ -432,13 +406,11 @@ class GalleryController {
         // Navigate to the project page
         projectUrl = `assets/images/projects/${folderName}/index.html`;
         
-        console.log('📍 Navigating to legacy project:', projectUrl);
         setTimeout(() => {
           window.location.href = projectUrl;
         }, 300);
       } else {
         // Fallback: show coming soon
-        console.warn(`Project page not found for: ${projectId}`);
         
         // Remove loading state
         if (item) {
@@ -526,24 +498,11 @@ class GalleryController {
     const hasPointer = window.matchMedia('(pointer: fine)').matches;
     
     if (isMobile || (!hasHover && !hasPointer)) {
-      console.log('📱 Mobile/touch device detected - skipping context dimming', {
-        isMobile,
-        hasHover,
-        hasPointer,
-        width: window.innerWidth
-      });
       return;
     }
 
-    console.log('🎭 Setting up cascade context dimming...', {
-      width: window.innerWidth,
-      hasHover,
-      hasPointer
-    });
-
     // JavaScript-driven cascade context dimming for smooth animations
     const galleryItems = this.grid.querySelectorAll('.gallery-item');
-    console.log('🖼️ Found', galleryItems.length, 'gallery items for cascade dimming');
     
     // Remove any existing event listeners to avoid duplicates
     galleryItems.forEach(item => {
@@ -555,29 +514,22 @@ class GalleryController {
     // Setup cascade dimming with staggered timing
     galleryItems.forEach((item, index) => {
       item.addEventListener('mouseenter', (e) => {
-        console.log(`🎯 Mouse enter on gallery item ${index}`);
         this.handleHoverStart(item, galleryItems);
         // Also trigger mascot interaction
         this.handleItemHover(item);
       });
       
       item.addEventListener('mouseleave', (e) => {
-        console.log(`👋 Mouse leave on gallery item ${index}`);
         this.handleHoverEnd(item, galleryItems);
       });
     });
-
-    console.log('✅ Context dimming cascade setup complete');
   }
 
   handleHoverStart(heroItem, allItems) {
     const now = Date.now();
     
-    console.log('🎯 handleHoverStart triggered', { heroItem: heroItem.getAttribute('data-project-id') });
-    
     // Reduced debounce since we simplified the animation
     if (now - this.animationState.lastHoverTime < 50) {
-      console.log('⏭️ Hover too rapid, skipping');
       return;
     }
     
@@ -588,11 +540,8 @@ class GalleryController {
     
     // If already animating the same item, ignore
     if (this.animationState.currentHero === heroItem) {
-      console.log('🔄 Same hero item, ignoring');
       return;
     }
-    
-    console.log('🎯 Hover start - cleaning previous state');
     
     // Cancel all existing animations immediately
     this.cancelAllAnimations(allItems);
@@ -611,13 +560,10 @@ class GalleryController {
     }
     
     // Immediate reset since we simplified everything
-    console.log('👋 Hover end - resetting state');
     this.resetContextDimming(allItems);
   }
 
   cancelAllAnimations(allItems) {
-    console.log('� Cancelling all animations');
-    
     // Clear all existing timeouts
     this.animationState.animationTimeouts.forEach(timeout => {
       clearTimeout(timeout);
@@ -659,8 +605,6 @@ class GalleryController {
   }
 
   cascadeContextDimming(heroItem, allItems) {
-    console.log('🚀 Starting smooth blur effect');
-    
     // Set animation state
     this.animationState.isAnimating = true;
     this.animationState.currentHero = heroItem;
@@ -682,18 +626,14 @@ class GalleryController {
         }
       });
     });
-    
-    console.log('✅ Hero scaled and non-hero items blurred');
   }
 
   blurNonHeroItem(item) {
-    console.log('🌫️ Adding blur to non-hero item:', item.getAttribute('data-project-id'));
     // Apply blur class directly - all timing handled by CSS
     item.classList.add('gallery-item-blurred');
   }
 
   animateHeroItem(heroItem) {
-    console.log('💫 Adding hero class for smooth CSS transition');
     // Apply hero class directly - all timing handled by CSS
     heroItem.classList.add('gallery-item-hero');
   }
@@ -701,8 +641,6 @@ class GalleryController {
   // Remove the old animateNonHeroItem method - replaced with simple blur
 
   resetContextDimming(allItems) {
-    console.log('🔄 Resetting smooth blur effect');
-    
     // Cancel any ongoing animations first
     this.cancelAllAnimations(allItems);
     
@@ -716,12 +654,9 @@ class GalleryController {
     // Clear state
     this.animationState.currentHero = null;
     this.animationState.isAnimating = false;
-    
-    console.log('✅ All items reset');
   }
 
   resetItemToNormal(item) {
-    console.log('📈 Removing animation classes for smooth reset');
     // Remove both classes directly - all timing handled by CSS
     item.classList.remove('gallery-item-hero', 'gallery-item-blurred');
   }
@@ -832,8 +767,6 @@ class GalleryController {
     this.grid = null;
     this.loadMoreBtn = null;
     this.projectContentManager = null;
-    
-    console.log('🖼️ Gallery destroyed');
   }
 }
 

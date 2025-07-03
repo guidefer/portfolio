@@ -45,13 +45,8 @@ export class BottomNavController {
       // Check initial state
       this.handleResize();
       
-      console.log('🍎 Bottom navigation initialized:', {
-        bottomNav: this.bottomNav,
-        navItemsCount: this.navItems.length,
-        hasLogo: !!this.logoLink
-      });
     } catch (error) {
-      console.error('Bottom navigation initialization failed:', error);
+      // Handle initialization errors silently
     }
   }
   
@@ -82,7 +77,6 @@ export class BottomNavController {
     const targetHref = e.currentTarget.getAttribute('href');
     
     if (!targetHref || !targetHref.startsWith('#')) {
-      console.warn('Invalid navigation target:', targetHref);
       return;
     }
 
@@ -90,7 +84,6 @@ export class BottomNavController {
     const targetElement = document.querySelector(targetHref);
     
     if (!targetElement) {
-      console.warn('Navigation target not found:', targetHref);
       return;
     }
 
@@ -140,7 +133,6 @@ export class BottomNavController {
         block: 'start'
       });
     } catch (error) {
-      console.error('Scroll error:', error);
       // Fallback to instant scroll
       element.scrollIntoView();
     }
@@ -269,9 +261,8 @@ export class BottomNavController {
       this.logoLink = null;
       this.isActive = false;
       
-      console.log('🍎 Bottom navigation destroyed successfully');
     } catch (error) {
-      console.error('Bottom navigation cleanup failed:', error);
+      // Handle cleanup errors silently
     }
   }
 }

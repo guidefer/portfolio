@@ -38,8 +38,6 @@ class ProjectContentManager {
     
     // Start background preloading after initialization
     this.startBackgroundPreloading();
-    
-    console.log('📄 Project Content Manager initialized');
   }
 
   setupEventListeners() {
@@ -63,15 +61,12 @@ class ProjectContentManager {
    */
   setNavigationController(navigationController) {
     this.navigationController = navigationController;
-    console.log('🔗 Navigation controller connected to project content manager');
   }
 
   /**
    * Show project content
    */
   async showProject(projectId) {
-    console.log('📄 Showing project content:', projectId);
-    
     // Load project content
     await this.loadProjectContent(projectId);
     
@@ -82,20 +77,17 @@ class ProjectContentManager {
     this.currentProjectId = projectId;
     
     // Focus management - focus the container for keyboard accessibility
-    // this.container.focus(); // TEMPORARILY DISABLED FOR DEVELOPMENT
+    // Focus on the container for accessibility
+    this.container.focus();
     
     // Dispatch event
     this.dispatchEvent('project:show', { projectId });
-    
-    console.log('✅ Project content shown:', projectId);
   }
 
   /**
    * Hide project content
    */
   async hideProject() {
-    console.log('📄 Hiding project content');
-    
     // Hide the container
     this.container.classList.remove('active');
     document.body.classList.remove('project-active');
@@ -112,7 +104,6 @@ class ProjectContentManager {
     if (projectsSection) {
       projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
-      console.warn('Projects section not found, trying fallback');
       const gallerySection = document.querySelector('.gallery-section');
       if (gallerySection) {
         gallerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -121,8 +112,6 @@ class ProjectContentManager {
     
     // Dispatch event
     this.dispatchEvent('project:hide');
-    
-    console.log('✅ Project content hidden');
   }
 
   /**
@@ -132,11 +121,8 @@ class ProjectContentManager {
     this.contentBody.classList.add('loading');
     
     try {
-      console.log('📄 Loading project content for:', projectId);
-      
       // Check if content is already preloaded
       if (this.preloadedContent.has(projectId)) {
-        console.log('⚡ Using preloaded content for:', projectId);
         const cachedContent = this.preloadedContent.get(projectId);
         this.contentBody.innerHTML = cachedContent;
         
@@ -170,7 +156,6 @@ class ProjectContentManager {
       });
       
     } catch (error) {
-      console.error('Failed to load project content:', error);
       this.contentBody.innerHTML = this.generateErrorHTML(projectId);
     } finally {
       this.contentBody.classList.remove('loading');
@@ -186,11 +171,8 @@ class ProjectContentManager {
     const projectData = portfolioData.find(project => project.id === projectId);
     
     if (!projectData) {
-      console.error('❌ Project not found:', projectId);
       throw new Error(`Project not found: ${projectId}`);
     }
-    
-    console.log('✅ Project data loaded:', projectData.title);
     
     // Get other projects for mini gallery
     const otherProjects = await this.getRandomOtherProjects(projectId, 2);
@@ -206,7 +188,6 @@ class ProjectContentManager {
     if (this.isPreloading) return;
     
     this.isPreloading = true;
-    console.log('🔄 Starting background preloading of project content...');
     
     try {
       // Get all project IDs
@@ -219,19 +200,17 @@ class ProjectContentManager {
           try {
             const contentHTML = await this.generateProjectContent(projectId);
             this.preloadedContent.set(projectId, contentHTML);
-            console.log(`⚡ Preloaded project: ${projectId}`);
             
             // Small delay between preloads to avoid blocking the main thread
             await this.delay(100);
           } catch (error) {
-            console.warn(`Failed to preload project ${projectId}:`, error);
+            // Handle preload errors silently
           }
         }
       }
       
-      console.log('✅ Background preloading completed for', this.preloadedContent.size, 'projects');
     } catch (error) {
-      console.error('Background preloading failed:', error);
+      // Handle background preloading errors silently
     } finally {
       this.isPreloading = false;
     }
@@ -248,9 +227,8 @@ class ProjectContentManager {
     try {
       const contentHTML = await this.generateProjectContent(projectId);
       this.preloadedContent.set(projectId, contentHTML);
-      console.log(`⚡ Preloaded project on demand: ${projectId}`);
     } catch (error) {
-      console.warn(`Failed to preload project ${projectId}:`, error);
+      // Handle preload errors silently
     }
   }
 
@@ -401,7 +379,6 @@ class ProjectContentManager {
       const shuffled = otherProjects.sort(() => 0.5 - Math.random());
       return shuffled.slice(0, count);
     } catch (error) {
-      console.error('Failed to get other projects:', error);
       return [];
     }
   }
@@ -498,20 +475,16 @@ class ProjectContentManager {
       item.addEventListener('mouseenter', handlers.mouseenter);
       item.addEventListener('mouseleave', handlers.mouseleave);
     });
-    
-    console.log('🎨 Mini gallery interactions setup complete');
   }
 
   /**
    * Handle mini gallery item click
    */
   async handleMiniGalleryClick(projectId, item) {
-    console.log('🖱️ Mini gallery item clicked:', projectId);
+    // Add selection animation
+    item.classList.add('selecting');
     
-    // DISABLED: Add selection animation
-    // item.classList.add('selecting');
-    
-    // DISABLED: Dim other items
+    // Dim other items
     // const allMiniItems = this.contentBody.querySelectorAll('.mini-gallery-item');
     // allMiniItems.forEach(otherItem => {
     //   if (otherItem !== item) {
@@ -579,7 +552,6 @@ class ProjectContentManager {
       } else {
         // Ensure we're exactly at the top
         this.container.scrollTop = 0;
-        console.log('📍 Smooth scroll to top completed');
       }
     };
 
@@ -614,8 +586,6 @@ class ProjectContentManager {
    * Removes all event listeners and clears references
    */
   destroy() {
-    console.log('🧹 ProjectContentManager: Starting cleanup...');
-    
     // Remove document-level event listeners
     if (this.boundHandlers.keydown) {
       document.removeEventListener('keydown', this.boundHandlers.keydown);
@@ -651,8 +621,6 @@ class ProjectContentManager {
     this.currentProjectId = null;
     this.isActive = false;
     this.isPreloading = false;
-    
-    console.log('✅ ProjectContentManager: Cleanup complete');
   }
 }
 

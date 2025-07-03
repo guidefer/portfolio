@@ -296,7 +296,7 @@
     <footer class="footer" role="contentinfo">
         <div class="footer-container">
             <p class="footer-text">© 2024 Guilherme Ferreira. All rights reserved.</p>
-            <p class="footer-version">v2.3.2</p>
+            <p class="footer-version">v2.3.3</p>
         </div>
     </footer>
 
@@ -308,7 +308,6 @@
     
     <!-- Fallback for browsers that don't support ES6 modules -->
     <script nomodule>
-        console.warn('⚠️ ES6 modules not supported. Showing fallback.');
         document.addEventListener('DOMContentLoaded', function() {
             // Show error message for unsupported browsers
             const errorMessage = document.createElement('div');
@@ -366,14 +365,14 @@
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
                     .then(registration => {
-                        console.log('✅ Service Worker registered successfully:', registration);
+                        // Service worker registered successfully
                     })
                     .catch(registrationError => {
-                        console.log('❌ Service Worker registration failed:', registrationError);
+                        // Service worker registration failed
                     });
             });
         } else if ('serviceWorker' in navigator) {
-            console.log('🔧 Service Worker registration skipped in development (HTTP)');
+            // Service Worker registration skipped in development (HTTP)
         }
     </script>
 </body>

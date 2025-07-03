@@ -44,7 +44,7 @@ export class NavigationController {
       // Set up Intersection Observer for active state detection
       this.setupSectionObserver();
     } catch (error) {
-      console.error('Navigation initialization failed:', error);
+      // Handle navigation errors silently in production
     }
   }
 
@@ -140,7 +140,6 @@ export class NavigationController {
     const targetId = link.getAttribute('href');
     
     if (!targetId || !targetId.startsWith('#')) {
-      console.warn('Invalid navigation target:', targetId);
       return;
     }
 
@@ -148,7 +147,6 @@ export class NavigationController {
     const targetElement = document.querySelector(targetId);
     
     if (!targetElement) {
-      console.warn('Navigation target not found:', targetId);
       return;
     }
 
@@ -170,7 +168,6 @@ export class NavigationController {
         block: 'start'
       });
     } catch (error) {
-      console.error('Scroll error:', error);
       // Fallback to instant scroll
       element.scrollIntoView();
     }
@@ -195,7 +192,6 @@ export class NavigationController {
     if (this.navLinks.length === 0) return;
 
     // TODO: Implement simple active state detection from scratch
-    console.log('� Active state detection - to be implemented');
   }
 
   setActiveLink(activeLink) {
@@ -301,9 +297,8 @@ export class NavigationController {
         this.manualNavigationTimeout = null;
       }
 
-      console.log('Navigation destroyed successfully');
     } catch (error) {
-      console.error('Navigation cleanup failed:', error);
+      // Handle cleanup errors silently
     }
   }
 }

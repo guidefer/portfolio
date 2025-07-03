@@ -7,7 +7,7 @@
   position: fixed;
   bottom: var(--space-md); /* Always at final position */
   left: 50%; /* Center horizontally */
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 1);
   -webkit-backdrop-filter: blur(10px); /* Safari support */
   backdrop-filter: blur(10px);
   border: 1px solid var(--color-secondary);
@@ -17,7 +17,7 @@
   
   /* Max width for responsive behavior */
   max-width: 400px; /* Prevent over-stretching on large screens */
-  width: calc(100vw - var(--space-xl)); /* Responsive width with margins */
+  width: calc(100vw - var(--space-2xl)); /* Responsive width with margins */
   
   /* Always centered at final position */
   transform: translateX(-50%);
