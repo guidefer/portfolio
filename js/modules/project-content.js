@@ -451,6 +451,10 @@ class ProjectContentManager {
       // Enhanced hover effects like main gallery
       item.addEventListener('mouseenter', () => {
         this.addMiniGalleryHoverEffect(item);
+        // Preload project content on hover for instant navigation
+        if (projectId && this.preloadProject) {
+          this.preloadProject(projectId);
+        }
       });
       
       item.addEventListener('mouseleave', () => {
@@ -478,10 +482,8 @@ class ProjectContentManager {
     //   }
     // });
     
-    // Wait for animation, then navigate to the new project
-    setTimeout(async () => {
-      await this.showProject(projectId);
-    }, 600);
+    // Navigate to the new project immediately - no animation delay needed
+    await this.showProject(projectId);
   }
 
   /**
