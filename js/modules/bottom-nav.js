@@ -163,37 +163,34 @@ export class BottomNavController {
   show() {
     if (!this.bottomNav || this.isActive) return;
     
+    // Make sure element is visible before animating
     this.bottomNav.style.display = 'block';
-    // Small delay to ensure display change is processed
-    setTimeout(() => {
-      this.bottomNav.classList.add('active');
-    }, 10);
+    
+    // Simple fade-in - just add active class
+    this.bottomNav.classList.add('active');
     this.isActive = true;
   }
   
   hide() {
     if (!this.bottomNav || !this.isActive) return;
     
+    // Simple fade-out - just remove active class
     this.bottomNav.classList.remove('active');
-    // Wait for animation to complete before hiding
-    setTimeout(() => {
-      this.bottomNav.style.display = 'none';
-    }, 400);
     this.isActive = false;
   }
   
   hideWithSlideDown() {
     if (!this.bottomNav || !this.isActive) return;
     
-    // First slide down (similar to header slide up behavior)
+    // Simple fade-out for viewport transitions
     this.bottomNav.classList.add('slide-down');
     
-    // After slide animation completes, hide completely
+    // Clean up classes and hide element after animation completes
     setTimeout(() => {
       this.bottomNav.classList.remove('active', 'slide-down');
-      this.bottomNav.style.display = 'none';
+      this.bottomNav.style.display = 'none'; // Hide after animation
       this.isActive = false;
-    }, 400); // Match transition duration
+    }, 300); // Match transition duration
   }
   
   handleResize() {
@@ -227,14 +224,19 @@ export class BottomNavController {
       return;
     }
     
-    const activeItem = this.navItems.find(item => 
-      item.getAttribute('href') === `#${activeSectionId}`
-    );
-    
-    if (activeItem) {
-      this.setActiveItem(activeItem);
+    if (activeSectionId) {
+      const activeItem = this.navItems.find(item => 
+        item.getAttribute('href') === `#${activeSectionId}`
+      );
+      
+      if (activeItem) {
+        this.setActiveItem(activeItem);
+      } else {
+        // Clear active state if no matching section found
+        this.setActiveItem(null);
+      }
     } else {
-      // Clear active state if no matching section
+      // No section is active (e.g., scrolled to top) - clear all active states
       this.setActiveItem(null);
     }
   }

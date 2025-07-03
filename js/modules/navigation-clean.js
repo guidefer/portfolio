@@ -210,10 +210,15 @@ export class NavigationController {
     }
     
     // Notify external listeners (e.g., bottom navigation)
-    if (this.onActiveStateChange && activeLink) {
-      const sectionId = activeLink.getAttribute('href')?.substring(1); // Remove # from href
-      if (sectionId) {
-        this.onActiveStateChange(sectionId);
+    if (this.onActiveStateChange) {
+      if (activeLink) {
+        const sectionId = activeLink.getAttribute('href')?.substring(1); // Remove # from href
+        if (sectionId) {
+          this.onActiveStateChange(sectionId);
+        }
+      } else {
+        // No active section - clear all active states
+        this.onActiveStateChange(null);
       }
     }
   }

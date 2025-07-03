@@ -5,36 +5,57 @@
 /* Bottom Navigation Container */
 .bottom-nav {
   position: fixed;
-  bottom: var(--space-md); /* Floating with margin from edges */
-  left: var(--space-md);
-  right: var(--space-md);
+  bottom: var(--space-md); /* Always at final position */
+  left: 50%; /* Center horizontally */
   background: rgba(255, 255, 255, 0.95);
   -webkit-backdrop-filter: blur(10px); /* Safari support */
   backdrop-filter: blur(10px);
   border: 1px solid var(--color-secondary);
-  border-radius: 20px; /* Rounded floating container */
+  border-radius: 30px; /* Rounded floating container */
   box-shadow: var(--shadow-xl); /* Floating shadow from variables */
   z-index: var(--z-bottom-nav); /* Use CSS variable for z-index */
   
-  /* Max width and centering for larger devices */
-  max-width: 480px; /* Prevent over-stretching on large screens */
-  margin: 0 auto; /* Center the navigation */
-  left: 50%;
-  right: auto;
-  transform: translateX(-50%) translateY(calc(100% + var(--space-md)));
+  /* Max width for responsive behavior */
+  max-width: 400px; /* Prevent over-stretching on large screens */
+  width: calc(100vw - var(--space-3xl)); /* Responsive width with margins */
   
-  /* Hidden by default - only shown on mobile */
+  /* Always centered at final position */
+  transform: translateX(-50%);
+  
+  /* Hidden by default - smooth opacity transition only */
   display: none;
-  transition: transform 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out,
+              visibility 0s linear 0.3s;
 }
 
+/* Active state - simply fades in */
 .bottom-nav.active {
-  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease-in-out;
 }
 
-/* Slide down animation for viewport transitions */
+/* Fade out animation for viewport transitions */
 .bottom-nav.slide-down {
-  transform: translateX(-50%) translateY(calc(100% + var(--space-md)));
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Mobile-only visibility */
+@media (max-width: 767px) {
+  .bottom-nav {
+    visibility: visible; /* Allow visibility on mobile when .active is added */
+  }
+}
+
+/* Desktop - completely hidden */
+@media (min-width: 768px) {
+  .bottom-nav {
+    visibility: hidden !important; /* Force hidden on desktop */
+    opacity: 0 !important;
+  }
 }
 
 .bottom-nav-container {
@@ -123,9 +144,8 @@
 }
 
 .bottom-nav-icon {
-  width: 24px;
-  height: 24px;
-  margin-bottom: 4px;
+  width: 36px;
+  height: 36px;
   z-index: 2;
   position: relative;
   transition: transform var(--transition-slower) var(--ease-liquid) 0.1s;
@@ -158,9 +178,9 @@
 
 /* Active State - Liquid Morph with White Content */
 .bottom-nav-item.active {
-  padding: var(--space-md); /* Expand padding like desktop */
-  min-width: 80px;
-  border-radius: 50px; /* Liquid morph to pill shape */
+  padding: var(--space-sm); /* Expand padding like desktop */
+  min-width: 90px;
+  border-radius: 30px; /* Liquid morph to pill shape */
   transform: scale(1.02); /* Subtle grow effect */
 }
 
@@ -243,12 +263,8 @@
 
 @media (min-width: 768px) {
   .bottom-nav {
-    display: none !important; /* Force hide on desktop */
-  }
-  
-  /* Allow slide-down animation to be visible even on desktop */
-  .bottom-nav.slide-down {
-    display: block !important; /* Temporarily show for animation */
+    /* Let JavaScript handle hiding after animation completes */
+    pointer-events: none; /* Disable interactions on desktop */
   }
 }
 
