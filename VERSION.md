@@ -1,8 +1,9 @@
 # Portfolio Version History
 
-## Current Version: v2.2.1
+## Current Version: v2.3.0
 
 ### Version History:
+- v2.3.0 - Complete mobile bottom navigation implementation: replaced hamburger menu with modern floating bottom nav, content offset system, footer enhancements, global scrollbar removal
 - v2.2.1 - Fixed "Back to All Projects" button navigation: now properly returns to gallery instead of contact section
 - v2.2.0 - Mobile navigation stacking context fix: moved menu outside header to resolve rendering issues
 - v2.1.1 - Mobile navigation critical fix: JS/CSS class alignment (.active → .open) + enhanced mobile UX
