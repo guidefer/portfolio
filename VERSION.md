@@ -1,8 +1,9 @@
 # Portfolio Version History
 
-## Current Version: v2.3.1
+## Current Version: v2.3.2
 
 ### Version History:
+- v2.3.2 - Event listener management: added proper cleanup methods for all controllers, fixed memory leaks, enhanced destroy methods with timeout/animation cleanup
 - v2.3.1 - Performance optimization: instant gallery loading with background preloading, removed 900ms artificial delays, hover preloading, mini gallery optimization
 - v2.3.0 - Complete mobile bottom navigation implementation: replaced hamburger menu with modern floating bottom nav, content offset system, footer enhancements, global scrollbar removal
 - v2.2.1 - Fixed "Back to All Projects" button navigation: now properly returns to gallery instead of contact section

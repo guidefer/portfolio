@@ -12,6 +12,9 @@ class HeroParallaxController {
     this.isInitialized = false;
     this.animationFrame = null;
     
+    // Store bound resize handler for cleanup
+    this.boundResizeHandler = null;
+    
     // Parallax settings for different elements
     this.elementConfigs = {
       owl: {
@@ -153,9 +156,10 @@ class HeroParallaxController {
     });
 
     // Handle window resize
-    window.addEventListener('resize', () => {
+    this.boundResizeHandler = () => {
       this.handleResize();
-    });
+    };
+    window.addEventListener('resize', this.boundResizeHandler);
 
     // Handle reduced motion preference
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -242,8 +246,16 @@ class HeroParallaxController {
   }
 
   destroy() {
+    // Remove resize listener
+    if (this.boundResizeHandler) {
+      window.removeEventListener('resize', this.boundResizeHandler);
+      this.boundResizeHandler = null;
+    }
+    
+    // Cancel animation frame
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame);
+      this.animationFrame = null;
     }
     
     // Remove parallax container
@@ -252,8 +264,12 @@ class HeroParallaxController {
       parallaxContainer.remove();
     }
     
+    // Reset state
     this.parallaxElements = [];
     this.isInitialized = false;
+    this.heroSection = null;
+    this.mouseX = 0;
+    this.mouseY = 0;
   }
 }
 

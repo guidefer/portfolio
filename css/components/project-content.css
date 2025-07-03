@@ -11,7 +11,7 @@
   width: 100%;
   height: 100vh;
   background: var(--color-background);
-  z-index: var(--z-project-overlay); /* Above both header and bottom nav */
+  z-index: var(--z-project-overlay); /* Application layer - above navigation by design */
   overflow-y: auto;
   overflow-x: hidden;
   opacity: 0;
@@ -526,7 +526,7 @@
   background: var(--gradient-accent);
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1;
+  z-index: var(--z-internal-base);
 }
 
 .back-to-gallery-btn:hover::before {
@@ -543,7 +543,7 @@
 
 .back-to-gallery-btn span {
   position: relative;
-  z-index: 2;
+  z-index: var(--z-internal-content);
   transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -698,7 +698,7 @@
 
 /* Ensure project content appears above everything else */
 .project-content-container.active ~ .header {
-  z-index: 999;
+  z-index: var(--z-project-controls);
 }
 
 /* Hide main content when project is active */
@@ -713,7 +713,7 @@ body.project-active .footer {
 
 /* Keep mascot visible and above project content */
 body.project-active .character-mascot {
-  z-index: 1100; /* Same as mascot base z-index */
+  z-index: var(--z-mascot); /* Use character layer variable */
 }
 
 /* ===== LOADING STATES ===== */
@@ -890,7 +890,7 @@ body.project-active .character-mascot {
   transform: scale(1.05);
   border-radius: 28px; /* Smaller change for smoother transition */
   border-color: rgba(255, 255, 255, 0.6);
-  z-index: 10;
+  z-index: var(--z-internal-overlay);
   position: relative;
   box-shadow: 
     0 20px 40px rgba(235, 197, 51, 0.4), 

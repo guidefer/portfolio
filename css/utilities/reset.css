@@ -233,7 +233,6 @@ textarea:not([rows]) {
   padding: 8px;
   text-decoration: none;
   border-radius: 4px;
-  z-index: 1000;
   transition: top 0.3s;
 }
 

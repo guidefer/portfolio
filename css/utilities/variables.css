@@ -71,21 +71,49 @@
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   
-  /* Z-Index Scale */
-  --z-negative: -1;
-  --z-base: 0;
-  --z-raised: 10;
-  --z-dropdown: 100;
-  --z-sticky: 200;
-  --z-overlay: 300;
-  --z-modal: 400;
-  --z-toast: 500;
-  --z-tooltip: 600;
-  
-  /* Navigation specific z-index */
-  --z-header: 1000;
-  --z-bottom-nav: 1050;
-  --z-project-overlay: 1200;
+  /* Z-Index Scale - Comprehensive Layer Management */
+  --z-negative: -1;         /* Behind content */
+  --z-base: 0;              /* Base layer */
+
+  /* Content Layers (1-99) */
+  --z-raised: 10;           /* Slightly elevated content */
+  --z-dropdown: 20;         /* Dropdown menus */
+  --z-sticky: 30;           /* Sticky elements */
+
+  /* Interface Layers (100-999) */
+  --z-overlay: 100;         /* General overlays */
+  --z-modal: 200;           /* Modal dialogs */
+  --z-toast: 300;           /* Toast notifications */
+  --z-tooltip: 400;         /* Tooltips */
+
+  /* Navigation Layers (1000-1099) */
+  --z-header: 1000;         /* Header navigation */
+  --z-bottom-nav: 1010;     /* Bottom navigation (slightly above header) */
+  --z-nav-dropdown: 1020;   /* Navigation dropdowns */
+  --z-nav-logo: 1030;       /* Navigation logo (above nav elements) */
+
+  /* Application Layers (1100-1199) */
+  --z-project-overlay: 1100; /* Project content overlay (above navigation by design) */
+  --z-project-controls: 1110; /* Project controls (close, nav) */
+  --z-mini-gallery: 1120;   /* Mini gallery within project */
+
+  /* Character & Animation Layers (1200-1299) - Variables only, not implemented */
+  --z-mascot: 1200;         /* Mascot character */
+  --z-mascot-speech: 1210;  /* Mascot speech/thought bubbles */
+  --z-mascot-interaction: 1220; /* Mascot interaction elements */
+
+  /* System Layers (9000+) */
+  --z-loading: 9000;        /* Loading screens */
+  --z-error: 9100;          /* Error messages */
+  --z-accessibility: 9200;  /* Accessibility features */
+  --z-debug: 9900;          /* Debug overlays */
+
+  /* Internal Component Layering (1-10) */
+  --z-internal-base: 1;     /* Background elements */
+  --z-internal-content: 2;  /* Content elements */
+  --z-internal-overlay: 3;  /* Overlay elements */
+  --z-internal-controls: 4; /* Control elements */
+  --z-internal-tooltip: 5;  /* Component tooltips */
   
   /* Transitions */
   --transition-fast: 0.15s ease;

@@ -95,7 +95,7 @@
   opacity: 0;
   transition: opacity 0.4s ease-out;
   border-radius: inherit;
-  z-index: 1;
+  z-index: var(--z-internal-base);
 }
 
 .gallery-item.visible {
@@ -120,7 +120,7 @@
 .gallery-item-hero {
   transform: scale(1.08) translateY(0) translate3d(0, 0, 0);
   border-radius: 50px;
-  z-index: 10;
+  z-index: var(--z-internal-overlay);
   position: relative;
   box-shadow: 
     0 25px 50px rgba(235, 197, 51, 0.6), 
@@ -169,7 +169,7 @@
   height: 100%;
   object-fit: cover;
   position: relative;
-  z-index: 2;
+  z-index: var(--z-internal-content);
   /* Use the same cubic-bezier timing as hero state for consistency */
   transition: 
     transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -194,7 +194,7 @@
   opacity: 0;
   transition: all var(--transition-slow) var(--ease-in-out);
   padding: var(--space-lg);
-  z-index: 3;
+  z-index: var(--z-internal-overlay);
 }
 
 .gallery-item:hover .gallery-item-overlay {

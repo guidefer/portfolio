@@ -7,7 +7,7 @@
   width: 100%;
   height: 100%;
   pointer-events: none; /* Allow clicks to pass through to content */
-  z-index: 2; /* Above background, below content (content is z-index: 10) */
+  z-index: var(--z-internal-content); /* Above background, below main content */
   overflow: visible; /* Allow elements to extend beyond container */
 }
 
@@ -35,7 +35,7 @@
   top: 55%;
   left: 50%;
   transform-origin: center center;
-  z-index: 3; /* In front of clouds */
+  z-index: var(--z-internal-overlay); /* In front of clouds */
   /* Center the element properly - reduced size */
   margin-left: -325px; /* Half of width (550px / 2) */
   margin-top: -140px; /* Approximate half height for better centering */
@@ -51,7 +51,7 @@
   top: 50%;
   left: 50%;
   transform-origin: center center;
-  z-index: 1;
+  z-index: var(--z-internal-base);
   /* Center the element properly - reduced size */
   margin-left: -125px; /* Half of width (250px / 2) */
   margin-top: -75px; /* Approximate half height */
@@ -67,7 +67,7 @@
   top: 50%;
   left: 50%;
   transform-origin: center center;
-  z-index: 2;
+  z-index: var(--z-internal-content);
   /* Center the element properly - reduced size */
   margin-left: -175px; /* Half of width (350px / 2) */
   margin-top: -105px; /* Approximate half height */
@@ -83,7 +83,7 @@
   top: 50%;
   left: 50%;
   transform-origin: center center;
-  z-index: 1;
+  z-index: var(--z-internal-base);
   /* Center the element properly - reduced size */
   margin-left: -125px; /* Half of width (250px / 2) */
   margin-top: -75px; /* Approximate half height */
@@ -233,7 +233,7 @@
 /* Ensure hero content stays above parallax elements */
 .hero-content {
   position: relative;
-  z-index: 10; /* Above all parallax elements */
+  z-index: var(--z-raised); /* Above all parallax elements */
 }
 
 /* Reduced motion support */

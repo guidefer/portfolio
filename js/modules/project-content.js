@@ -15,6 +15,13 @@ class ProjectContentManager {
     this.preloadedContent = new Map(); // Cache for preloaded project content
     this.isPreloading = false;
     
+    // Event listener references for cleanup
+    this.boundHandlers = {
+      keydown: null,
+      wheel: null
+    };
+    this.miniGalleryListeners = new WeakMap(); // Store listeners for mini gallery items
+    
     this.init();
   }
 
@@ -36,17 +43,19 @@ class ProjectContentManager {
   }
 
   setupEventListeners() {
-    // Escape key to close
-    document.addEventListener('keydown', (e) => {
+    // Escape key to close - store bound reference
+    this.boundHandlers.keydown = (e) => {
       if (e.key === 'Escape' && this.isActive) {
         this.hideProject();
       }
-    });
+    };
+    document.addEventListener('keydown', this.boundHandlers.keydown);
     
-    // Prevent body scroll when project is active
-    this.container.addEventListener('wheel', (e) => {
+    // Prevent body scroll when project is active - store bound reference
+    this.boundHandlers.wheel = (e) => {
       e.stopPropagation();
-    });
+    };
+    this.container.addEventListener('wheel', this.boundHandlers.wheel);
   }
 
   /**
@@ -427,39 +436,67 @@ class ProjectContentManager {
   }
 
   /**
+   * Clean up existing mini gallery listeners
+   */
+  cleanupMiniGalleryListeners() {
+    if (this.contentBody) {
+      const miniGalleryItems = this.contentBody.querySelectorAll('.mini-gallery-item');
+      miniGalleryItems.forEach(item => {
+        const handlers = this.miniGalleryListeners.get(item);
+        if (handlers) {
+          item.removeEventListener('click', handlers.click);
+          item.removeEventListener('keydown', handlers.keydown);
+          item.removeEventListener('mouseenter', handlers.mouseenter);
+          item.removeEventListener('mouseleave', handlers.mouseleave);
+          this.miniGalleryListeners.delete(item);
+        }
+      });
+    }
+  }
+
+  /**
    * Setup mini gallery interactions with liquid animations
    */
   setupMiniGalleryInteractions() {
+    // Clean up existing listeners first
+    this.cleanupMiniGalleryListeners();
+    
     const miniGalleryItems = this.contentBody.querySelectorAll('.mini-gallery-item');
     
     miniGalleryItems.forEach(item => {
       const projectId = item.dataset.projectId;
       
-      // Click handler
-      item.addEventListener('click', () => {
-        this.handleMiniGalleryClick(projectId, item);
-      });
-      
-      // Keyboard support
-      item.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
+      // Create bound handlers for this item
+      const handlers = {
+        click: () => {
           this.handleMiniGalleryClick(projectId, item);
+        },
+        keydown: (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.handleMiniGalleryClick(projectId, item);
+          }
+        },
+        mouseenter: () => {
+          this.addMiniGalleryHoverEffect(item);
+          // Preload project content on hover for instant navigation
+          if (projectId && this.preloadProject) {
+            this.preloadProject(projectId);
+          }
+        },
+        mouseleave: () => {
+          this.removeMiniGalleryHoverEffect(item);
         }
-      });
+      };
       
-      // Enhanced hover effects like main gallery
-      item.addEventListener('mouseenter', () => {
-        this.addMiniGalleryHoverEffect(item);
-        // Preload project content on hover for instant navigation
-        if (projectId && this.preloadProject) {
-          this.preloadProject(projectId);
-        }
-      });
+      // Store handlers for cleanup
+      this.miniGalleryListeners.set(item, handlers);
       
-      item.addEventListener('mouseleave', () => {
-        this.removeMiniGalleryHoverEffect(item);
-      });
+      // Add event listeners
+      item.addEventListener('click', handlers.click);
+      item.addEventListener('keydown', handlers.keydown);
+      item.addEventListener('mouseenter', handlers.mouseenter);
+      item.addEventListener('mouseleave', handlers.mouseleave);
     });
     
     console.log('🎨 Mini gallery interactions setup complete');
@@ -570,6 +607,52 @@ class ProjectContentManager {
 
   getCurrentProject() {
     return this.currentProjectId;
+  }
+
+  /**
+   * Cleanup and destroy
+   * Removes all event listeners and clears references
+   */
+  destroy() {
+    console.log('🧹 ProjectContentManager: Starting cleanup...');
+    
+    // Remove document-level event listeners
+    if (this.boundHandlers.keydown) {
+      document.removeEventListener('keydown', this.boundHandlers.keydown);
+      this.boundHandlers.keydown = null;
+    }
+    
+    // Remove container event listeners
+    if (this.container && this.boundHandlers.wheel) {
+      this.container.removeEventListener('wheel', this.boundHandlers.wheel);
+      this.boundHandlers.wheel = null;
+    }
+    
+    // Remove mini gallery event listeners
+    if (this.contentBody) {
+      const miniGalleryItems = this.contentBody.querySelectorAll('.mini-gallery-item');
+      miniGalleryItems.forEach(item => {
+        const handlers = this.miniGalleryListeners.get(item);
+        if (handlers) {
+          item.removeEventListener('click', handlers.click);
+          item.removeEventListener('keydown', handlers.keydown);
+          item.removeEventListener('mouseenter', handlers.mouseenter);
+          item.removeEventListener('mouseleave', handlers.mouseleave);
+          this.miniGalleryListeners.delete(item);
+        }
+      });
+    }
+    
+    // Clear caches and references
+    this.preloadedContent.clear();
+    this.navigationController = null;
+    this.container = null;
+    this.contentBody = null;
+    this.currentProjectId = null;
+    this.isActive = false;
+    this.isPreloading = false;
+    
+    console.log('✅ ProjectContentManager: Cleanup complete');
   }
 }
 

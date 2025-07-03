@@ -17,6 +17,10 @@ class GalleryController {
     this.isLoading = false;
     this.observer = null;
     this.projectContentManager = null; // Add project content manager reference
+    this.resizeTimeout = null;
+    
+    // Store bound resize handler for cleanup
+    this.boundResizeHandler = null;
     
     // Animation state management
     this.animationState = {
@@ -109,12 +113,13 @@ class GalleryController {
     }
     
     // Handle window resize to re-setup context dimming
-    window.addEventListener('resize', () => {
+    this.boundResizeHandler = () => {
       this.debounceResize(() => {
         console.log('🔄 Window resized, re-setting up context dimming');
         this.setupContextDimming();
       });
-    });
+    };
+    window.addEventListener('resize', this.boundResizeHandler);
     
     // Note: Gallery hover events are handled in setupContextDimming()
     // to avoid conflicts with the blur effects
@@ -792,9 +797,41 @@ class GalleryController {
 
   // Cleanup
   destroy() {
+    // Remove resize listener
+    if (this.boundResizeHandler) {
+      window.removeEventListener('resize', this.boundResizeHandler);
+      this.boundResizeHandler = null;
+    }
+    
+    // Clear resize timeout
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = null;
+    }
+    
+    // Disconnect intersection observer
     if (this.observer) {
       this.observer.disconnect();
+      this.observer = null;
     }
+    
+    // Clear animation timeouts
+    if (this.animationState.animationTimeouts) {
+      this.animationState.animationTimeouts.forEach(timeout => clearTimeout(timeout));
+      this.animationState.animationTimeouts = [];
+    }
+    
+    // Clear debounce timer
+    if (this.animationState.debounceTimer) {
+      clearTimeout(this.animationState.debounceTimer);
+      this.animationState.debounceTimer = null;
+    }
+    
+    // Reset references
+    this.container = null;
+    this.grid = null;
+    this.loadMoreBtn = null;
+    this.projectContentManager = null;
     
     console.log('🖼️ Gallery destroyed');
   }

@@ -12,6 +12,7 @@ export class BottomNavController {
     this.resizeTimeout = null;
     this.isManualNavigation = false; // Flag to prevent scroll spy conflicts
     this.manualNavigationTimeout = null;
+    this.boundResizeHandler = null; // Store bound resize handler for cleanup
     
     // Bind methods to preserve context
     this.handleNavClick = this.handleNavClick.bind(this);
@@ -66,12 +67,13 @@ export class BottomNavController {
     }
     
     // Debounced resize handling
-    window.addEventListener('resize', () => {
+    this.boundResizeHandler = () => {
       if (this.resizeTimeout) {
         clearTimeout(this.resizeTimeout);
       }
       this.resizeTimeout = setTimeout(this.handleResize, 100);
-    });
+    };
+    window.addEventListener('resize', this.boundResizeHandler);
   }
   
   handleNavClick(e) {
@@ -253,7 +255,7 @@ export class BottomNavController {
         this.logoLink.removeEventListener('click', this.handleLogoClick);
       }
       
-      window.removeEventListener('resize', this.handleResize);
+      window.removeEventListener('resize', this.boundResizeHandler);
       
       // Clear timeouts
       if (this.resizeTimeout) {

@@ -17,7 +17,7 @@
   margin: 0 auto;
   padding: 0 var(--space-md);
   position: relative;
-  z-index: 2;
+  z-index: var(--z-internal-content);
 }
 
 .contact-title {
@@ -74,7 +74,7 @@
   background: var(--gradient-accent);
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1;
+  z-index: var(--z-internal-base);
 }
 
 .contact-link:hover::before,
@@ -91,7 +91,7 @@
 .contact-link .contact-icon,
 .contact-link span {
   position: relative;
-  z-index: 2;
+  z-index: var(--z-internal-content);
 }
 
 .contact-icon {
